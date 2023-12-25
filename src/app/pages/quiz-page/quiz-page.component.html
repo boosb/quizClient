@@ -1,3 +1,5 @@
+<app-navigation></app-navigation>
+
 <h1 class="font-bold text-center">{{ title | titlecase }}</h1>
 
 <input
@@ -9,12 +11,12 @@
 
 <p *ngIf="loading" class="text-center text-lg">Loading...</p>
 
-<div *ngIf="userService.users">
+<div *ngIf="questionService.questions">
     <!-- разобраться в стримах ($) -->
-    <app-user
-        *ngFor="let user of userService.users | filterUsers: term"  
-        [user]="user"
-    ></app-user>
+    <app-quiz
+        *ngFor="let question of questionService.questions | filterUsers: term"  
+        [question]="question"
+    ></app-quiz>
 </div>
 
 <app-modal *ngIf="modalService.isVisible$ | async" title="Create new user">

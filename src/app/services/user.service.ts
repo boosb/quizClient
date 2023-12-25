@@ -1,8 +1,8 @@
-import { HttpClient, HttpParams, HttpErrorResponse } from "@angular/common/http";
+import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { IUser } from "../models/user";
-import { delay, Observable, catchError, throwError, retry, tap } from 'rxjs';
+import { Observable, catchError, throwError, tap } from 'rxjs';
 import { ErrorService } from "./error.service";
+import { IUser } from "../models/user";
 
 @Injectable({
     providedIn: 'root'
@@ -15,26 +15,17 @@ export class UserService {
 
     users: IUser[] = [];
 
-    getAll(): Observable<IUser[]> {
-        return this.http.get<IUser[]>('https://fakestoreapi.com/products', {
-            params: new HttpParams({
-                fromObject: {limit: 5}
-            })
-        }).pipe(
-            retry(2),
-            tap((users: IUser[]) => this.users = users),
-            catchError(this.errorHandler.bind(this))
-        );
-    }
-
-    create(user: IUser): Observable<IUser> {
-        return this.http.post<IUser>('https://fakestoreapi.com/products', user)
+    getAllUsers(): Observable<IUser[]> {
+        return this.http.get<IUser[]>('http://localhost:3000/user/all')
             .pipe(
-                tap(user => this.users.push(user))
+                tap((users: IUser[]) => {
+                    this.users = users;
+                }),
+                catchError(this.errorHandler.bind(this))
             );
     }
 
-    private errorHandler(error: HttpErrorResponse) {
+    private errorHandler(error: HttpErrorResponse) { // todo метод повторяется (in question.service), полумать как уйти от этого
         this.errorService.handle(error.message);
         return throwError(() => error.message);
     }

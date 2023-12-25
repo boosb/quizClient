@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { UserService } from '../../services/user.service';
 import { ModalService } from '../../services/modal.service';
+import { QuestionService } from '../../services/question.service';
 
 @Component({
   selector: 'app-create-user',
@@ -10,7 +10,7 @@ import { ModalService } from '../../services/modal.service';
 })
 export class CreateUserComponent {
   constructor(
-    private userService: UserService,
+    private questionService: QuestionService,
     private modalServise: ModalService
   ) {}
 
@@ -26,7 +26,7 @@ export class CreateUserComponent {
   }
 
   submit() {
-    this.userService.create({
+    this.questionService.create({
       title: this.form.value.title as string,
       price: 13.5,
       description: 'lorem ipsum set',
