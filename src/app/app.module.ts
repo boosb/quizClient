@@ -9,7 +9,7 @@ import { GlobalErrorComponent } from "./components/global-error/global-error.com
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FilterUsersPipe } from './pipes/filter-products.pipe';
 import { ModalComponent } from './components/modal/modal.component';
-import { CreateUserComponent } from './components/create-user/create-user.component';
+import { CreateQuestionComponent } from './components/create-question/create-question.component';
 import { FocusDirective } from './directives/focus.directive';
 import { QuizPageComponent } from './pages/quiz-page/quiz-page.component';
 import { InfoPageComponent } from './pages/info-page/info-page.component';
@@ -17,6 +17,7 @@ import { NavigationComponent } from './components/navigation/navigation.componen
 import { RatingPageComponent } from './pages/rating-page/rating-page.component';
 import { UserComponent } from './components/user/user.component';
 import { AuthPageComponent } from './pages/auth-page/auth-page.component';
+import { NotificationComponent } from './components/notification/notification.component';
 
 @NgModule({
     declarations: [
@@ -24,7 +25,7 @@ import { AuthPageComponent } from './pages/auth-page/auth-page.component';
         QuizComponent, 
         GlobalErrorComponent,
         ModalComponent,
-        CreateUserComponent,
+        CreateQuestionComponent,
         FilterUsersPipe,
         FocusDirective,
         QuizPageComponent,
@@ -32,7 +33,8 @@ import { AuthPageComponent } from './pages/auth-page/auth-page.component';
         NavigationComponent,
         RatingPageComponent,
         UserComponent,
-        AuthPageComponent
+        AuthPageComponent,
+        NotificationComponent
     ],
     providers: [],
     bootstrap: [AppComponent],

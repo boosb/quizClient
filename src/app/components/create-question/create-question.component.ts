@@ -2,16 +2,18 @@ import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ModalService } from '../../services/modal.service';
 import { QuestionService } from '../../services/question.service';
+import { NotificationService } from '../../services/notification.service';
 
 @Component({
-  selector: 'app-create-user',
-  templateUrl: './create-user.component.html',
-  styleUrl: './create-user.component.scss'
+  selector: 'app-create-question',
+  templateUrl: './create-question.component.html',
+  styleUrl: './create-question.component.scss'
 })
-export class CreateUserComponent {
+export class CreateQuestionComponent { // todo ля, а это не правильный компонент, начать от сюда
   constructor(
     private questionService: QuestionService,
-    private modalServise: ModalService
+    private modalServise: ModalService,
+    private notificationService : NotificationService
   ) {}
 
   form = new FormGroup({
@@ -38,6 +40,8 @@ export class CreateUserComponent {
       }
     }).subscribe(() => {
       this.modalServise.close();
+      // todo хотелось бы все это вынести в константы, разобраться в бест практиках для ангуляра
+      this.notificationService.show('Question has been created!', 'successfully');
     });
   }
 }

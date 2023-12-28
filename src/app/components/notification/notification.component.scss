@@ -1,0 +1,45 @@
+$bg-note: #F5F5F5;
+
+.main-note {
+    position: fixed;
+    z-index: 1;
+    left: 20px;
+    top: 90%;
+    width: 350px;
+    height: 70px;
+    background-color: green;
+    border-radius: 6px;
+    transform-origin: left;
+    transition-property: background-color;
+    transition-duration: 3s;
+}
+
+.ticker {
+    position: fixed;
+    z-index: 2;
+    left: 20px;
+    top: 90%;
+    width: 350px;
+    height: 65px;
+    background-color: $bg-note;
+    border-radius: 5px 5px 0 0;
+}
+
+.wrapper-note {
+    position: relative;
+    z-index: 3;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 65px;
+}
+
+.img {
+    width: 40px;
+    margin-left: 10px;
+}
+
+.btn {
+    margin-right: 10px;
+    margin-bottom: 50px;
+}

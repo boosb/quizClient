@@ -3,6 +3,7 @@ import { Observable } from 'rxjs';
 import { ModalService } from '../../services/modal.service';
 import { IQuestion } from '../../models/question';
 import { QuestionService } from '../../services/question.service';
+import { NotificationService } from '../../services/notification.service';
 
 @Component({
   selector: 'app-quiz-page',
@@ -17,10 +18,13 @@ export class QuizPageComponent implements OnInit {
 
   constructor(
     public questionService: QuestionService,
-    public modalService: ModalService
+    public modalService: ModalService,
+
+    public notificationService: NotificationService
   ) {}
 
   ngOnInit(): void {
+    this.notificationService.show('1111111111111', 'successfully')
     this.loading = true;
     this.questionService.getAll().subscribe(() => {
       this.loading = false;

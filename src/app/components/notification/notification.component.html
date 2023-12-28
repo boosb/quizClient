@@ -1,0 +1,17 @@
+<div 
+    *ngIf="notificationService.text && notificationService.imgPath"
+    class="main-note"
+>
+    <div class="wrapper-note">
+        <img class="img" src={{notificationService.imgPath}}>
+        <p>{{notificationService.text}}</p>
+        <button 
+            class="btn"
+            (click)="notificationService.close()"
+        >&times;</button>
+    </div>
+
+    <div 
+        class="ticker"
+    ></div>
+</div>
