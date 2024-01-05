@@ -1,36 +1,39 @@
-import { Injectable, OnInit, ViewChild } from '@angular/core';
-
-const imgConfig: any = {
-  'banned': '../../../assets/img/banned.png',
-  'successfully': '../../../assets/img/successfully.png',
-  'timeOver': '../../../assets/img/timeOver.png'
-}
+import { Injectable } from '@angular/core';
+import { FULL_STATE, EMPTY_STATE } from '../components/notification/notification.constants';
 
 @Injectable({
   providedIn: 'root'
 })
-export class NotificationService implements OnInit {
+export class NotificationService {
   public text: string | undefined;
   public imgPath: string | undefined;
+  public isShow: boolean | undefined;
+  public runStatusBar: boolean | undefined;
 
   constructor() {}
 
-  ngOnInit(): void {
-    throw new Error('Method not implemented.');
-  }
-
-  show(text: string, imgPath: string) {
+  show(text: string = '', imgPath: string = '') {
     this.text = text;
-    this.imgPath = imgConfig[imgPath];
-    //setTimeout(() => this.close(), 5000);
+    this.imgPath = imgPath;
+    this.isShow = true;
+    this.runStatusBar = false;
   }
 
   close(): void {
     this.text = '';
     this.imgPath = '';
+    this.isShow = false;
   }
 
-  animated(): void {
+  animationNoteDone() {
+    this.runStatusBar = true;
+  }
 
+  animationRunStatusBarDone(event: any) {
+    const {fromState, toState} = event;
+    const isClose = fromState === FULL_STATE && toState === EMPTY_STATE;
+    if(isClose) {
+      this.close();
+    }
   }
 }

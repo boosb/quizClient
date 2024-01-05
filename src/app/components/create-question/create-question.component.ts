@@ -3,13 +3,14 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ModalService } from '../../services/modal.service';
 import { QuestionService } from '../../services/question.service';
 import { NotificationService } from '../../services/notification.service';
+import { BANNED_PATH } from '../notification/notification.constants';
 
 @Component({
   selector: 'app-create-question',
   templateUrl: './create-question.component.html',
   styleUrl: './create-question.component.scss'
 })
-export class CreateQuestionComponent { // todo ля, а это не правильный компонент, начать от сюда
+export class CreateQuestionComponent {
   constructor(
     private questionService: QuestionService,
     private modalServise: ModalService,
@@ -28,8 +29,9 @@ export class CreateQuestionComponent { // todo ля, а это не правил
   }
 
   submit() {
+    const {title} = this.form.value;
     this.questionService.create({
-      title: this.form.value.title as string,
+      title: title as string,
       price: 13.5,
       description: 'lorem ipsum set',
       image: 'https://i.pravatar.cc',
@@ -40,8 +42,7 @@ export class CreateQuestionComponent { // todo ля, а это не правил
       }
     }).subscribe(() => {
       this.modalServise.close();
-      // todo хотелось бы все это вынести в константы, разобраться в бест практиках для ангуляра
-      this.notificationService.show('Question has been created!', 'successfully');
+      this.notificationService.show(`Question ${title} has been created!`, BANNED_PATH);
     });
   }
 }

@@ -24,7 +24,6 @@ export class QuizPageComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.notificationService.show('1111111111111', 'successfully')
     this.loading = true;
     this.questionService.getAll().subscribe(() => {
       this.loading = false;

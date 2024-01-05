@@ -1,33 +1,29 @@
 $bg-note: #F5F5F5;
+$bg-statusbar: green;
 
 .main-note {
     position: fixed;
-    z-index: 1;
     left: 20px;
     top: 90%;
     width: 350px;
     height: 70px;
-    background-color: green;
-    border-radius: 6px;
+    background-color: $bg-note;
+    border-radius: 6px 6px 0 0;
     transform-origin: left;
     transition-property: background-color;
     transition-duration: 3s;
+    //animation: ani ease-in 2.5s forwards;
 }
 
 .ticker {
-    position: fixed;
-    z-index: 2;
-    left: 20px;
-    top: 90%;
-    width: 350px;
-    height: 65px;
-    background-color: $bg-note;
-    border-radius: 5px 5px 0 0;
+    position: relative;
+    //width: 100%;
+    height: 5px;
+    background-color: $bg-statusbar;
+    border-radius: 0 0 5px 5px;
 }
 
 .wrapper-note {
-    position: relative;
-    z-index: 3;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -43,3 +39,8 @@ $bg-note: #F5F5F5;
     margin-right: 10px;
     margin-bottom: 50px;
 }
+/*
+@keyframes ani {
+    0% {left: -370px;;}
+    100% {left: 20;}
+  }*/

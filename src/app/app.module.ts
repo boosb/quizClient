@@ -18,6 +18,7 @@ import { RatingPageComponent } from './pages/rating-page/rating-page.component';
 import { UserComponent } from './components/user/user.component';
 import { AuthPageComponent } from './pages/auth-page/auth-page.component';
 import { NotificationComponent } from './components/notification/notification.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
     declarations: [
@@ -51,7 +52,8 @@ import { NotificationComponent } from './components/notification/notification.co
         HttpClientModule, // todo а этот модуль я не нашел как подключить иначе, кроме как в ngModule
         BrowserModule, // todo проблема запуска была в этом
         FormsModule,
-        ReactiveFormsModule 
+        ReactiveFormsModule,
+        BrowserAnimationsModule
     ]
 })
 export class AppModule {}

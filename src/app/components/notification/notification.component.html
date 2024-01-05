@@ -1,5 +1,7 @@
 <div 
-    *ngIf="notificationService.text && notificationService.imgPath"
+    [@note]="notificationService.isShow"
+    (@note.done)="notificationService.animationNoteDone()"
+    *ngIf="notificationService.text || notificationService.imgPath"
     class="main-note"
 >
     <div class="wrapper-note">
@@ -12,6 +14,8 @@
     </div>
 
     <div 
+        [@runStatusBar]="notificationService.runStatusBar ? 'empty' : 'full'"
+        (@runStatusBar.done)="notificationService.animationRunStatusBarDone($event)"
         class="ticker"
     ></div>
 </div>
