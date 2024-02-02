@@ -1,12 +1,5 @@
 export interface IQuestion {
     id?: number
-    title: string
-    price: number
-    description: string
-    category: string
-    image: string
-    rating: {
-        rate: number
-        count: number
-    }
+    text: string
+    quizId: number | null // todo хотя по идеи null быть не может, так как не нужны нам вопросы без викторины
 }

@@ -1,16 +1,18 @@
 <form [formGroup]="form" (ngSubmit)="submit()">
+    <h1 class="medium-title center">Create new question</h1>
+    
     <input 
         type="text"
-        class="border w-full py-2 px-4 mb-2"
-        placeholder="User name"
-        formControlName="title"
+        class="entry-field"
+        placeholder="Enter question"
+        formControlName="questionText"
         appFocus
     >
 
     <p
         class="text-red-600 font-medium mb-2"
-        *ngIf="title.errors?.minlength && title.touched"
-    >Please fill title field width min length. Now {{ title.value.length }}</p>
+        *ngIf="questionText.errors?.minlength && questionText.touched"
+    >Please fill title field width min length. Now {{ questionText.value.length }}</p>
 
-    <button type="submit" class="py-2 px-4 bg-blue-600 text-white">Create</button>
+    <button type="submit" class="default-admin-btn">Create</button>
 </form>

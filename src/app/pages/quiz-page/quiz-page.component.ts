@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ModalService } from '../../services/modal.service';
-import { IQuestion } from '../../models/question';
 import { QuestionService } from '../../services/question.service';
 import { NotificationService } from '../../services/notification.service';
+import { IQuiz } from '../../models/quiz';
+import { QuizService } from '../../services/quiz.service';
 
 @Component({
   selector: 'app-quiz-page',
@@ -11,22 +12,34 @@ import { NotificationService } from '../../services/notification.service';
   styleUrl: './quiz-page.component.scss'
 })
 export class QuizPageComponent implements OnInit {
-  title = 'quizClient';
+  title = 'quizzes';
   loading = false;
   term = '';
-  questions$: Observable<IQuestion[]> | undefined;
+  quizzes$: Observable<IQuiz[]> | undefined;
 
   constructor(
-    public questionService: QuestionService,
+    public quizService: QuizService,
     public modalService: ModalService,
-
-    public notificationService: NotificationService
+    public notificationService: NotificationService,
+    private questionService: QuestionService
   ) {}
 
   ngOnInit(): void {
     this.loading = true;
-    this.questionService.getAll().subscribe(() => {
+    this.quizService.getAll().subscribe(() => {
       this.loading = false;
+    });
+  }
+
+  createEmptyQuiz() {
+    this.quizService.create({
+      name: 'New empty quiz',
+      complexity: 0
+    }).subscribe(() => {
+      this.notificationService.show(`Quiz has been created!`);
+      this.questionService.getAll( // todo но зачем получать ответы в пустой викторине
+        this.quizService?.currentQuiz?.id
+      ).subscribe(() => {});
     });
   }
 }

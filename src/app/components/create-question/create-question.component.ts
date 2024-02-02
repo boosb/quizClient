@@ -4,45 +4,49 @@ import { ModalService } from '../../services/modal.service';
 import { QuestionService } from '../../services/question.service';
 import { NotificationService } from '../../services/notification.service';
 import { BANNED_PATH } from '../notification/notification.constants';
+import { IAnswer } from '../../models/answer';
+import { Observable } from 'rxjs';
+import { QuizService } from '../../services/quiz.service';
+import { AnswerService } from '../../services/answer.service';
 
 @Component({
   selector: 'app-create-question',
   templateUrl: './create-question.component.html',
-  styleUrl: './create-question.component.scss'
+  styleUrls: [
+    './create-question.component.scss',
+    '../../app.component.scss'
+  ]
 })
 export class CreateQuestionComponent {
   constructor(
     private questionService: QuestionService,
-    private modalServise: ModalService,
-    private notificationService : NotificationService
+    private quizService: QuizService,
+    private modalService: ModalService,
+    private notificationService : NotificationService,
+    public answerService: AnswerService
   ) {}
 
+  //answers$: Observable<IAnswer[]> | undefined;
+
   form = new FormGroup({
-    title: new FormControl<string>('', [
+    questionText: new FormControl<string>('', [ // todo опять же вопрос!  Должно ли название совпадать с названием на сервере? 
       Validators.required,
       Validators.minLength(6)
     ])
   });
 
-  get title() {
-    return this.form.controls.title as FormControl;
+  get questionText() {
+    return this.form.controls.questionText as FormControl;
   }
 
   submit() {
-    const {title} = this.form.value;
+    const {questionText} = this.form.value;
     this.questionService.create({
-      title: title as string,
-      price: 13.5,
-      description: 'lorem ipsum set',
-      image: 'https://i.pravatar.cc',
-      category: 'electronic',
-      rating: {
-        rate: 42,
-        count: 1
-      }
+      text: questionText as string,
+      quizId: this.quizService.currentQuiz?.id || null
     }).subscribe(() => {
-      this.modalServise.close();
-      this.notificationService.show(`Question ${title} has been created!`, BANNED_PATH);
+      this.modalService.close();
+      this.notificationService.show(`Question has been created!`, BANNED_PATH);
     });
   }
 }

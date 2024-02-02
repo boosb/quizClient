@@ -1,0 +1,18 @@
+<form [formGroup]="form" (ngSubmit)="submit()">
+    <h1 class="medium-title center">Create new answer</h1>
+
+    <input 
+        type="text"
+        class="entry-field"
+        placeholder="Enter answer"
+        formControlName="answerText"
+        appFocus
+    >
+
+    <p
+        class="text-red-600 font-medium mb-2"
+        *ngIf="answerText.errors?.minlength && answerText.touched"
+    >Please fill title field width min length. Now {{ answerText.value.length }}</p>
+
+    <button type="submit" class="default-admin-btn">Create</button>
+</form>

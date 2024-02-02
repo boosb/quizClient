@@ -1,3 +1,56 @@
 body {
     font-family: Georgia;
 }
+
+.container {
+    padding-top: 1.25rem;
+    max-width: 1300px;
+    margin: 0 auto;
+}
+
+.default-admin-btn {
+    color: rgb(255 255 255);
+    background-color: rgb(37 99 235);
+    padding: 0.5rem 1rem;
+    border-radius: 0.25rem;
+    cursor: pointer;
+}
+
+.default-admin-mini-btn {
+    color: rgb(255 255 255);
+    background-color: rgb(37 99 235);
+    font-size: 14px;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    cursor: pointer;
+}
+
+.large-title {
+    margin: 15px 0;
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.medium-title {
+    margin: 10px 0;
+    font-size: 18px;
+}
+
+.small-title {
+    margin: 10px 0;
+    font-size: 16px;
+}
+
+.center {
+    text-align: center;
+}
+
+.entry-field {
+    width: 100%;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    border-width: 1px;
+    margin-bottom: 0.5rem;
+}

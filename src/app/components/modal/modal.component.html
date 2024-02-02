@@ -5,8 +5,14 @@
 
 <div
     class="w-[500px] absolute top-16 rounded p-6 bg-white left-1/2 -translate-x-1/2"
->
-    <h1 class="text-center mb-2 text-lg">{{ title | titlecase }}</h1>
+>    
+    <div *ngIf="type === this.modalService.dlgTypes.CREATE_QUESTION">
+        <app-create-question></app-create-question>
+    </div>
+
+    <div *ngIf="type === this.modalService.dlgTypes.CREATE_ANSWER">
+        <app-create-answer></app-create-answer>
+    </div>
 
     <ng-content></ng-content>
 </div>

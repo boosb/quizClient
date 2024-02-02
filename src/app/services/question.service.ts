@@ -14,11 +14,24 @@ export class QuestionService {
   ) { }
 
   questions: IQuestion[] = [];
+  currentQuestion: IQuestion | null = null;
   
-  getAll(): Observable<IQuestion[]> {
-    return this.http.get<IQuestion[]>('https://fakestoreapi.com/products', {
+  setCurrentQuestion(questionId: number | undefined): Observable<IQuestion> {
+    return this.http.get<IQuestion>(`http://localhost:3000/question/${questionId}`)
+      .pipe(
+        tap((question: IQuestion) => {
+          this.currentQuestion = question;
+          console.log( this.currentQuestion, ' >>> this.currentQuestion' )
+        })
+      );
+  }
+  
+  getAll(quizId: number | undefined): Observable<IQuestion[]> {
+    return this.http.get<IQuestion[]>(`http://localhost:3000/question`, {
         params: new HttpParams({
-            fromObject: {limit: 5}
+            fromObject: {
+              quizid: quizId || -1
+            }
         })
     }).pipe(
         retry(2),
@@ -30,10 +43,22 @@ export class QuestionService {
   }
 
   create(question: IQuestion): Observable<IQuestion> {
-    return this.http.post<IQuestion>('https://fakestoreapi.com/products', question)
-        .pipe(
-            tap(question => this.questions.push(question))
-        );
+    return this.http.post<IQuestion>(`http://localhost:3000/question`, question) // todo ID скорее всего должен меняться
+      .pipe(
+        tap(question => {
+          this.currentQuestion = question;
+          this.questions.push(question);
+        })
+      );
+  }
+
+  delete(questionId: number | undefined) {
+    return this.http.delete<IQuestion>(`http://localhost:3000/question/${questionId}`)
+      .pipe(
+        tap(() => {
+          this.questions = this.questions.filter(question => question.id !== questionId);
+        })
+      );
   }
 
   private errorHandler(error: HttpErrorResponse) {

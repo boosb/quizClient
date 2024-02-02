@@ -1,3 +1,5 @@
 export interface IQuiz {
-
+    id?: number;
+    name: string;
+    complexity: number;
 }

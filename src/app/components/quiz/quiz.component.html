@@ -1,19 +1,13 @@
-<div class="py-4 px-6 border rounded flex items-center flex-col mb-2">
-    <img [src]="question?.image" [alt]="question?.title" class="w-1/6 mb-2">
-    <h2 class="mb-2 text-lg text-center">{{ question?.title }}</h2>
-    <p>Price: <span class="font-bold">{{ question?.price | currency: 'RUB' }}</span></p>
-
-    <button 
-        class="border py-2 px-4 rounded"
-        [ngClass]="{
-            'bg-yellow-400': !details,
-            'bg-blue-400': details
-        }"
-        (click)="details = !details"
-    >{{ details ? 'Hide' : 'Show' }} Details</button>
-
-    <div *ngIf="details">
-        <p>{{ question?.description }}</p>
-        <p>Rate: <span [ngStyle]="{fontWeight: 'bold'}">{{ question?.rating?.rate | number: '1.2-4' }}</span></p>
+<div class="quiz-item">
+    <div class="main-content-wrapper">
+        <h2 class="quiz-text">{{ quiz?.name }}</h2>
+        <div class="buttons">
+            <div class="btn" routerLink="/quizzes/edit" (click)="getQuiz()">
+                <img src="../../../assets/img/pencil.png" alt="edit">
+            </div>
+            <div class="btn" (click)="deleteQuiz()">
+                <img src="../../../assets/img/basket.png" alt="delete">
+            </div>
+        </div>
     </div>
 </div>

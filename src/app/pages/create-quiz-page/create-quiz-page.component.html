@@ -1,0 +1,51 @@
+<app-modal *ngIf="modalService.isVisible$ | async" type={{modalService.modalType}}></app-modal>
+
+<h1 class="large-title main-title">{{ 'Create quiz' | titlecase }}</h1>
+
+<div class="wrapper">
+    <div class="input-block">
+        <form [formGroup]="form" (ngSubmit)="submit()">
+            <div class="input-block__item">
+                <h2 class="medium-title">Quiz name:</h2>
+                <input 
+                    type="text"
+                    class="entry-field"
+                    placeholder="Quiz name"
+                    formControlName="quizName"
+                    appFocus
+                >
+            </div>
+
+            <div class="input-block__item">
+                <h2 class="medium-title">Complexity quiz:</h2>
+                <input 
+                    type="text"
+                    class="entry-field"
+                    placeholder="Complexity quiz"
+                    formControlName="complexityQuiz"
+                >
+            </div>
+
+            <button 
+                type="submit" 
+                class="default-admin-btn"
+                (click)="updateQuiz()"
+            >Save changes</button>
+        </form>
+    </div>
+    <div class="questions-block">
+        <h2 class="medium-title">Questions:</h2>
+
+        <div *ngIf="questionService.questions">
+            <app-question
+                *ngFor="let question of questionService.questions"  
+                [question]="question"
+            ></app-question>
+        </div>
+
+        <button 
+            class="default-admin-btn"
+            (click)="modalService.addQuestion()"
+        >Add question</button>
+    </div>
+</div>
