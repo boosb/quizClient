@@ -1,11 +1,11 @@
-import { Component, DoCheck } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ModalService } from '../../services/modal.service';
 import { QuestionService } from '../../services/question.service';
-import { Observable } from 'rxjs';
 import { IQuestion } from '../../models/question';
 import { QuizService } from '../../services/quiz.service';
 import { NotificationService } from '../../services/notification.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-create-quiz-page',
@@ -15,20 +15,32 @@ import { NotificationService } from '../../services/notification.service';
     '../../app.component.scss'
   ] 
 })
-export class CreateQuizPageComponent implements DoCheck {
+export class CreateQuizPageComponent implements OnDestroy {
   constructor(
     public modalService: ModalService,
     public quizService: QuizService,
     public questionService: QuestionService,
     private notificationService : NotificationService
-  ) {}
+  ) {
+    this.lastCreatedQuestionSubs = this.questionService.lastCreatedQuestion$
+      .subscribe((lastCreatedQuestion) => {
+        this.questions?.push(lastCreatedQuestion);
+      });
 
-  //questions$: Observable<IQuestion[]> | undefined;
+    this.lastDeletedQuestionIdSubs = this.questionService.lastDeletedQuestionId$
+      .subscribe((lastDeletedQuestionId) => {
+        this.questions = this.questions.filter(question => question.id !== lastDeletedQuestionId);
+      });
+  }
 
-  //modalType: string | undefined;
+  private lastCreatedQuestionSubs: Subscription;
+
+  private lastDeletedQuestionIdSubs: Subscription;
+
+  questions: IQuestion[] = [];
 
   form = new FormGroup({
-    quizName: new FormControl<string>('', [ // todo точно не помню какие поля на бэке
+    quizName: new FormControl<string>('', [
       Validators.required,
       Validators.minLength(6)
     ]),
@@ -43,22 +55,27 @@ export class CreateQuizPageComponent implements DoCheck {
     return this.form.controls.complexityQuiz as FormControl;
   }
 
-  ngDoCheck(): void {
-    this.quizName.setValue(this.quizService?.currentQuiz?.name);
-    this.complexityQuiz.setValue(this.quizService?.currentQuiz?.complexity);
+  ngOnDestroy(): void {
+    this.lastCreatedQuestionSubs.unsubscribe();
+    this.lastDeletedQuestionIdSubs.unsubscribe();
   }
 
-  submit() {
-
+  createQuiz() {
+    this.modalService.showConfirm({
+      text: 'Do you really want to create a quiz?',
+      okCallback: this._createQuiz.bind(this),
+      redirectPath: '/quizzes'
+    });
   }
 
-  updateQuiz() {
+  _createQuiz() {
     const {quizName, complexityQuiz} = this.form.value;
-    this.quizService.update(this.quizService?.currentQuiz?.id, {
+    this.quizService.create({
       name: quizName as string,
-      complexity: complexityQuiz as number
+      complexity: complexityQuiz as number,
+      questions: this.questions
     }).subscribe(() => {
-      this.notificationService.show(`Quiz has been updated!`);
+      this.notificationService.show(`Quiz has been created!`);
     });
   }
 }

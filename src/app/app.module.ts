@@ -4,12 +4,12 @@ import { CommonModule } from '@angular/common';
 import { AppComponent } from './app.component';
 import { RouterLink, RouterModule, RouterOutlet } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
-import { QuizComponent } from './components/quiz/quiz.component';
-import { GlobalErrorComponent } from "./components/global-error/global-error.component";
+import { QuizComponent } from './components/admin-side-components/quiz-components/quiz/quiz.component';
+import { GlobalErrorComponent } from "./components/common-components/global-error/global-error.component";
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FilterQuestionPipe } from './pipes/filter-question.pipe';
-import { ModalComponent } from './components/modal/modal.component';
-import { CreateQuestionComponent } from './components/create-question/create-question.component';
+import { ModalComponent } from './components/common-components/modal/modal.component';
+import { CreateQuestionComponent } from './components/admin-side-components/question-components/create-question/create-question.component';
 import { FocusDirective } from './directives/focus.directive';
 import { QuizPageComponent } from './pages/quiz-page/quiz-page.component';
 import { InfoPageComponent } from './pages/info-page/info-page.component';
@@ -17,15 +17,18 @@ import { NavigationComponent } from './components/navigation/navigation.componen
 import { RatingPageComponent } from './pages/rating-page/rating-page.component';
 import { UserComponent } from './components/user/user.component';
 import { AuthPageComponent } from './pages/auth-page/auth-page.component';
-import { NotificationComponent } from './components/notification/notification.component';
+import { NotificationComponent } from './components/common-components/notification/notification.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { AdminMenuComponent } from './components/admin-menu/admin-menu.component';
-import { AdminMenuItemComponent } from './components/admin-menu-item/admin-menu-item.component';
+import { AdminMenuComponent } from './components/admin-side-components/admin-menu/admin-menu.component';
+import { AdminMenuItemComponent } from './components/admin-side-components/admin-menu-item/admin-menu-item.component';
 import { CreateQuizPageComponent } from './pages/create-quiz-page/create-quiz-page.component';
-import { CreateAnswerComponent } from './components/create-answer/create-answer.component';
-import { QuestionComponent } from './components/question/question.component';
+import { CreateAnswerComponent } from './components/admin-side-components/answer-components/create-answer/create-answer.component';
+import { QuestionComponent } from './components/admin-side-components/question-components/question/question.component';
 import { FilterQuizzesPipe } from './pipes/filter-quizzes.pipe';
-import { AnswerComponent } from './components/answer/answer.component';
+import { AnswerComponent } from './components/admin-side-components/answer-components/answer/answer.component';
+import { EditQuestionComponent } from './components/admin-side-components/question-components/edit-question/edit-question.component';
+import { EditQuizPageComponent } from './pages/edit-quiz-page/edit-quiz-page.component';
+import { ConfirmComponent } from './components/common-components/confirm/confirm.component';
 
 @NgModule({
     declarations: [
@@ -47,9 +50,12 @@ import { AnswerComponent } from './components/answer/answer.component';
         AdminMenuComponent,
         AdminMenuItemComponent,
         CreateQuizPageComponent,
+        EditQuizPageComponent,
         CreateAnswerComponent,
         QuestionComponent,
-        AnswerComponent
+        AnswerComponent,
+        EditQuestionComponent,
+        ConfirmComponent
     ],
     providers: [],
     bootstrap: [AppComponent],
@@ -63,7 +69,7 @@ import { AnswerComponent } from './components/answer/answer.component';
             {path: 'rating', component: RatingPageComponent},
             {path: 'auth', component: AuthPageComponent},
             {path: 'quizzes/create', component: CreateQuizPageComponent},
-            {path: 'quizzes/edit', component: CreateQuizPageComponent},
+            {path: 'quizzes/edit/:id', component: EditQuizPageComponent},
             {path: 'quizzes', component: QuizPageComponent}
         ]),
         HttpClientModule, // todo а этот модуль я не нашел как подключить иначе, кроме как в ngModule

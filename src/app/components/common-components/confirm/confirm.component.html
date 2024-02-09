@@ -1,0 +1,13 @@
+<p class="main-text">{{ text }}</p>
+<div class="buttons">
+    <button 
+        class="default-admin-btn btn-ok"
+        (click)="onOk()"
+        [routerLink]="path"
+    >OK</button>
+
+    <button 
+        class="default-admin-btn btn-cancel"
+        (click)="modalService.close()"
+    >Cancel</button>
+</div>

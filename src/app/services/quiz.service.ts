@@ -1,8 +1,8 @@
-import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ErrorService } from './error.service';
 import { IQuiz } from '../models/quiz';
-import { Observable, catchError, throwError, retry, tap } from 'rxjs';
+import { Observable, catchError, throwError, tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -14,23 +14,16 @@ export class QuizService {
   ) {}
   
   quizzes: IQuiz[] = [];
-  currentQuiz: IQuiz | null = null;
 
   getOne(quizId: number | undefined): Observable<IQuiz> {
-    return this.http.get<IQuiz>(`http://localhost:3000/quizzes/${quizId}`)
-      .pipe(
-        tap((quiz: IQuiz) => {
-          this.currentQuiz = quiz;
-        })
-      );
+    return this.http.get<IQuiz>(`http://localhost:3000/quizzes/${quizId}`);
   }
   
   getAll(): Observable<IQuiz[]> {
     return this.http.get<IQuiz[]>('http://localhost:3000/quizzes')
       .pipe(
-          retry(2),
           tap((quizzes: IQuiz[]) => {
-              this.quizzes = quizzes;
+            this.quizzes = quizzes;
           }),
           catchError(this.errorHandler.bind(this))
       );
@@ -42,7 +35,6 @@ export class QuizService {
       complexity: quiz.complexity
     }).pipe(
       tap(quiz => {
-        this.currentQuiz = quiz;
         this.quizzes.push(quiz);
       })
     );
@@ -62,10 +54,6 @@ export class QuizService {
           this.quizzes = this.quizzes.filter(quiz => quiz.id !== quizId);
         })
       );
-  }
-
-  addQuestionAtQuiz() {
-
   }
 
   private errorHandler(error: HttpErrorResponse) {

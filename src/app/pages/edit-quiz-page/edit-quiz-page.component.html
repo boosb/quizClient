@@ -1,10 +1,10 @@
 <app-modal *ngIf="modalService.isVisible$ | async" type={{modalService.modalType}}></app-modal>
 
-<h1 class="large-title main-title">{{ 'Create quiz' | titlecase }}</h1>
+<h1 class="large-title main-title">{{ 'Update quiz' | titlecase }}</h1>
 
 <div class="wrapper">
     <div class="input-block">
-        <form [formGroup]="form" (ngSubmit)="createQuiz()">
+        <form [formGroup]="form" (ngSubmit)="updateQuiz()">
             <div class="input-block__item">
                 <h2 class="medium-title">Quiz name:</h2>
                 <input 
@@ -29,7 +29,7 @@
             <button 
                 type="submit" 
                 class="default-admin-btn"
-            >Create quiz</button>
+            >Update quiz</button>
         </form>
     </div>
     <div class="questions-block">

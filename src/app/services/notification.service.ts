@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FULL_STATE, EMPTY_STATE } from '../components/notification/notification.constants';
+import { FULL_STATE, EMPTY_STATE } from '../components/common-components/notification/notification.constants';
 
 @Injectable({
   providedIn: 'root'

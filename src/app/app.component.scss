@@ -54,3 +54,29 @@ body {
     border-width: 1px;
     margin-bottom: 0.5rem;
 }
+
+.btn {
+    width: 35px;
+    height: 35px;
+    border-width: 1px;
+    border-radius: 0.25rem;
+    padding: 6px;
+    margin: 0 5px;
+    &:hover {
+        cursor: pointer;
+        border-width: 2px;
+    }
+}
+
+.btn-mini {
+    width: 25px;
+    height: 25px;
+    border-width: 1px;
+    border-radius: 0.25rem;
+    padding: 3px;
+    margin: 0 5px;
+    &:hover {
+        cursor: pointer;
+        border-width: 2px;
+    }
+}

@@ -1,11 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { QuestionService } from './question.service';
-
-export interface DlgTypes {
-  CREATE_QUESTION: string;
-  CREATE_ANSWER: string;
-}
+import { DlgTypes } from '../components/common-components/modal/modal.dialog-types';
+import { ConfirmData } from '../components/common-components/modal/modal.confirm-data';
 
 @Injectable({
   providedIn: 'root'
@@ -17,9 +13,13 @@ export class ModalService {
 
   modalType: string | undefined;
 
+  confirmData: ConfirmData;
+
   dlgTypes: DlgTypes = {
     CREATE_QUESTION: 'create-question',
-    CREATE_ANSWER: 'create-answer'
+    UPDATE_QUESTION: 'update-question',
+    CREATE_ANSWER: 'create-answer',
+    CONFIRM: 'confirm'
   }
 
   open() {
@@ -35,8 +35,24 @@ export class ModalService {
     this.open();
   }
 
+  editQuestion() {
+    this.modalType = this.dlgTypes.UPDATE_QUESTION;
+    this.open();
+  }
+
   addAnswer() {
     this.modalType = this.dlgTypes.CREATE_ANSWER;
+    this.open();
+  }
+
+  showConfirm(data: ConfirmData) {
+    console.log('hello')
+    this.modalType = this.dlgTypes.CONFIRM;
+    this.confirmData = {
+      text: data.text,
+      okCallback: data.okCallback,
+      redirectPath: data.redirectPath
+    };
     this.open();
   }
 }

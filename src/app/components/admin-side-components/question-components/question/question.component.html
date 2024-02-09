@@ -1,0 +1,44 @@
+<div class="question-item" (click)="setCurrentQuestion()">
+    <div class="content-wrapper">
+        <div class="main-content-wrapper">
+            <h2 class="question-text">{{ questionText }}</h2>
+    
+            <div class="buttons">
+                <!-- хотя, возможно надо будет добавить метод editQuestion -->
+                <div class="btn" (click)="modalService.editQuestion()">
+                    <img src="../../../assets/img/pencil.png" alt="edit">
+                </div>
+                <div class="btn" (click)="deleteQuestion()">
+                    <img src="../../../assets/img/basket.png" alt="delete">
+                </div>
+            </div>
+        </div>
+    
+        <div *ngIf="answers && answersDetails">
+            <app-answer
+                *ngFor="let answer of answers; index as i"  
+                [answer]="answer"
+                [orderNumber]="i+1"
+            ></app-answer>
+        </div>
+
+        <div class="toggle-wrapper">
+            <div 
+                *ngIf="isShowMoreInfoToggle"
+                class="toggle"
+                (click)="toggleShowMore()"
+            >{{ infoDetails ? 'Collapse' : 'Show more' }}</div>
+
+            <div 
+                *ngIf="isShowAnswersToggle"
+                class="toggle"
+                (click)="toggleAnswers()"
+            >{{ answersDetails ? 'Hide' : 'Show' }} answers</div>
+        </div>
+    </div>
+
+    <button 
+        class="default-admin-mini-btn"
+        (click)="addAnswer()"
+    >Add answer</button>
+</div>

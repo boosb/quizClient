@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { ErrorService } from './error.service';
-import { Observable, catchError, tap, throwError } from 'rxjs';
+import { Observable, Subject, catchError, tap, throwError } from 'rxjs';
 import { IAnswer } from '../models/answer';
 
 @Injectable({
@@ -13,7 +13,7 @@ export class AnswerService {
     private errorService: ErrorService
   ) { }
 
-  answers: IAnswer[] = [];
+  public newAnswer$ = new Subject<IAnswer>;
 
   getAll(questionId: number | undefined): Observable<IAnswer[]> {
     return this.http.get<IAnswer[]>(`http://localhost:3000/answers`, {
@@ -23,24 +23,25 @@ export class AnswerService {
         }
       })
     }).pipe(
-      tap((answers: IAnswer[]) => {
-        this.answers = answers;
-        console.log( this.answers, ' >>> this.answers' )
-      }),
       catchError(this.errorHandler.bind(this))
     );
   }
 
   create(answer: IAnswer): Observable<IAnswer> {
-    console.log( answer, ' >>> answer!' )
     return this.http.post<IAnswer>(`http://localhost:3000/answers`, answer)
-        .pipe(
-            tap(answer => this.answers.push(answer))
-        );
+      .pipe(
+        tap(answer => {
+          this.newAnswer$.next(answer);
+        })
+      );
+  }
+
+  update(id: number, answer: IAnswer) {
+    
   }
 
   private errorHandler(error: HttpErrorResponse) {
-      this.errorService.handle(error.message);
-      return throwError(() => error.message);
+    this.errorService.handle(error.message);
+    return throwError(() => error.message);
   }
 }
