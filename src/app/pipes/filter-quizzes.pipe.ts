@@ -1,6 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { IQuestion } from '../models/question';
-import { IQuiz } from '../models/quiz';
+import { IQuestion } from '../store/models/question';
+import { IQuiz } from '../store/models/quiz';
 
 @Pipe({
   name: 'filterQuizzes'

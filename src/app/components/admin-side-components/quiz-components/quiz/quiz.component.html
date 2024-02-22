@@ -1,8 +1,8 @@
 <div class="quiz-item">
     <div class="main-content-wrapper">
-        <h2 class="quiz-text">{{ quiz.name }}</h2>
+        <h2 class="quiz-text">{{ quiz?.name }}</h2>
         <div class="buttons">
-            <div class="btn" [routerLink]="['/quizzes/edit', quiz.id]">
+            <div class="btn" [routerLink]="['/quizzes/edit', quiz?.id]">
                 <img src="../../../assets/img/pencil.png" alt="edit">
             </div>
             <div class="btn" (click)="deleteQuiz()">

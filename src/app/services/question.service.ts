@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { ErrorService } from './error.service';
 import { Observable, catchError, throwError, retry, tap, Subject } from 'rxjs';
-import { IQuestion } from '../models/question';
+import { IQuestion } from '../store/models/question';
 
 @Injectable({
   providedIn: 'root'
@@ -30,9 +30,7 @@ export class QuestionService {
               quizid: quizId || -1
             }
         })
-    }).pipe(
-        catchError(this.errorHandler.bind(this))
-    );
+    });
   }
 
   getOne(questionId: number | undefined): Observable<IQuestion> {
@@ -63,13 +61,12 @@ export class QuestionService {
     return this.http.delete<IQuestion>(`http://localhost:3000/question/${questionId}`)
       .pipe(
         tap(() => {
-          console.log(questionId, ' >>> deletedQuestion-test-0')
           this.lastDeletedQuestionId$.next(questionId);
         })
       );
   }
 
-  private errorHandler(error: HttpErrorResponse) {
+  private errorHandler(error: HttpErrorResponse) { // todo убрать
       this.errorService.handle(error.message);
       return throwError(() => error.message);
   }

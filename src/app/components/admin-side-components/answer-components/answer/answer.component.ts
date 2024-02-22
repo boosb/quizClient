@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { IAnswer } from '../../../../models/answer';
+import { IAnswer } from '../../../../store/models/answer';
 
 @Component({
   selector: 'app-answer',

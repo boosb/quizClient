@@ -1,8 +1,11 @@
 import { Component, Input } from '@angular/core';
-import { IQuiz } from '../../../../models/quiz';
+import { IQuiz } from '../../../../store/models/quiz';
 import { QuizService } from '../../../../services/quiz.service';
 import { NotificationService } from '../../../../services/notification.service';
 import { ModalService } from '../../../../services/modal.service';
+import { Store } from '@ngrx/store';
+import { AppState } from '../../../../store';
+import { deleteRequiest } from '../../../../store/actions/quizzes.actions';
 
 @Component({
     selector: 'app-quiz',
@@ -16,10 +19,11 @@ export class QuizComponent {
     constructor(
         private quizService: QuizService,
         private notificationService: NotificationService,
-        private modalService: ModalService
+        private modalService: ModalService,
+        private store: Store<AppState>
     ) {}
 
-    @Input() quiz: IQuiz;
+    @Input() quiz: IQuiz | undefined;
 
     deleteQuiz() {
         this.modalService.showConfirm({
@@ -29,10 +33,7 @@ export class QuizComponent {
     }
 
     _deleteQuiz() {
-        this.quizService.delete(
-            this.quiz?.id
-        ).subscribe(() => {
-            this.notificationService.show(`Quiz has been updated!`);
-        });
+        //this.store.dispatch(new QuizzesDeletedAction({quizId: this.quiz?.id})); // todo как-то вставить сюда нотификацию
+        this.store.dispatch(deleteRequiest({quizId: String(this.quiz?.id)}));
     }
 }

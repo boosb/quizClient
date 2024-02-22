@@ -1,7 +1,7 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ErrorService } from './error.service';
-import { IQuiz } from '../models/quiz';
+import { IQuiz } from '../store/models/quiz';
 import { Observable, catchError, throwError, tap } from 'rxjs';
 
 @Injectable({
@@ -12,32 +12,21 @@ export class QuizService {
     private http: HttpClient,
     private errorService: ErrorService,
   ) {}
-  
-  quizzes: IQuiz[] = [];
 
   getOne(quizId: number | undefined): Observable<IQuiz> {
     return this.http.get<IQuiz>(`http://localhost:3000/quizzes/${quizId}`);
   }
   
   getAll(): Observable<IQuiz[]> {
-    return this.http.get<IQuiz[]>('http://localhost:3000/quizzes')
-      .pipe(
-          tap((quizzes: IQuiz[]) => {
-            this.quizzes = quizzes;
-          }),
-          catchError(this.errorHandler.bind(this))
-      );
+    return this.http.get<IQuiz[]>('http://localhost:3000/quizzes');
   }
 
   create(quiz: IQuiz): Observable<IQuiz> {
     return this.http.post<IQuiz>('http://localhost:3000/quizzes', {
       name: quiz.name,
-      complexity: quiz.complexity
-    }).pipe(
-      tap(quiz => {
-        this.quizzes.push(quiz);
-      })
-    );
+      complexity: quiz.complexity,
+      questions: quiz.questions
+    });
   }
 
   update(quizId: number | undefined, quiz: IQuiz): Observable<IQuiz> {
@@ -48,15 +37,10 @@ export class QuizService {
   }
 
   delete(quizId: number | undefined): Observable<IQuiz> {
-    return this.http.delete<IQuiz>(`http://localhost:3000/quizzes/${quizId}`)
-      .pipe(
-        tap(() => {
-          this.quizzes = this.quizzes.filter(quiz => quiz.id !== quizId);
-        })
-      );
+    return this.http.delete<IQuiz>(`http://localhost:3000/quizzes/${quizId}`);
   }
 
-  private errorHandler(error: HttpErrorResponse) {
+  private errorHandler(error: HttpErrorResponse) { // todo по сути вся обработка ошибок перешла в effects
       this.errorService.handle(error.message);
       return throwError(() => error.message);
   }

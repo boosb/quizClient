@@ -1,0 +1,21 @@
+.wrapper {
+    display: flex;
+    justify-content: center;
+}
+
+.input-block {
+    width: 40%;
+    &__item {
+        margin-bottom: 50px;
+    }
+    margin: 0 20px;
+}
+
+.questions-block {
+    width: 40%;
+    margin: 0 20px;
+}
+
+.main-title {
+    text-align: center;
+}

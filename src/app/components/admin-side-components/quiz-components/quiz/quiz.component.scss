@@ -2,6 +2,8 @@
 .quiz-item {
     display: flex;
     flex-direction: column;
+    max-width: 100%;
+    min-width: 30%;
     padding: 1rem 1.5rem;
     border-width: 1px;
     border-radius: 0.25rem;

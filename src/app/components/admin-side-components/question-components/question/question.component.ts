@@ -1,9 +1,9 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { IQuestion } from '../../../../models/question';
+import { IQuestion } from '../../../../store/models/question';
 import { QuestionService } from '../../../../services/question.service';
 import { AnswerService } from '../../../../services/answer.service';
 import { ModalService } from '../../../../services/modal.service';
-import { IAnswer } from '../../../../models/answer';
+import { IAnswer } from '../../../../store/models/answer';
 import { Subscription } from 'rxjs';
 
 const MAX_TEXT_LENGTH = 75;
@@ -49,7 +49,10 @@ export class QuestionComponent implements OnInit, OnDestroy {
     this._setIsShowMoreInfoToggle();
 
     this.newAnswerSubs = this.answerService.newAnswer$.subscribe((answer) => {
-      this.answers.push(answer);
+      if( answer.questionId === this.question.id ) {
+        this.answers.push(answer);
+        this._setIsShowAnswersToggle();  
+      }
     });
   }
 

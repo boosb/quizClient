@@ -1,0 +1,22 @@
+<app-modal *ngIf="modalService.isVisible$ | async" type={{modalService.modalType}}></app-modal>
+
+<h1 class="font-bold text-center">{{ title | titlecase }}</h1>
+
+<input
+    type="text"
+    class="mb-2 border py-2 px-4 w-full"
+    placeholder="Filter quizzes..."
+
+>
+
+<div *ngIf="quizzes$ | async">
+    <app-quiz
+        *ngFor="let quiz of quizzes$ | async"
+        [quiz]="quiz"
+    ></app-quiz>
+</div>
+
+<button
+    class="rounded-full bg-red-700 text-white fixed right-5 bottom-5 py-2 px-4"
+    routerLink="/quizzes/create"
+>Add quiz</button>

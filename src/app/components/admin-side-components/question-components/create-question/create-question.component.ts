@@ -7,6 +7,8 @@ import { BANNED_PATH } from '../../../common-components/notification/notificatio
 import { AnswerService } from '../../../../services/answer.service';
 import { Subscription } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
+import { AppState } from '../../../../store';
+import { Store } from '@ngrx/store';
 
 @Component({
   selector: 'app-create-question',
@@ -22,12 +24,13 @@ export class CreateQuestionComponent implements OnDestroy {
     private modalService: ModalService,
     private notificationService: NotificationService,
     private activatedRoute: ActivatedRoute,
-    public answerService: AnswerService
+    public answerService: AnswerService,
+    private store: Store<AppState>
   ) {
     this.quizIdSubs = this.activatedRoute.params.subscribe(params => this.quizId = params.id);
   }
 
-  quizId: number | undefined;
+  _quizId: number | undefined;
 
   private quizIdSubs: Subscription;
 
@@ -37,6 +40,14 @@ export class CreateQuestionComponent implements OnDestroy {
       Validators.minLength(6)
     ])
   });
+
+  get quizId() {
+    return Number(this._quizId)
+  }
+
+  set quizId(quizId) {
+    this._quizId = Number(quizId);
+  }
 
   get questionText() {
     return this.form.controls.questionText as FormControl;
@@ -48,12 +59,19 @@ export class CreateQuestionComponent implements OnDestroy {
 
   submit() {
     const {questionText} = this.form.value;
-    this.questionService.create({
+    /*this.questionService.create({
       text: questionText as string,
       quizId: this.quizId || null
     }).subscribe(() => {
       this.modalService.close();
       this.notificationService.show(`Question has been created!`, BANNED_PATH);
-    });
+    });*/
+
+    /*this.store.dispatch(new QuizzesAddedQuestionAction({
+      question: {
+        text: questionText as string,
+        quizId: this.quizId || null
+      }
+    }));*/
   }
 }
