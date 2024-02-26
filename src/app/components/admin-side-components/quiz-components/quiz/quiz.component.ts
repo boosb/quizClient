@@ -1,7 +1,5 @@
 import { Component, Input } from '@angular/core';
 import { IQuiz } from '../../../../store/models/quiz';
-import { QuizService } from '../../../../services/quiz.service';
-import { NotificationService } from '../../../../services/notification.service';
 import { ModalService } from '../../../../services/modal.service';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../../store';
@@ -17,8 +15,6 @@ import { deleteRequiest } from '../../../../store/actions/quizzes.actions';
 })
 export class QuizComponent {
     constructor(
-        private quizService: QuizService,
-        private notificationService: NotificationService,
         private modalService: ModalService,
         private store: Store<AppState>
     ) {}
@@ -33,7 +29,6 @@ export class QuizComponent {
     }
 
     _deleteQuiz() {
-        //this.store.dispatch(new QuizzesDeletedAction({quizId: this.quiz?.id})); // todo как-то вставить сюда нотификацию
         this.store.dispatch(deleteRequiest({quizId: String(this.quiz?.id)}));
     }
 }

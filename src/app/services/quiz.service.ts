@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { ErrorService } from './error.service';
 import { IQuiz } from '../store/models/quiz';
 import { Observable, catchError, throwError, tap } from 'rxjs';
+import { Update } from '@ngrx/entity';
 
 @Injectable({
   providedIn: 'root'
@@ -29,10 +30,10 @@ export class QuizService {
     });
   }
 
-  update(quizId: number | undefined, quiz: IQuiz): Observable<IQuiz> {
-    return this.http.patch<IQuiz>(`http://localhost:3000/quizzes/${quizId}`, {
-      name: quiz ? quiz.name : '',
-      complexity: quiz ? quiz.complexity : ''
+  update(quiz: Update<IQuiz>): Observable<IQuiz> {
+    return this.http.patch<IQuiz>(`http://localhost:3000/quizzes/${quiz.id}`, {
+      name: quiz ? quiz.changes.name : '',
+      complexity: quiz ? quiz.changes.complexity : ''
     });
   }
 

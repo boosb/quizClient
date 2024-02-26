@@ -5,10 +5,11 @@ import { QuestionService } from '../../services/question.service';
 import { ModalService } from '../../services/modal.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { IQuiz } from '../../store/models/quiz';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { IQuestion } from '../../store/models/question';
 import { ActivatedRoute } from '@angular/router';
-import { addRequiest, updateRequiest } from '../../store/actions/quizzes.actions';
+import { addRequiest, updateRequiest, updatedSuccess } from '../../store/actions/quizzes.actions';
+import { Update } from '@ngrx/entity';
 
 @Component({
   selector: 'app-quiz-page',
@@ -24,11 +25,11 @@ export class QuizPageComponent {
 
   quizSubs: Subscription
 
+  questionsSubs: Subscription
+
   quiz: IQuiz | undefined
 
   questions: IQuestion[] | undefined
-  
-  questionsSubs: Subscription
 
   form = new FormGroup({
     quizName: new FormControl<string>(``, [
@@ -39,11 +40,15 @@ export class QuizPageComponent {
   });
 
   get quizName() {
-    return this.form.controls.quizName as FormControl;
+    return this.form.controls.quizName as FormControl
   }
 
   get complexityQuiz() {
-    return this.form.controls.complexityQuiz as FormControl;
+    return this.form.controls.complexityQuiz as FormControl
+  }
+
+  get quizId() {
+    return String(this.quiz?.id)
   }
 
   constructor(
@@ -57,16 +62,18 @@ export class QuizPageComponent {
   }
 
   ngOnInit(): void {
+    this.questionsSubs = this.store.pipe(select(selectCurrentQuizQuestions))
+      .subscribe(questions => this.questions = questions);
+
+    //this.store.pipe(select(selectQuizEntities)).subscribe(test=> {console.log(test, ' >>> TEST_TEST')});  
+
     this.quizSubs = this.store.pipe(select(selectCurrentQuiz)).subscribe(quiz => {
       this.quiz = quiz;
       this.quizName.setValue(quiz?.name);
       this.complexityQuiz.setValue(quiz?.complexity);
     });
-
-    this.questionsSubs = this.store.pipe(select(selectCurrentQuizQuestions))
-      .subscribe(questions => this.questions = questions);
-
-    //this.store.pipe(select(selectQuizEntities)).subscribe(test=> {console.log(test, ' >>> TEST_TEST')});  
+    
+    console.log( this.isUpdate, ' >>> edit-edit')
   }
 
   ngOnDestroy(): void {
@@ -83,14 +90,6 @@ export class QuizPageComponent {
 
   _createQuiz() {
     const {quizName, complexityQuiz} = this.form.value;    
-   /* this.store.dispatch(new QuizzesAddedAction({
-      quiz: {
-        name: quizName as string,
-        complexity: complexityQuiz as number,
-        questions: this.questions
-      }
-    }));*/
-
     this.store.dispatch(addRequiest({
       quiz: {
         name: quizName as string,
@@ -102,22 +101,14 @@ export class QuizPageComponent {
 
   _updateQuiz() {
     const {quizName, complexityQuiz} = this.form.value;
-    /*this.store.dispatch(new QuizzesUpdatedAction({
-      quizId: this.quiz?.id,
-      quiz: {
+    const quizUpdate: Update<IQuiz> = {
+      id: this.quizId,
+      changes: {
         name: quizName as string,
         complexity: complexityQuiz as number,
         questions: this.questions
       }
-    }));*/
-
-   /* this.store.dispatch(updateRequiest({
-      //quizId: String(this.quiz?.id),
-      quiz: {
-        name: quizName as string,
-        complexity: complexityQuiz as number,
-        questions: this.questions
-      }
-    }));*/
+    }
+    this.store.dispatch(updateRequiest({update: quizUpdate}));
   }
 }

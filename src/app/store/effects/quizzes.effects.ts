@@ -3,37 +3,27 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { EMPTY } from 'rxjs';
 import { map, exhaustMap, catchError, mergeMap } from 'rxjs/operators';
 import { QuizService } from '../../services/quiz.service';
-//import { QuizzesActionTypes, QuizzesAddedAction, QuizzesAddedSuccessAction, QuizzesDeletedAction, QuizzesDeletedSuccessAction, QuizzesLoadedSuccessAction, QuizzesUpdatedAction, QuizzesUpdatedSuccessAction, loadQuizzes } from '../actions/quizzes.actions';
 import { Router } from '@angular/router';
 import { NotificationService } from '../../services/notification.service';
-import { addRequiest, addedSuccess, loadQuizzes, loadQuizzesSuccess } from '../actions/quizzes.actions';
+import { addQuestionRequest, addQuestionSuccess, addRequiest, addedSuccess, deleteRequiest, deletedSuccess, loadQuizzes, loadQuizzesSuccess, updateRequiest, updatedSuccess } from '../actions/quizzes.actions';
+import { QuestionService } from '../../services/question.service';
 
 @Injectable()
 export class QuizzesEffects {
 
   loadQuizzes$ = createEffect(() => this.actions$.pipe(
     ofType(loadQuizzes),
-    exhaustMap(() => {
-      console.log('00')
-      return this.quizService.getAll()
+    exhaustMap(() => this.quizService.getAll()
       .pipe(
-        map(quizzes => {
-          console.log(quizzes, ' >>> 1')
-          const test = loadQuizzesSuccess({quizzes})
-          console.log(test, ' >>>> test-test-test')
-          return test
-        }),
+        map(quizzes => loadQuizzesSuccess({quizzes})),
         catchError(() => EMPTY)
-      )
-    })
+      ))
     )
   );
 
   addQuiz$ = createEffect(() => this.actions$.pipe(
     ofType(addRequiest),
-    mergeMap((action) => {
-      console.log(action, ' >>> ACTION')
-      return this.quizService.create(action.quiz)
+    mergeMap((action) => this.quizService.create(action.quiz)
       .pipe(
         map(createdQuiz => {
           this.router.navigate([`/quizzes/edit/${createdQuiz.id}`])
@@ -41,18 +31,17 @@ export class QuizzesEffects {
           return addedSuccess({quiz: createdQuiz})
         }),
         catchError(() => EMPTY)
-      )
-    })
+      ))
     )
   );
-/*
+
   deleteQuiz$ = createEffect(() => this.actions$.pipe(
-      ofType(QuizzesActionTypes.DeleteRequiest),
-      mergeMap((action: QuizzesDeletedAction) => this.quizService.delete(action.payload.quizId) // todo хорошо бы поразбираться с этими mergeMap
+      ofType(deleteRequiest),
+      mergeMap((action) => this.quizService.delete(Number(action.quizId)) // todo хорошо бы поразбираться с этими mergeMap
         .pipe(
           map(() => {
             this.notificationService.show(`Quiz has been deleted!`)
-            return new QuizzesDeletedSuccessAction({quizId: action.payload.quizId})
+            return deletedSuccess({quizId: action.quizId})
           }),
           catchError(() => EMPTY)
         ))
@@ -60,24 +49,38 @@ export class QuizzesEffects {
   );
 
   updateQuiz$ = createEffect(() => this.actions$.pipe(
-    ofType(QuizzesActionTypes.UpdateRequiest),
-    mergeMap((action: QuizzesUpdatedAction) => {
-      const {quizId, quiz} = action.payload;
-      return this.quizService.update(quizId, quiz)
+    ofType(updateRequiest),
+    mergeMap((action) => this.quizService.update(action.update)
+      .pipe(
+        map(() => {
+          this.notificationService.show(`Quiz has been updated!`)
+          return updatedSuccess({update: action.update})
+        }),
+        catchError(() => EMPTY)
+      ))
+    )
+  );
+
+  addQuestion$ = createEffect(() => this.actions$.pipe(
+    ofType(addQuestionRequest),
+    mergeMap((action) => {
+      console.log(action, ' >>> action')
+      return this.questionService.create(action.question)
         .pipe(
-          map(() => {
-            this.notificationService.show(`Quiz has been updated!`)
-            return new QuizzesUpdatedSuccessAction({quizId, quiz})
+          map((createdQuestion) => {
+            this.notificationService.show(`Question has been created!`)
+            return addQuestionSuccess({question: createdQuestion})
           }),
           catchError(() => EMPTY)
         )
-    })
+      })
     )
   );
-*/
+
   constructor(
     private actions$: Actions,
     private quizService: QuizService,
+    private questionService: QuestionService,
     private router: Router,
     private notificationService: NotificationService
   ) {}

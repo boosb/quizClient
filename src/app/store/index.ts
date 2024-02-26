@@ -10,46 +10,29 @@ export interface AppState {
   
 export const reducers: ActionReducerMap<AppState, any> = {
     quizzesState: fromQuiz.quizzesReducer,
-    //quizzesState: fromQuiz.reducer,
     router: routerReducer
 }
 
 export const selectQuizzesState = (state: AppState) => state.quizzesState;
 
 export const selectQuizState = createFeatureSelector<fromQuiz.QuizzesState>('quiz');
-/*
-export const selectQuizState = createFeature({
-  name: "quiz",
-  reducer: quizzesReducer
-});*/
 
 export const {
   selectCurrentRoute,
   selectRouteParams
 } = getRouterSelectors();
 
-export const testSelector = createSelector(
+export const selectQuizzes = createSelector(
   selectQuizState,
   ( { entities } ) => Object.values(entities)
 );
 
-export const selectQuizzes = createSelector(
-  selectQuizzesState,
-  (state: QuizzesState) => {
-    console.log(state, ' >>> STATE')
-    return state.quizzes
-  }
-);
-
 export const selectCurrentQuiz = createSelector(
-  selectQuizzesState,
+  selectQuizState,
   selectRouteParams,
-  (state: QuizzesState, { id }) => {
-    console.log(state.quizzes, ' >>> state.quizzes---tt')
-    return state.quizzes.find(quiz => quiz.id === Number(id))
-  }
+  (state: QuizzesState, { id }) => state.entities[id]
 );
-
+/*
 export const selectCurrentQuizQuestions = createSelector(
   selectQuizzesState,
   selectRouteParams,
@@ -57,14 +40,10 @@ export const selectCurrentQuizQuestions = createSelector(
     const quiz = state.quizzes.find(quiz => quiz.id === Number(id))
     return quiz?.questions
   }
-);
-/*
-export const selectQuizEntities = createSelector(
-  selectQuizState,
-  fromQuiz.selectUserEntities
-);
-
-export const selectAllQuizzes = createSelector(
-  selectQuizState,
-  fromQuiz.selectAllUsers
 );*/
+
+export const selectCurrentQuizQuestions = createSelector(
+  selectQuizState,
+  selectRouteParams,
+  (state: QuizzesState, { id }) => state.entities[id]?.questions
+);

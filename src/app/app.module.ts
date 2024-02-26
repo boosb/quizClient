@@ -31,7 +31,7 @@ import { StoreModule, provideStore } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { QuizzesEffects } from './store/effects/quizzes.effects';
 import { reducers } from './store';
-import { StoreRouterConnectingModule } from '@ngrx/router-store';
+import { StoreRouterConnectingModule, routerReducer } from '@ngrx/router-store';
 import { CustomSerializer } from './store/custom-route-serializer';
 import { QuizPageComponent } from './pages/quiz-page/quiz-page.component';
 import { QuestionsEffects } from './store/effects/questions.effects';
@@ -95,7 +95,8 @@ import { quizzesReducer } from './store/reducers/quizzes.reducer';
         ReactiveFormsModule,
         BrowserAnimationsModule,
         StoreModule.forRoot(reducers),
-        StoreModule.forFeature("quiz", quizzesReducer),
+        StoreModule.forFeature('quiz', quizzesReducer),
+        StoreModule.forFeature('router', routerReducer),
         EffectsModule.forRoot([
             QuizzesEffects,
             QuestionsEffects,

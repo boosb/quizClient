@@ -9,6 +9,7 @@ import { Subscription } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 import { AppState } from '../../../../store';
 import { Store } from '@ngrx/store';
+import { addQuestionRequest } from '../../../../store/actions/quizzes.actions';
 
 @Component({
   selector: 'app-create-question',
@@ -67,11 +68,11 @@ export class CreateQuestionComponent implements OnDestroy {
       this.notificationService.show(`Question has been created!`, BANNED_PATH);
     });*/
 
-    /*this.store.dispatch(new QuizzesAddedQuestionAction({
+    this.store.dispatch(addQuestionRequest({
       question: {
         text: questionText as string,
         quizId: this.quizId || null
       }
-    }));*/
+    }));
   }
 }

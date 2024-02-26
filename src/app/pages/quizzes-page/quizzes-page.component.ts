@@ -6,7 +6,7 @@ import { Store, select } from '@ngrx/store';
 import { IQuiz } from '../../store/models/quiz';
 import { Observable } from 'rxjs';
 //import { QuizzesLoadedAction } from '../../store/actions/quizzes.actions';
-import { AppState, selectQuizState, selectQuizzes, testSelector } from '../../store';
+import { AppState, selectQuizState, selectQuizzes } from '../../store';
 import { Dictionary } from '@ngrx/entity';
 import { QuizzesState } from '../../store/reducers/quizzes.reducer';
 import { loadQuizzes } from '../../store/actions/quizzes.actions';
@@ -20,9 +20,7 @@ export class QuizzesPageComponent implements OnInit {
   title = 'quizzes';
   term = ''; // todo разобраться с фильтром
   
-  quizzes$: Observable<(IQuiz | undefined)[]> = this.store.select(testSelector)
- // quizzes$: Observable<IQuiz[]> =  this.store.select(selectAllQuizzes);
-  quizzes: IQuiz[]
+  quizzes$: Observable<(IQuiz | undefined)[]> = this.store.select(selectQuizzes)
 
   constructor(
     public quizService: QuizService,
@@ -32,12 +30,7 @@ export class QuizzesPageComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    
     // todo лоадинг добавлю потом отдельным компонентом
     this.store.dispatch(loadQuizzes());
-
-    //this.store.select(testSelector).subscribe(t => {console.log(t, ' >> t')});
-
-    //console.log(this.quizzes$.subscribe(t => {console.log(t, ' >t')}), ' >>> this.quizzes$')
   }
 }
