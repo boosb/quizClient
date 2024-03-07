@@ -1,5 +1,4 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { IQuestion } from '../store/models/question';
 import { IQuiz } from '../store/models/quiz';
 
 @Pipe({
@@ -7,9 +6,8 @@ import { IQuiz } from '../store/models/quiz';
 })
 export class FilterQuizzesPipe implements PipeTransform {
 
-  transform(quiz: IQuiz[], search: string): IQuiz[] {
-    return search.length === 0 
-      ? quiz 
-      : quiz.filter(quiz => quiz.name.toLowerCase().includes(search.toLowerCase()));
+  transform(quiz: (IQuiz | undefined)[] | null, search: string): (IQuiz | undefined)[] | null {
+    const value = quiz ? quiz.filter(quiz => quiz?.name.toLowerCase().includes(search.toLowerCase())) : null
+    return search.length === 0 ? quiz : value
   }
 }

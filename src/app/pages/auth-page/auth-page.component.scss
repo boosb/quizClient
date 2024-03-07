@@ -2,20 +2,6 @@ $fuschia: #ff0081;
 $button-bg: $fuschia;
 $button-text-color: #fff; //todo разобраться как оформить все эти константы в одном месте
 
-.auth-nav {
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: 10;
-    width: 100%;
-    height: 50px;
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    color: #fff;
-    background-color: #7d7a7a;
-}
-
 .wrapper {
     width: 100%;
     height: 100%;
@@ -51,11 +37,6 @@ $button-text-color: #fff; //todo разобраться как оформить 
     &:hover {
         color: $button-bg;
     }
-}
-
-.nav-item {
-    cursor: pointer;
-    margin-right: 10px;
 }
 
 .bubbly-button{

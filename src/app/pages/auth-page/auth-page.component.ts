@@ -2,6 +2,9 @@ import { Component } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { AppState } from '../../store';
+import { login, registration } from '../../store/actions/auth.actions';
 
 @Component({
   selector: 'app-auth-page',
@@ -11,7 +14,8 @@ import { Router } from '@angular/router';
 export class AuthPageComponent {
   constructor(
     public authService: AuthService,
-    private router: Router
+    private router: Router,
+    private store: Store<AppState>
   ) {}
 
   authForm = new FormGroup({
@@ -32,23 +36,25 @@ export class AuthPageComponent {
   }
 
   login() {
-    this.authService.login({
-      email: this.authForm.value.email as string,
-      password: this.authForm.value.password as string
-    }).subscribe(() => {
-      this.router.navigateByUrl('/');
-    });
+    this.store.dispatch(login({
+      user: {
+        email: this.authForm.value.email as string,
+        password: this.authForm.value.password as string
+      }
+    }))
   }
 
   registration() {
-    this.authService.registration({
-      email: this.authForm.value.email as string,
-      password: this.authForm.value.password as string
-    }).subscribe(() => {
-    });
+    this.store.dispatch(registration({
+      user: {
+        email: this.authForm.value.email as string,
+        password: this.authForm.value.password as string,
+        roleId: 1
+      }
+    }))
   }
 
-  animateButton(event: any) {
+  animateButton(event: any) { // todo убрать в helper
     event.preventDefault;
     event.target.classList.remove('animate');
     event.target.classList.add('animate');

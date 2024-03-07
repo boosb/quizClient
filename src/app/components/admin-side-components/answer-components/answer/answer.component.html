@@ -1,12 +1,13 @@
 <div class="answer-item">
     <p>{{ orderNumber }}. {{ answer?.text }}</p>
 
+
     <div class="buttons" >
-        <!-- хотя, возможно надо будет добавить метод editQuestion -->
-        <div class="btn-mini">
+        <p class="right-info" *ngIf="answer?.isRight">right</p>
+        <div class="btn-mini" (click)="onEdit()">
             <img src="../../../assets/img/pencil.png" alt="edit">
         </div>
-        <div class="btn-mini">
+        <div class="btn-mini" (click)="onDelete()">
             <img src="../../../assets/img/basket.png" alt="delete">
         </div>
     </div>

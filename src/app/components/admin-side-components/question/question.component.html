@@ -4,8 +4,7 @@
             <h2 class="question-text">{{ questionText }}</h2>
     
             <div class="buttons">
-                <!-- хотя, возможно надо будет добавить метод editQuestion -->
-                <div class="btn" (click)="modalService.editQuestion()">
+                <div class="btn" (click)="updateQuestion()">
                     <img src="../../../assets/img/pencil.png" alt="edit">
                 </div>
                 <div class="btn" (click)="deleteQuestion()">

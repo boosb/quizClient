@@ -1,30 +1,8 @@
 <div 
     class="bg-black/50 fixed top-0 right-0 left-0 bottom-0"
-    (click)="modalService.close()"
+    (click)="close()"
 ></div>
 
-<div
-    class="w-[500px] absolute top-16 rounded p-6 bg-white left-1/2 -translate-x-1/2"
->    
-    <div *ngIf="type === this.modalService.dlgTypes.CREATE_QUESTION">
-        <app-create-question></app-create-question>
-    </div>
-
-    <div *ngIf="type === this.modalService.dlgTypes.UPDATE_QUESTION">
-        <app-edit-question></app-edit-question>
-    </div>
-
-    <div *ngIf="type === this.modalService.dlgTypes.CREATE_ANSWER">
-        <app-create-answer></app-create-answer>
-    </div>
-
-    <div *ngIf="type === this.modalService.dlgTypes.CONFIRM">
-        <app-confirm 
-            text="{{ this.modalService.confirmData.text }}"
-            [okCallback]="this.modalService.confirmData.okCallback"
-            redirectPath="{{ this.modalService.confirmData.redirectPath }}" 
-        ></app-confirm>
-    </div>
-
-    <ng-content></ng-content>
+<div class="w-[500px] absolute top-16 rounded p-6 bg-white left-1/2 -translate-x-1/2">    
+    <div #content></div>
 </div>

@@ -1,0 +1,46 @@
+.menu-btn {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 40px;
+    height: 40px;
+    border: 1px solid #000;
+    margin-top: 15px;
+    margin-left: 15px;
+    background: rgba(255, 255, 255, 0.1);
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    div {
+        width: 24px;
+        height: 2px;
+        background-color: #000;
+        margin: 3px 0;
+    }
+
+    &.show-menu {
+        border: 1px solid #fff;
+    }
+
+    .top-row.show-menu {
+        position: absolute;
+        width: 35px;
+        transform: rotate(45deg);
+        background-color: #fff;
+    }
+
+    .bottom-row.show-menu {
+        position: absolute;
+        width: 35px;
+        transform: rotate(-45deg);
+        bottom:15px;
+        background-color: #fff;
+    }
+
+    .middle-row.show-menu {
+        display: none;
+    }
+}

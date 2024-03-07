@@ -1,9 +1,9 @@
 import { createAction, props } from '@ngrx/store';
 import { IQuiz } from '../models/quiz';
-import { IQuestion } from '../models/question';
 import { Update } from '@ngrx/entity';
 
-// Quizzes
+export const selectQuiz = createAction('[Quizzes API] Quiz Select', props<{ quizId: number }>());
+
 export const loadQuizzes = createAction('[Quizzes API] Quizzes Loaded');
 export const loadQuizzesSuccess = createAction('[Quizzes API] Quizzes Loaded Success', props<{ quizzes: IQuiz[] }>());
 
@@ -15,8 +15,4 @@ export const deletedSuccess = createAction('[Quizzes API] Quizzes Deleted Succes
 
 export const updateRequiest = createAction('[Quizzes API] Quizzes Update', props<{ update: Update<IQuiz> }>());
 export const updatedSuccess = createAction('[Quizzes API] Quizzes Updated Success', props<{ update: Update<IQuiz> }>());
-
-// Questions
-export const addQuestionRequest = createAction('[Quizzes API] Questions Add', props<{ question: IQuestion }>());
-export const addQuestionSuccess = createAction('[Quizzes API] Questions Added Success', props<{ question: IQuestion }>());
 

@@ -1,6 +1,8 @@
 import { Component, Input } from '@angular/core';
-import { ModalService } from '../../../services/modal.service';
 import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { AppState } from '../../../store';
+import { closeModal } from '../../../store/actions/modal.actions';
 
 @Component({
   selector: 'app-confirm',
@@ -11,23 +13,28 @@ import { Router } from '@angular/router';
   ]
 })
 export class ConfirmComponent {
-  constructor(
-    private router: Router,
-    public modalService: ModalService
-  ) {}
 
-  @Input() text: string = '';
+  @Input() text: string = ''
 
-  @Input() okCallback: Function;
+  @Input() okCallback: Function
 
-  @Input() redirectPath: string | null = null;
+  @Input() redirectPath: string | null = null
 
   get path() {
-    return this.redirectPath ? this.redirectPath : this.router.url;
+    return this.redirectPath ? this.redirectPath : this.router.url
   }
 
+  constructor(
+    private router: Router,
+    private store: Store<AppState>
+  ) {}
+
   onOk() {
-    this.okCallback();
-    this.modalService.close();
+    this.okCallback()
+    this.close()
+  }
+
+  close() {
+    this.store.dispatch(closeModal())
   }
 }

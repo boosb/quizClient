@@ -1,14 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { ModalService } from '../../services/modal.service';
-import { NotificationService } from '../../services/notification.service';
-import { QuizService } from '../../services/quiz.service';
-import { Store, select } from '@ngrx/store';
+import { Store } from '@ngrx/store';
 import { IQuiz } from '../../store/models/quiz';
 import { Observable } from 'rxjs';
-//import { QuizzesLoadedAction } from '../../store/actions/quizzes.actions';
-import { AppState, selectQuizState, selectQuizzes } from '../../store';
-import { Dictionary } from '@ngrx/entity';
-import { QuizzesState } from '../../store/reducers/quizzes.reducer';
+import { AppState, selectModalShow } from '../../store';
+import { selectQuizzes } from '../../store/selectors/quizzes.selectors';
 import { loadQuizzes } from '../../store/actions/quizzes.actions';
 
 @Component({
@@ -17,20 +12,18 @@ import { loadQuizzes } from '../../store/actions/quizzes.actions';
   styleUrl: './quizzes-page.component.scss'
 })
 export class QuizzesPageComponent implements OnInit {
-  title = 'quizzes';
-  term = ''; // todo разобраться с фильтром
+
+  term: string = ''
   
   quizzes$: Observable<(IQuiz | undefined)[]> = this.store.select(selectQuizzes)
 
+  isShowModal$: Observable<boolean> = this.store.select(selectModalShow)
+
   constructor(
-    public quizService: QuizService,
-    public modalService: ModalService,
-    public notificationService: NotificationService,
     private store: Store<AppState>
   ) {}
 
   ngOnInit(): void {
-    // todo лоадинг добавлю потом отдельным компонентом
-    this.store.dispatch(loadQuizzes());
+    this.store.dispatch(loadQuizzes())
   }
 }

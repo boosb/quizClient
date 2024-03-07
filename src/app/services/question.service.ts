@@ -3,6 +3,7 @@ import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http'
 import { ErrorService } from './error.service';
 import { Observable, catchError, throwError, retry, tap, Subject } from 'rxjs';
 import { IQuestion } from '../store/models/question';
+import { Update } from '@ngrx/entity';
 
 @Injectable({
   providedIn: 'root'
@@ -12,16 +13,6 @@ export class QuestionService {
     private http: HttpClient,
     private errorService: ErrorService
   ) { }
-
-  currentQuestion$ = new Subject<IQuestion>();
-
-  lastCreatedQuestion$ = new Subject<IQuestion>();
-
-  lastDeletedQuestionId$ = new Subject<number | undefined>();
-  
-  setCurrentQuestion(question: IQuestion) {
-    this.currentQuestion$.next(question);
-  }
   
   getAll(quizId: number | undefined): Observable<IQuestion[]> {
     return this.http.get<IQuestion[]>(`http://localhost:3000/question`, {
@@ -38,32 +29,15 @@ export class QuestionService {
   }
 
   create(question: IQuestion): Observable<IQuestion> {
-    return this.http.post<IQuestion>(`http://localhost:3000/question`, question)
-      .pipe(
-        tap((createdQuestion) => {
-          this.lastCreatedQuestion$.next(createdQuestion);
-        })
-      );
+    return this.http.post<IQuestion>(`http://localhost:3000/question`, question);
   }
 
-  update(questionId: number | undefined, question: IQuestion): Observable<IQuestion> {
-    return this.http.patch<IQuestion>(`http://localhost:3000/question/${questionId}`, question)
-      .pipe(
-        tap(() => {
-          this.getOne(questionId).subscribe((updatedQuestion) => {
-            this.currentQuestion$.next(updatedQuestion);
-          });
-        })
-      );
+  update(question: Update<IQuestion>): Observable<IQuestion> {
+    return this.http.patch<IQuestion>(`http://localhost:3000/question/${question.id}`, question.changes)
   }
 
   delete(questionId: number | undefined): Observable<IQuestion> {
     return this.http.delete<IQuestion>(`http://localhost:3000/question/${questionId}`)
-      .pipe(
-        tap(() => {
-          this.lastDeletedQuestionId$.next(questionId);
-        })
-      );
   }
 
   private errorHandler(error: HttpErrorResponse) { // todo убрать

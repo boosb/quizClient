@@ -1,11 +1,3 @@
-<nav class="auth-nav">
-    <span class="link-box">
-        <span (click)="authService.swapLogIn()" class="nav-item">Log In</span>
-        <span class="nav-item">/</span>
-        <span (click)="authService.swapSignIn()" class="nav-item">Sign In</span>
-    </span>
-</nav>
-
 <div class="wrapper">
 
     <form [formGroup]="authForm" (ngSubmit)="submit()" class="form-box">

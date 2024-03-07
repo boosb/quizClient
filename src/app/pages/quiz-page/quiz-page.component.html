@@ -1,6 +1,8 @@
-<app-modal *ngIf="modalService.isVisible$ | async" type={{modalService.modalType}}></app-modal>
+<app-modal *ngIf="isShowModal$ | async"></app-modal>
 
 <h1 class="large-title main-title">{{ this.isUpdate ? 'Update quiz' : 'Create quiz' | titlecase }}</h1>
+
+<app-menu-btn></app-menu-btn>
 
 <div class="wrapper">
     <div class="input-block">
@@ -44,7 +46,7 @@
 
         <button 
             class="default-admin-btn"
-            (click)="modalService.addQuestion()"
+            (click)="addQuestion()"
         >Add question</button>
     </div>
 </div>

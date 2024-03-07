@@ -3,13 +3,12 @@ import { BrowserModule } from '@angular/platform-browser';
 import { CommonModule } from '@angular/common';
 import { AppComponent } from './app.component';
 import { RouterLink, RouterModule, RouterOutlet } from '@angular/router';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { QuizComponent } from './components/admin-side-components/quiz-components/quiz/quiz.component';
 import { GlobalErrorComponent } from "./components/common-components/global-error/global-error.component";
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FilterQuestionPipe } from './pipes/filter-question.pipe';
 import { ModalComponent } from './components/common-components/modal/modal.component';
-import { CreateQuestionComponent } from './components/admin-side-components/question-components/create-question/create-question.component';
 import { FocusDirective } from './directives/focus.directive';
 import { QuizzesPageComponent } from './pages/quizzes-page/quizzes-page.component';
 import { InfoPageComponent } from './pages/info-page/info-page.component';
@@ -21,11 +20,9 @@ import { NotificationComponent } from './components/common-components/notificati
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AdminMenuComponent } from './components/admin-side-components/admin-menu/admin-menu.component';
 import { AdminMenuItemComponent } from './components/admin-side-components/admin-menu-item/admin-menu-item.component';
-import { CreateAnswerComponent } from './components/admin-side-components/answer-components/create-answer/create-answer.component';
-import { QuestionComponent } from './components/admin-side-components/question-components/question/question.component';
+import { QuestionComponent } from './components/admin-side-components/question/question.component';
 import { FilterQuizzesPipe } from './pipes/filter-quizzes.pipe';
 import { AnswerComponent } from './components/admin-side-components/answer-components/answer/answer.component';
-import { EditQuestionComponent } from './components/admin-side-components/question-components/edit-question/edit-question.component';
 import { ConfirmComponent } from './components/common-components/confirm/confirm.component';
 import { StoreModule, provideStore } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
@@ -37,6 +34,19 @@ import { QuizPageComponent } from './pages/quiz-page/quiz-page.component';
 import { QuestionsEffects } from './store/effects/questions.effects';
 import { StoreDevtoolsModule, provideStoreDevtools } from '@ngrx/store-devtools';
 import { quizzesReducer } from './store/reducers/quizzes.reducer';
+import { qustionsReducer } from './store/reducers/questions.reducer';
+import { answersReducer } from './store/reducers/answers.reducer';
+import { AnswersEffects } from './store/effects/answers.effects';
+import { QuestionModalComponent } from './components/admin-side-components/question-modal/question-modal.component';
+import { MenuBtnComponent } from './components/common-components/menu-btn/menu-btn.component';
+import { menuReducer } from './store/reducers/menu.reducer';
+import { modalReducer } from './store/reducers/modal.reducer';
+import { AnswerModalComponent } from './components/admin-side-components/answer-modal/answer-modal.component';
+import { AuthGuard } from './guards/auth.guard';
+import { JwtInterceptor } from './helpers/jwt.interceptor';
+import { AuthEffects } from './store/effects/auth.effects';
+import { authReducer } from './store/reducers/auth.reducer';
+import { RoleGuard } from './guards/role.guard';
 
 @NgModule({
     declarations: [
@@ -44,7 +54,6 @@ import { quizzesReducer } from './store/reducers/quizzes.reducer';
         QuizComponent, 
         GlobalErrorComponent,
         ModalComponent,
-        CreateQuestionComponent,
         FilterQuestionPipe,
         FilterQuizzesPipe,
         FocusDirective,
@@ -57,12 +66,13 @@ import { quizzesReducer } from './store/reducers/quizzes.reducer';
         NotificationComponent,
         AdminMenuComponent,
         AdminMenuItemComponent,
-        CreateAnswerComponent,
         QuestionComponent,
         AnswerComponent,
-        EditQuestionComponent,
         ConfirmComponent,
-        QuizPageComponent
+        QuizPageComponent,
+        QuestionModalComponent,
+        MenuBtnComponent,
+        AnswerModalComponent
     ],
     providers: [
         provideStore(),
@@ -73,7 +83,8 @@ import { quizzesReducer } from './store/reducers/quizzes.reducer';
           trace: false, //  If set to true, will include stack trace for every dispatched action, so you can see it in trace tab jumping directly to that part of code
           traceLimit: 75, // maximum stack trace frames to be stored (in case trace option was provided as true)
           connectInZone: true // If set to true, the connection is established within the Angular zone
-        })
+        }),
+        { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     ],
     bootstrap: [AppComponent],
     imports: [
@@ -81,13 +92,13 @@ import { quizzesReducer } from './store/reducers/quizzes.reducer';
         // RouterOutlet,
         // RouterLink,
         RouterModule.forRoot([
-            {path: '', component: QuizzesPageComponent},
+            {path: '', component: QuizzesPageComponent, canActivate: [AuthGuard]},
             {path: 'info', component: InfoPageComponent},
-            {path: 'rating', component: RatingPageComponent},
+            {path: 'rating', component: RatingPageComponent, canActivate: [AuthGuard]},
             {path: 'auth', component: AuthPageComponent},
-            {path: 'quizzes/create', component: QuizPageComponent},
-            {path: 'quizzes/edit/:id', component: QuizPageComponent},
-            {path: 'quizzes', component: QuizzesPageComponent}
+            {path: 'quizzes/create', component: QuizPageComponent, canActivate: [AuthGuard, RoleGuard]},
+            {path: 'quizzes/edit/:id', component: QuizPageComponent, canActivate: [AuthGuard, RoleGuard]},
+            // todo настроить компонент и маршрут PageNotFoundComponent с **
         ]),
         HttpClientModule, // todo а этот модуль я не нашел как подключить иначе, кроме как в ngModule
         BrowserModule, // todo проблема запуска была в этом
@@ -95,12 +106,18 @@ import { quizzesReducer } from './store/reducers/quizzes.reducer';
         ReactiveFormsModule,
         BrowserAnimationsModule,
         StoreModule.forRoot(reducers),
-        StoreModule.forFeature('quiz', quizzesReducer),
+        StoreModule.forFeature('quizzes', quizzesReducer),
         StoreModule.forFeature('router', routerReducer),
+        StoreModule.forFeature('questions', qustionsReducer),
+        StoreModule.forFeature('answers', answersReducer),
+        StoreModule.forFeature('menu', menuReducer),
+        StoreModule.forFeature('modal', modalReducer),
+        StoreModule.forFeature('auth', authReducer),
         EffectsModule.forRoot([
             QuizzesEffects,
             QuestionsEffects,
-            
+            AnswersEffects,
+            AuthEffects
         ]),
         StoreRouterConnectingModule.forRoot({
            // serializer: CustomSerializer

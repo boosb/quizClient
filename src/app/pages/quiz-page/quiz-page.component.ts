@@ -1,15 +1,19 @@
 import { Component } from '@angular/core';
 import { Store, select } from '@ngrx/store';
-import { AppState, selectCurrentQuiz, selectCurrentQuizQuestions } from '../../store';
+import { AppState, selectModalShow } from '../../store';
 import { QuestionService } from '../../services/question.service';
-import { ModalService } from '../../services/modal.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { IQuiz } from '../../store/models/quiz';
 import { Observable, Subscription } from 'rxjs';
 import { IQuestion } from '../../store/models/question';
-import { ActivatedRoute } from '@angular/router';
-import { addRequiest, updateRequiest, updatedSuccess } from '../../store/actions/quizzes.actions';
+import { addRequiest, loadQuizzes, selectQuiz, updateRequiest } from '../../store/actions/quizzes.actions';
 import { Update } from '@ngrx/entity';
+import { loadQuestions } from '../../store/actions/questions.actions';
+import { selectCurrentQuiz } from '../../store/selectors/quizzes.selectors';
+import { selectAllQuestions } from '../../store/selectors/questions.selectors';
+import { loadAnswers } from '../../store/actions/answers.actions';
+import { ActivatedRoute } from '@angular/router';
+import { showConfirm, showModalQuestions } from '../../store/actions/modal.actions';
 
 @Component({
   selector: 'app-quiz-page',
@@ -30,6 +34,8 @@ export class QuizPageComponent {
   quiz: IQuiz | undefined
 
   questions: IQuestion[] | undefined
+
+  isShowModal$: Observable<boolean> = this.store.select(selectModalShow)
 
   form = new FormGroup({
     quizName: new FormControl<string>(``, [
@@ -52,40 +58,36 @@ export class QuizPageComponent {
   }
 
   constructor(
-    public modalService: ModalService,
+
     public questionService: QuestionService,
-    private activateRoute: ActivatedRoute,
+    private activatedRoute: ActivatedRoute,
     private store: Store<AppState>
   ) {
-    const edit = activateRoute.snapshot.url.find(part => part.path === 'edit')
+    const edit = activatedRoute.snapshot.url.find(part => part.path === 'edit')
     this.isUpdate = edit ? true : false
   }
 
   ngOnInit(): void {
-    this.questionsSubs = this.store.pipe(select(selectCurrentQuizQuestions))
-      .subscribe(questions => this.questions = questions);
-
-    //this.store.pipe(select(selectQuizEntities)).subscribe(test=> {console.log(test, ' >>> TEST_TEST')});  
-
-    this.quizSubs = this.store.pipe(select(selectCurrentQuiz)).subscribe(quiz => {
-      this.quiz = quiz;
-      this.quizName.setValue(quiz?.name);
-      this.complexityQuiz.setValue(quiz?.complexity);
-    });
-    
-    console.log( this.isUpdate, ' >>> edit-edit')
+    this.quizSubs = this.store.pipe(select(selectCurrentQuiz))
+      .subscribe(quiz => this._setQuizData(quiz))
+    this.questionsSubs = this.store.pipe(select(selectAllQuestions))
+      .subscribe(questions => this.questions = questions)
   }
 
   ngOnDestroy(): void {
-    this.quizSubs.unsubscribe();
-    this.questionsSubs.unsubscribe();
+    this.quizSubs.unsubscribe()
+    this.questionsSubs.unsubscribe()
+  }
+
+  addQuestion() {
+    this.store.dispatch(showModalQuestions({data: { isUpdate: false }}))
   }
 
   submit() {
-    this.modalService.showConfirm({
+    this.store.dispatch(showConfirm({ data: {
       text: `Do you really want to ${this.isUpdate ? 'update' : 'create'} a quiz?`,
       okCallback: this.isUpdate ? this._updateQuiz.bind(this) : this._createQuiz.bind(this)
-    });
+    }}))
   }
 
   _createQuiz() {
@@ -110,5 +112,26 @@ export class QuizPageComponent {
       }
     }
     this.store.dispatch(updateRequiest({update: quizUpdate}));
+  }
+
+  _setQuizData(quiz: IQuiz | undefined) {
+    if(!quiz) {
+      return
+    }
+
+    this.quiz = quiz
+    this._loadData()
+    this._setQuizValues()
+  }
+
+  _loadData() {    
+    this.store.dispatch(selectQuiz({ quizId: Number(this.quizId) }))
+    this.store.dispatch(loadQuestions({ quizId: Number(this.quizId) })) // todo надо уходить от этих мудацких преобразования типов
+    this.store.dispatch(loadAnswers({ quizId: Number(this.quizId) }))
+  }
+
+  _setQuizValues() {
+    this.quizName.setValue(this.quiz?.name)
+    this.complexityQuiz.setValue(this.quiz?.complexity)
   }
 }

@@ -6,4 +6,14 @@
 
 .buttons {
     display: flex;
+    align-items: center;
+}
+
+.right-info {
+    color: green;
+    border: 1px solid green;
+    font-size: 11px;
+    padding: 0px 8px;
+    height: 19px;
+    border-radius: 3px;
 }

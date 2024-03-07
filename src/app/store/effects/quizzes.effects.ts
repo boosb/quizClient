@@ -5,7 +5,7 @@ import { map, exhaustMap, catchError, mergeMap } from 'rxjs/operators';
 import { QuizService } from '../../services/quiz.service';
 import { Router } from '@angular/router';
 import { NotificationService } from '../../services/notification.service';
-import { addQuestionRequest, addQuestionSuccess, addRequiest, addedSuccess, deleteRequiest, deletedSuccess, loadQuizzes, loadQuizzesSuccess, updateRequiest, updatedSuccess } from '../actions/quizzes.actions';
+import { addRequiest, addedSuccess, deleteRequiest, deletedSuccess, loadQuizzes, loadQuizzesSuccess, updateRequiest, updatedSuccess } from '../actions/quizzes.actions';
 import { QuestionService } from '../../services/question.service';
 
 @Injectable()
@@ -58,22 +58,6 @@ export class QuizzesEffects {
         }),
         catchError(() => EMPTY)
       ))
-    )
-  );
-
-  addQuestion$ = createEffect(() => this.actions$.pipe(
-    ofType(addQuestionRequest),
-    mergeMap((action) => {
-      console.log(action, ' >>> action')
-      return this.questionService.create(action.question)
-        .pipe(
-          map((createdQuestion) => {
-            this.notificationService.show(`Question has been created!`)
-            return addQuestionSuccess({question: createdQuestion})
-          }),
-          catchError(() => EMPTY)
-        )
-      })
     )
   );
 
