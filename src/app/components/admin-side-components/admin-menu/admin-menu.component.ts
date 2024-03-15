@@ -14,7 +14,7 @@ import { closeMenu } from '../../../store/actions/menu.action';
 })
 export class AdminMenuComponent {
 
-  public isShow$: Observable<boolean> = this.store.select(selectMenuIsShow)
+  public isShow$: Observable<boolean> = this.store.select(selectMenuIsShow);
 
   constructor(
     private router: Router,
@@ -22,8 +22,8 @@ export class AdminMenuComponent {
   ) {}
 
   logout() {
-    this.router.navigateByUrl('/auth')
-    this.store.dispatch(closeMenu())
-    this.store.dispatch(logout())
+    this.router.navigateByUrl('/auth');
+    this.store.dispatch(closeMenu());
+    this.store.dispatch(logout());
   }
 }

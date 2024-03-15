@@ -1,7 +1,7 @@
 <div class="quiz-item">
     <div class="main-content-wrapper">
         <h2 class="quiz-text">{{ quiz?.name }}</h2>
-        <div class="buttons">
+        <div class="buttons" *appRoleAccess="['ADMIN', 'OWNER']">
             <div class="btn" [routerLink]="['/quizzes/edit', quiz?.id]">
                 <img src="../../../assets/img/pencil.png" alt="edit">
             </div>

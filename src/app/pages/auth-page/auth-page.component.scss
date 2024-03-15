@@ -39,6 +39,11 @@ $button-text-color: #fff; //todo разобраться как оформить 
     }
 }
 
+.confirm-email-row,
+.error-row {
+    color: red;
+}
+// todo  вот эту логику кнопки ваще в отдельный компонент и ЗБС
 .bubbly-button{
     width: 150px;
     font-family: 'Helvetica', 'Arial', sans-serif;

@@ -1,16 +1,16 @@
 import { Component, Input } from '@angular/core';
-import { IQuiz } from '../../../../store/models/quiz';
+import { IQuiz } from '../../../store/models/quiz';
 import { Store } from '@ngrx/store';
-import { AppState } from '../../../../store';
-import { deleteRequiest } from '../../../../store/actions/quizzes.actions';
-import { showConfirm } from '../../../../store/actions/modal.actions';
+import { AppState } from '../../../store';
+import { deleteRequiest } from '../../../store/actions/quizzes.actions';
+import { showConfirm } from '../../../store/actions/modal.actions';
 
 @Component({
     selector: 'app-quiz',
     templateUrl: './quiz.component.html',
     styleUrls: [
         './quiz.component.scss',
-        '../../../../app.component.scss'
+        '../../../app.component.scss'
     ]
 })
 export class QuizComponent {

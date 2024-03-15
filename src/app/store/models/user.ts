@@ -5,4 +5,7 @@ export interface IUser {
     email?: string
     password: string
     token?: string
+    isEmailConfirmed?: boolean
+    avatar?: string
+    alias?: string
 }

@@ -1,15 +1,17 @@
 import { createReducer, on } from '@ngrx/store';
 import { IUser } from '../models/user';
-import { login, loginSuccess, logout, registrationSuccess } from '../actions/auth.actions';
+import { confirmEmailSuccess, loginError, loginSuccess, logout, registrationSuccess, updateUserSuccess } from '../actions/auth.actions';
 
 export interface AuthState {
   user: IUser | null;
   role: string | null;
+  errorText: string | null
 }
 
 const initialAuthState: AuthState = {
     user: null,
-    role: null
+    role: null,
+    errorText: null
 }
 
 export const authReducer = createReducer(
@@ -19,21 +21,48 @@ export const authReducer = createReducer(
     return {
         ...state,
         user,
-        role: user.role.name
+        role: user.role.name,
+        errorText: null
+    }
+  }),
+  on(loginError, (state, { errorText }) => {
+    return {
+        ...state,
+        errorText
     }
   }),
   on(logout, (state, {}) => {
     return {
         ...state,
         user: null,
-        role: null
+        role: null,
+        errorText: null
     }
   }),
   on(registrationSuccess, (state, { user }) => {
     return {
         ...state,
         user,
-        role: user.role.name
+        role: user.role.name,
+        errorText: null
+    }
+  }),
+  on(confirmEmailSuccess, (state, { user }) => {
+    return {
+        ...state,
+        user,
+        role: user.role.name,
+        errorText: null
+    }
+  }),
+  on(updateUserSuccess, (state, { updatedUser }) => {
+    // todo Ваще тут возникла проблема. Хотел обновить объект на клиенте на основе update.changes, но не нашел как это сделать в TS
+    // поэтому просто обновляю объект на сервере, а после получаю обновленного пользователя
+    return {
+        ...state,
+        user: updatedUser,
+        role: updatedUser.role.name,
+        errorText: null
     }
   }),
 );

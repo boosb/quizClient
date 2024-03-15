@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { AppComponent } from './app.component';
 import { RouterLink, RouterModule, RouterOutlet } from '@angular/router';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
-import { QuizComponent } from './components/admin-side-components/quiz-components/quiz/quiz.component';
+import { QuizComponent } from './components/admin-side-components/quiz/quiz.component';
 import { GlobalErrorComponent } from "./components/common-components/global-error/global-error.component";
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FilterQuestionPipe } from './pipes/filter-question.pipe';
@@ -22,7 +22,7 @@ import { AdminMenuComponent } from './components/admin-side-components/admin-men
 import { AdminMenuItemComponent } from './components/admin-side-components/admin-menu-item/admin-menu-item.component';
 import { QuestionComponent } from './components/admin-side-components/question/question.component';
 import { FilterQuizzesPipe } from './pipes/filter-quizzes.pipe';
-import { AnswerComponent } from './components/admin-side-components/answer-components/answer/answer.component';
+import { AnswerComponent } from './components/admin-side-components/answer/answer.component';
 import { ConfirmComponent } from './components/common-components/confirm/confirm.component';
 import { StoreModule, provideStore } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
@@ -47,6 +47,9 @@ import { JwtInterceptor } from './helpers/jwt.interceptor';
 import { AuthEffects } from './store/effects/auth.effects';
 import { authReducer } from './store/reducers/auth.reducer';
 import { RoleGuard } from './guards/role.guard';
+import { AccessDirective } from './directives/access.directive';
+import { ConfirmEmailPageComponent } from './pages/confirm-email-page/confirm-email-page.component';
+import { ProfilePageComponent } from './pages/profile-page/profile-page.component';
 
 @NgModule({
     declarations: [
@@ -57,6 +60,7 @@ import { RoleGuard } from './guards/role.guard';
         FilterQuestionPipe,
         FilterQuizzesPipe,
         FocusDirective,
+        AccessDirective,
         QuizzesPageComponent,
         InfoPageComponent,
         NavigationComponent,
@@ -72,7 +76,9 @@ import { RoleGuard } from './guards/role.guard';
         QuizPageComponent,
         QuestionModalComponent,
         MenuBtnComponent,
-        AnswerModalComponent
+        AnswerModalComponent,
+        ConfirmEmailPageComponent,
+        ProfilePageComponent
     ],
     providers: [
         provideStore(),
@@ -98,6 +104,8 @@ import { RoleGuard } from './guards/role.guard';
             {path: 'auth', component: AuthPageComponent},
             {path: 'quizzes/create', component: QuizPageComponent, canActivate: [AuthGuard, RoleGuard]},
             {path: 'quizzes/edit/:id', component: QuizPageComponent, canActivate: [AuthGuard, RoleGuard]},
+            {path: 'confirm', component: ConfirmEmailPageComponent},
+            {path: 'profile', component: ProfilePageComponent, canActivate: [AuthGuard]},
             // todo настроить компонент и маршрут PageNotFoundComponent с **
         ]),
         HttpClientModule, // todo а этот модуль я не нашел как подключить иначе, кроме как в ngModule

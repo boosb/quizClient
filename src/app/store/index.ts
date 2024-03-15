@@ -38,7 +38,8 @@ export const selectAuthState = createFeatureSelector<fromAuth.AuthState>('auth')
 
 export const {
   selectCurrentRoute,
-  selectRouteParams
+  selectRouteParams,
+  selectQueryParams
 } = getRouterSelectors();
 
 // MENU selectors
@@ -62,14 +63,3 @@ export const selectModalShow = createSelector(
   selectModalState,
   (state: fromModal.ModalState) => state.isShow
 );
-
-// AUTH selectors
-export const selectUser = createSelector(
-  selectAuthState,
-  (state: fromAuth.AuthState) => state.user
-)
-
-export const selectUserRole = createSelector(
-  selectAuthState,
-  (state: fromAuth.AuthState) => state.role
-)

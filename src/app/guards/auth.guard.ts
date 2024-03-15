@@ -3,9 +3,10 @@ import { Router, CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot } from
 
 import { AuthService } from '../services/auth.service';
 import { Store, select } from '@ngrx/store';
-import { AppState, selectUser } from '../store';
+import { AppState } from '../store';
 import { IUser } from '../store/models/user';
 import { Subscription } from 'rxjs';
+import { selectUser } from '../store/selectors/auth.selectors';
 
 @Injectable({ providedIn: 'root' })
 export class AuthGuard implements CanActivate, OnDestroy {
@@ -25,11 +26,11 @@ export class AuthGuard implements CanActivate, OnDestroy {
         this.currentUserSubs.unsubscribe()
     }
 
-    canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {    
-        console.log(this.currentUser, ' >>> this.currentUser')    
-        if(!this.currentUser) {
+    canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+        const cond = this.currentUser && this.currentUser.isEmailConfirmed;
+        if(!cond) {
             this.router.navigate(['/auth'], { queryParams: { returnUrl: state.url } })
         }
-        return this.currentUser ? true : false
+        return !!cond;
     }
 }

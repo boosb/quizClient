@@ -1,0 +1,53 @@
+.main-content-wrapper {
+    display: flex;
+    margin-bottom: 70px;
+}
+
+.avatar-wrapper {
+    position: relative;
+    max-width: 130px;
+    max-height: 130px;
+    margin-right: 50px;
+    padding: 15px;
+}
+
+.btn-avatar-edit {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    
+    &::before{
+        background-image: url('../../../assets/img/basket.png');
+    }
+}
+
+.avatar-img {
+    padding: 10px;
+    border: 1px solid black;
+    border-radius: 50%;
+}
+
+.info-item {
+    margin-bottom: 20px;
+}
+
+.info-item__email-box,
+.info-item__alias-box {
+    display: flex;
+}
+
+.info-item__alias-title,
+.info-item__email-title {
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+
+.info-item__email,
+.info-item__alias {
+    margin-right: 10px;
+}
+
+.input-field {
+    border: 1px solid black;
+    border-radius: 2px;
+}

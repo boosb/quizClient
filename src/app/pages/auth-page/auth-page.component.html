@@ -15,11 +15,21 @@
             placeholder="Password"
         >
 
+        <p
+            *ngIf="errorText"
+            class="error-row"
+        >{{ errorText }}</p>
+
         <button type="submit" class="bubbly-button" (click)="animateButton($event)">Submit</button>
 
         <p 
             class="footer-text"
             (click)="authService.toggleIsLogin()"
         >{{ authService.isLogin ? 'You don\'t have an account?' : 'Already have an account?' }}</p>
+
+        <p 
+            *ngIf="isShowConfirmInfo"
+            class="confirm-email-row"
+        >Your account has been created! Please confirm your email</p>
     </form>
 </div>

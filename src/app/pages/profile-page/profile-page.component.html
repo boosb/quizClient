@@ -1,0 +1,71 @@
+<app-menu-btn></app-menu-btn>
+
+<form [formGroup]="form" (ngSubmit)="submit()">
+    <div class="main-content-wrapper">
+        <div class="avatar-wrapper">
+            <img class="avatar-img" src="../../../assets/img/default-user.png" alt="avatar">
+    
+            <input 
+                type="file"
+                class="btn-mini btn-avatar-edit"
+                formControlName="avatarFile"
+                (change)="test($event)"
+            >
+
+
+        </div>
+    
+        <div class="content-wrapper">
+            <div class="info-item">
+                <div class="info-item__alias-title">Alias</div>
+                <div class="info-item__alias-box">
+                    <div *ngIf="profilePageService.toggleAlias$ | async; then inputAliasText else aliasText"></div>
+
+                    <ng-template #aliasText>
+                        <div class="info-item__email">{{ user?.alias }}</div>
+                    </ng-template>
+
+                    <ng-template #inputAliasText>
+                        <input 
+                            type="text"
+                            class="input-field"
+                            formControlName="aliasText"
+                        >
+                    </ng-template>
+
+                    <div class="btn-mini" (click)="profilePageService.switchAlias()">
+                        <img src="../../../assets/img/pencil.png" alt="edit">
+                    </div>
+                </div>
+            </div>
+    
+            <div class="info-item">
+                <div class="info-item__email-title">Email</div>
+                <div class="info-item__email-box">
+                    <div *ngIf="profilePageService.toggleEmail$ | async; then inputEmailText else emailText"></div>
+
+                    <ng-template #emailText>
+                        <div class="info-item__email">{{ user?.email }}</div>
+                    </ng-template>
+
+                    <ng-template #inputEmailText>
+                        <input 
+                            type="text"
+                            class="input-field"
+                            formControlName="emailText"
+                        >
+                    </ng-template>
+
+                    <div class="btn-mini" (click)="profilePageService.switchEmail()">
+                        <img src="../../../assets/img/pencil.png" alt="edit">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <button type="submit" class="default-admin-btn">Save changes</button>
+
+</form>
+
+<button class="default-admin-btn" (click)="uploadAvatar()">TEST</button>

@@ -25,9 +25,9 @@ export class AnswersEffects {
     exhaustMap((action) => this.answerService.create(action.answer)
       .pipe(
           map(createdAnswer => {
-            this.store.dispatch(closeModal())
-            this.notificationService.show(`Answer has been created!`)
-            return addedAnswerSuccess({answer: createdAnswer})
+            this.store.dispatch(closeModal());
+            this.notificationService.show(`Answer has been created!`);
+            return addedAnswerSuccess({answer: createdAnswer});
           }),
           catchError(() => EMPTY)
       ))
@@ -39,8 +39,8 @@ export class AnswersEffects {
     exhaustMap((action) => this.answerService.delete(action.answerId)
       .pipe(
         map(() => {
-          this.notificationService.show(`Answer has been deleted!`)
-          return deletedAnswerSuccess({answerId: action.answerId})
+          this.notificationService.show(`Answer has been deleted!`);
+          return deletedAnswerSuccess({answerId: action.answerId});
         }),
         catchError(() => EMPTY)
       ))
@@ -52,9 +52,9 @@ export class AnswersEffects {
     exhaustMap((action) => this.answerService.update(action.update)
       .pipe(
         map(() => {
-          this.store.dispatch(closeModal())
-          this.notificationService.show(`Answer has been updated!`)
-          return updatedAnswerSuccess({update: action.update})
+          this.store.dispatch(closeModal());
+          this.notificationService.show(`Answer has been updated!`);
+          return updatedAnswerSuccess({update: action.update});
         }),
         catchError(() => EMPTY)
       ))

@@ -1,9 +1,10 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { Store, select } from '@ngrx/store';
-import { AppState, selectUserRole } from '../store';
+import { AppState } from '../store';
 import { Subscription } from 'rxjs';
 import { showConfirm } from '../store/actions/modal.actions';
+import { selectUserRole } from '../store/selectors/auth.selectors';
 
 @Injectable({ providedIn: 'root' })
 export class RoleGuard implements CanActivate, OnDestroy {

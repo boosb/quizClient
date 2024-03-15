@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { IUser } from '../store/models/user';
-import { BehaviorSubject, Observable, map } from 'rxjs';
+import { BehaviorSubject, Observable, map, tap } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
+import { IConfirmationData } from '../store/models/confirmationData';
 
 export interface User {
   token: string
@@ -21,7 +22,7 @@ export class AuthService {
     private http: HttpClient
   ) {
     this.currentUserSubject = new BehaviorSubject<IUser|null>(JSON.parse(String(localStorage.getItem('currentUser'))));
-    this.currentUser = this.currentUserSubject.asObservable();
+    this.currentUser = this.currentUserSubject.asObservable(); // todo а оно, вот это вот все, нужно мне вообще? 
   }
 
   isLogin = true;
@@ -51,8 +52,10 @@ export class AuthService {
   }
 
   registration(user: IUser): Observable<IUser> {
-    console.log(user,'1')
     return this.http.post<IUser>('http://localhost:3000/user', user);
   }
 
+  confirmEmail(confirmationData: IConfirmationData): Observable<IUser> {
+    return this.http.post<IUser>('http://localhost:3000/auth/confirm', confirmationData);
+  }
 }

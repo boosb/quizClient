@@ -1,34 +1,54 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
-import { Router } from '@angular/router';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { AppState } from '../../store';
 import { login, registration } from '../../store/actions/auth.actions';
+import { selectError, selectUser } from '../../store/selectors/auth.selectors';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-auth-page',
   templateUrl: './auth-page.component.html',
   styleUrl: './auth-page.component.scss'
 })
-export class AuthPageComponent {
-  constructor(
-    public authService: AuthService,
-    private router: Router,
-    private store: Store<AppState>
-  ) {}
+export class AuthPageComponent implements OnDestroy {
+
+  confirmEmailSubs: Subscription;
+
+  errorTextSubs: Subscription;
+
+  isShowConfirmInfo: boolean | null;
+
+  errorText: string | null;
 
   authForm = new FormGroup({
     email: new FormControl(),
     password: new FormControl()
   });
-
+  
   get email() {
     return this.authForm.controls.email as FormControl;
   }
 
   get password() {
     return this.authForm.controls.password as FormControl;
+  }
+
+  constructor(
+    public authService: AuthService,
+    private store: Store<AppState>
+  ) {
+    this.confirmEmailSubs = this.store.pipe(select(selectUser)).subscribe(user => {
+      this.isShowConfirmInfo = user && !user.isEmailConfirmed;
+    });
+
+    this.errorTextSubs = this.store.pipe(select(selectError)).subscribe(errorText => this.errorText = errorText);
+  }
+
+  ngOnDestroy(): void {
+    this.confirmEmailSubs.unsubscribe();
+    this.errorTextSubs.unsubscribe();
   }
 
   submit() {
