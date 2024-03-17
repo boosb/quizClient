@@ -17,3 +17,6 @@ export const registrationSuccess = createAction('[Auth API] Registration Success
 
 export const updateUser = createAction('[Auth API] Update User', props<{ update: Update<IUser> }>());
 export const updateUserSuccess = createAction('[Auth API] Update User Success', props<{ updatedUser: IUser }>());
+
+export const uploadAvatar = createAction('[Auth API] Upload Avatar', props<{ userId: number | undefined, formData: FormData }>());
+export const uploadAvatarSuccess = createAction('[Auth API] Upload Avatar Success', props<{ updatedUser: IUser }>());

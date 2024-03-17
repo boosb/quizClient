@@ -6,9 +6,9 @@ import { Subscription } from 'rxjs';
 import { selectUser } from '../../store/selectors/auth.selectors';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ProfilePageService } from '../../services/profile-page.service';
-import { updateUser } from '../../store/actions/auth.actions';
+import { updateUser, uploadAvatar } from '../../store/actions/auth.actions';
 import { Update } from '@ngrx/entity';
-import { UserService } from '../../services/user.service';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-profile-page',
@@ -25,14 +25,15 @@ export class ProfilePageComponent implements OnDestroy {
 
   formData: FormData = new FormData();
 
+  avatar: any;
+
   // todo не забыть облажить тут все валидацией
   form = new FormGroup({
-    aliasText: new FormControl<string>('ghggfgf', [
+    aliasText: new FormControl<string>('', [
       Validators.required,
       Validators.minLength(6)
     ]),
     emailText: new FormControl<boolean>(false, []),
-    avatarFile: new FormControl('', [Validators.required]),
   });
 
   get aliasText() {
@@ -43,18 +44,26 @@ export class ProfilePageComponent implements OnDestroy {
     return this.form.controls.emailText as FormControl;
   }
 
-  get avatarFile() {
-    return this.form.controls.avatarFile as FormControl;
+  get avatarImg() {
+    return this.user?.avatar 
+      ? this.sanitizer.bypassSecurityTrustUrl(this.user?.avatar) 
+      : '../../../assets/img/default-user.png';
   }
 
   constructor(
     private readonly store: Store<AppState>,
     public profilePageService: ProfilePageService,
-    private userService: UserService
+    private sanitizer: DomSanitizer
   ) {
     this.userSubs = store.pipe(select(selectUser)).subscribe(currentUser => {
       this.user = currentUser
       console.log(this.user, ' >>> SUPER TEST')
+
+      // set avatar
+      if(currentUser?.avatar) {
+        this.avatar = sanitizer.bypassSecurityTrustUrl(currentUser?.avatar);
+      }
+      
     });
   }
 
@@ -73,20 +82,16 @@ export class ProfilePageComponent implements OnDestroy {
         // todo добавить обновление аватара
       }
     };
-    console.log('kkk')
     this.store.dispatch(updateUser({ update: userUpdate }));
   }
 
-  uploadAvatar() {
-    console.log(this.form.value.avatarFile, ' >>> this.form.value.avatarFile')
-    console.log(this.formData.get('avatar'), ' >>>> this.formData')
-    this.userService.uploadAvatar(this.user?.id, this.formData).subscribe()
-  }
-
-  test(event: any) {
+  changeAvatar(event: any) {
     const file = event.target.files[0];
-    console.log(event.target.files[0], ' >>> event.target.files[0]')
-
     this.formData.append('avatar', file, file.name);
+
+    this.store.dispatch(uploadAvatar({
+      userId: this.user?.id, 
+      formData: this.formData
+    }));    
   }
 }

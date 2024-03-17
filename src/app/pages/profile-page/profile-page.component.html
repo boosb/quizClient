@@ -3,15 +3,13 @@
 <form [formGroup]="form" (ngSubmit)="submit()">
     <div class="main-content-wrapper">
         <div class="avatar-wrapper">
-            <img class="avatar-img" src="../../../assets/img/default-user.png" alt="avatar">
+            <img class="avatar-img" [src]="avatarImg" alt="avatar">
     
             <input 
                 type="file"
                 class="btn-mini btn-avatar-edit"
-                formControlName="avatarFile"
-                (change)="test($event)"
+                (change)="changeAvatar($event)"
             >
-
 
         </div>
     
@@ -67,5 +65,3 @@
     <button type="submit" class="default-admin-btn">Save changes</button>
 
 </form>
-
-<button class="default-admin-btn" (click)="uploadAvatar()">TEST</button>

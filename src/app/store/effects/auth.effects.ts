@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { EMPTY, of } from 'rxjs';
 import { map, exhaustMap, catchError, mergeMap } from 'rxjs/operators';
-import { confirmEmail, confirmEmailSuccess, login, loginError, loginSuccess, registration, registrationSuccess, updateUser, updateUserSuccess } from '../actions/auth.actions';
+import { confirmEmail, confirmEmailSuccess, login, loginError, loginSuccess, registration, registrationSuccess, updateUser, updateUserSuccess, uploadAvatar, uploadAvatarSuccess } from '../actions/auth.actions';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 import { IUser } from '../models/user';
@@ -54,11 +54,11 @@ export class AuthEffects {
   // но тут есть нюансы: 1) если я владелец, возможно мне нужно видеть всех пользаков, чтобы именть возможность забанить (например)
   // 2) но если я обычный юзер, то мне нельзя владеть такой инфой 
   // 3) получается нужен какой-то гуард или какая-то логика, чтобы определать поведение редьюсера в зависимости от роли
-  updateUser$ = createEffect(() => this.actions$.pipe(
+  updateUserData$ = createEffect(() => this.actions$.pipe(
     ofType(updateUser),
     exhaustMap((action) => {
-      this.userServise.update(action.update).subscribe();
-      return this.userServise.getOne(Number(action.update.id))
+      this.userService.update(action.update).subscribe();
+      return this.userService.getOne(Number(action.update.id))
         .pipe(
           map((updatedUser) => {
             this.notificationService.show(`Your profile has been successfully updated!`);
@@ -69,11 +69,27 @@ export class AuthEffects {
     })
   )
   );
+
+  updateUserAvatar$ = createEffect(() => this.actions$.pipe(
+    ofType(uploadAvatar),
+    exhaustMap((action) => {
+      this.userService.uploadAvatar(action.userId, action.formData).subscribe(); // todo точно ли тут нужен subscribe()
+      return this.userService.getOne(Number(action.userId))
+        .pipe(
+          map((updatedUser) => {
+            this.notificationService.show(`Your avatar has been successfully updated!`);
+            return uploadAvatarSuccess({ updatedUser });
+          }),
+          catchError(() => EMPTY)
+        )
+      })
+    )
+  );
  
   constructor(
     private actions$: Actions,
     private authService: AuthService,
-    private userServise: UserService,
+    private userService: UserService,
     private notificationService: NotificationService,
     private router: Router
   ) {}
