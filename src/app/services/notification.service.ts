@@ -5,6 +5,7 @@ import { FULL_STATE, EMPTY_STATE } from '../components/common-components/notific
   providedIn: 'root'
 })
 export class NotificationService {
+  // todo хороший опыт, но надо бы перейти на angular material
   public text: string | undefined;
   public imgPath: string | undefined;
   public isShow: boolean | undefined;

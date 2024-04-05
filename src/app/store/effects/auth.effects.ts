@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { EMPTY, of } from 'rxjs';
-import { map, exhaustMap, catchError, mergeMap } from 'rxjs/operators';
-import { confirmEmail, confirmEmailSuccess, login, loginError, loginSuccess, registration, registrationSuccess, updateUser, updateUserSuccess, uploadAvatar, uploadAvatarSuccess } from '../actions/auth.actions';
+import { EMPTY, merge, of } from 'rxjs';
+import { map, exhaustMap, catchError, mergeMap, tap, switchMap, concatMap } from 'rxjs/operators';
+import { confirmEmail, confirmEmailSuccess, getAuthUser, getAuthUserSuccess, login, loginError, loginSuccess, registration, registrationSuccess, updateEmailUser, updateEmailUserError, updateEmailUserSuccess, updateUser, updateUserSuccess, uploadAvatar, uploadAvatarSuccess } from '../actions/auth.actions';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 import { IUser } from '../models/user';
@@ -56,34 +56,53 @@ export class AuthEffects {
   // 3) получается нужен какой-то гуард или какая-то логика, чтобы определать поведение редьюсера в зависимости от роли
   updateUserData$ = createEffect(() => this.actions$.pipe(
     ofType(updateUser),
-    exhaustMap((action) => {
-      this.userService.update(action.update).subscribe();
-      return this.userService.getOne(Number(action.update.id))
-        .pipe(
-          map((updatedUser) => {
-            this.notificationService.show(`Your profile has been successfully updated!`);
-            return updateUserSuccess({ updatedUser });
-          }),
-          catchError(() => EMPTY)
-        )
-    })
-  )
+    exhaustMap((action) => this.userService.update(action.update)
+      .pipe(
+        map(() => {
+          this.notificationService.show(`Your profile has been successfully updated!`);
+          return getAuthUser({userId: Number(action.update.id)})
+        }),
+        catchError(() => EMPTY)
+      ))
+    )
+  );
+
+  updateUserEmail$ = createEffect(() => this.actions$.pipe(
+    ofType(updateEmailUser),
+    exhaustMap((action) => this.userService.updateEmail(action.update)
+      .pipe(
+        map(() => {
+          this.notificationService.show(`Confirm your new email!`);
+          return updateEmailUserSuccess()
+        }),
+        catchError((err) => of(updateEmailUserError({errorText: err.error.message})))
+      ))
+    )
   );
 
   updateUserAvatar$ = createEffect(() => this.actions$.pipe(
     ofType(uploadAvatar),
-    exhaustMap((action) => {
-      this.userService.uploadAvatar(action.userId, action.formData).subscribe(); // todo точно ли тут нужен subscribe()
-      return this.userService.getOne(Number(action.userId))
-        .pipe(
-          map((updatedUser) => {
-            this.notificationService.show(`Your avatar has been successfully updated!`);
-            return uploadAvatarSuccess({ updatedUser });
-          }),
-          catchError(() => EMPTY)
-        )
-      })
-    )
+    switchMap((action) => this.userService.uploadAvatar(action.userId, action.formData)
+      .pipe(
+        map(() => {
+          this.notificationService.show(`Your avatar has been successfully updated!`);
+          return getAuthUser({userId: action.userId})
+        }),
+        catchError(() => EMPTY)
+      ))
+    )  
+  );
+
+  getAuthUser$ = createEffect(() => this.actions$.pipe(
+    ofType(getAuthUser),
+    switchMap((action) => this.userService.getOne(action.userId)
+      .pipe(
+        map((user) => {
+          return getAuthUserSuccess({ user: user });
+        }),
+        catchError(() => EMPTY)
+      ))
+    )  
   );
  
   constructor(

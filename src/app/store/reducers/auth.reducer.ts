@@ -1,6 +1,6 @@
 import { createReducer, on } from '@ngrx/store';
 import { IUser } from '../models/user';
-import { confirmEmailSuccess, loginError, loginSuccess, logout, registrationSuccess, updateUserSuccess, uploadAvatarSuccess } from '../actions/auth.actions';
+import { confirmEmailSuccess, getAuthUserSuccess, loginError, loginSuccess, logout, registrationSuccess, updateEmailUserError, updateUserSuccess, uploadAvatarSuccess } from '../actions/auth.actions';
 
 export interface AuthState {
   user: IUser | null;
@@ -23,12 +23,6 @@ export const authReducer = createReducer(
         user,
         role: user.role.name,
         errorText: null
-    }
-  }),
-  on(loginError, (state, { errorText }) => {
-    return {
-        ...state,
-        errorText
     }
   }),
   on(logout, (state, {}) => {
@@ -65,13 +59,34 @@ export const authReducer = createReducer(
         errorText: null
     }
   }),
-  on(uploadAvatarSuccess, (state, { updatedUser }) => {
-    // todo по сути такой же как updateUserSuccess, может можно как-то отрефакторить
+  on(uploadAvatarSuccess, (state, { userId, formData }) => {
+    // todo Хуйня какая-то, потом надо разобраться
     return {
         ...state,
-        user: updatedUser,
+       /* user: updatedUser,
         role: updatedUser.role.name,
-        errorText: null
+        errorText: null*/
     }
   }),
+  on(getAuthUserSuccess, (state, { user }) => {
+    return {
+        ...state,
+        user: user
+    }
+  }),
+
+  // ERRORS
+  // todo return одинаковый, можно ли 
+  on(loginError, (state, { errorText }) => {
+    return {
+        ...state,
+        errorText
+    }
+  }),
+  on(updateEmailUserError, (state, { errorText }) => {
+    return {
+        ...state,
+        errorText
+    }
+  })
 );

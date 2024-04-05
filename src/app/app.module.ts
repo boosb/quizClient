@@ -5,14 +5,11 @@ import { AppComponent } from './app.component';
 import { RouterLink, RouterModule, RouterOutlet } from '@angular/router';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { QuizComponent } from './components/admin-side-components/quiz/quiz.component';
-import { GlobalErrorComponent } from "./components/common-components/global-error/global-error.component";
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FilterQuestionPipe } from './pipes/filter-question.pipe';
 import { ModalComponent } from './components/common-components/modal/modal.component';
 import { FocusDirective } from './directives/focus.directive';
 import { QuizzesPageComponent } from './pages/quizzes-page/quizzes-page.component';
-import { InfoPageComponent } from './pages/info-page/info-page.component';
-import { NavigationComponent } from './components/navigation/navigation.component';
 import { RatingPageComponent } from './pages/rating-page/rating-page.component';
 import { UserComponent } from './components/user/user.component';
 import { AuthPageComponent } from './pages/auth-page/auth-page.component';
@@ -50,20 +47,32 @@ import { RoleGuard } from './guards/role.guard';
 import { AccessDirective } from './directives/access.directive';
 import { ConfirmEmailPageComponent } from './pages/confirm-email-page/confirm-email-page.component';
 import { ProfilePageComponent } from './pages/profile-page/profile-page.component';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import {MatButton, MatButtonModule} from '@angular/material/button';
+import {MatTooltip} from '@angular/material/tooltip';
+import {MatIconModule} from '@angular/material/icon';
+import {MatDividerModule} from '@angular/material/divider';
+import {MatInputModule} from '@angular/material/input';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import { QuizGameComponent } from './pages/quiz-game/quiz-game.component';
+import { gameReducer } from './store/reducers/quiz-game.reducer';
+import { GameEffects } from './store/effects/quiz-game.effects';
+import { GameStatisticComponent } from './components/game-statistic/game-statistic.component';
+import { usersReducer } from './store/reducers/users.reducer';
+import { UsersEffects } from './store/effects/users.effects';
+import {MatPaginatorModule} from '@angular/material/paginator';
 
 @NgModule({
     declarations: [
         AppComponent, 
         QuizComponent, 
-        GlobalErrorComponent,
         ModalComponent,
         FilterQuestionPipe,
         FilterQuizzesPipe,
         FocusDirective,
         AccessDirective,
         QuizzesPageComponent,
-        InfoPageComponent,
-        NavigationComponent,
         RatingPageComponent,
         UserComponent,
         AuthPageComponent,
@@ -78,7 +87,9 @@ import { ProfilePageComponent } from './pages/profile-page/profile-page.componen
         MenuBtnComponent,
         AnswerModalComponent,
         ConfirmEmailPageComponent,
-        ProfilePageComponent
+        ProfilePageComponent,
+        QuizGameComponent,
+        GameStatisticComponent
     ],
     providers: [
         provideStore(),
@@ -91,6 +102,7 @@ import { ProfilePageComponent } from './pages/profile-page/profile-page.componen
           connectInZone: true // If set to true, the connection is established within the Angular zone
         }),
         { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
+        provideAnimationsAsync(),
     ],
     bootstrap: [AppComponent],
     imports: [
@@ -99,13 +111,13 @@ import { ProfilePageComponent } from './pages/profile-page/profile-page.componen
         // RouterLink,
         RouterModule.forRoot([
             {path: '', component: QuizzesPageComponent, canActivate: [AuthGuard]},
-            {path: 'info', component: InfoPageComponent},
             {path: 'rating', component: RatingPageComponent, canActivate: [AuthGuard]},
             {path: 'auth', component: AuthPageComponent},
             {path: 'quizzes/create', component: QuizPageComponent, canActivate: [AuthGuard, RoleGuard]},
             {path: 'quizzes/edit/:id', component: QuizPageComponent, canActivate: [AuthGuard, RoleGuard]},
             {path: 'confirm', component: ConfirmEmailPageComponent},
             {path: 'profile', component: ProfilePageComponent, canActivate: [AuthGuard]},
+            {path: 'quizzes/:id', component: QuizGameComponent, canActivate: [AuthGuard]},
             // todo настроить компонент и маршрут PageNotFoundComponent с **
         ]),
         HttpClientModule, // todo а этот модуль я не нашел как подключить иначе, кроме как в ngModule
@@ -113,19 +125,32 @@ import { ProfilePageComponent } from './pages/profile-page/profile-page.componen
         FormsModule,
         ReactiveFormsModule,
         BrowserAnimationsModule,
+        MatSlideToggleModule,
+        MatButton,
+        MatTooltip,
+        MatIconModule,
+        MatButtonModule, 
+        MatDividerModule, 
+        MatFormFieldModule, 
+        MatInputModule,
+        MatPaginatorModule,
         StoreModule.forRoot(reducers),
-        StoreModule.forFeature('quizzes', quizzesReducer),
+        StoreModule.forFeature('quizzes', quizzesReducer), // todo почитать, мб можно это организовать покрасивее
         StoreModule.forFeature('router', routerReducer),
         StoreModule.forFeature('questions', qustionsReducer),
         StoreModule.forFeature('answers', answersReducer),
         StoreModule.forFeature('menu', menuReducer),
         StoreModule.forFeature('modal', modalReducer),
         StoreModule.forFeature('auth', authReducer),
+        StoreModule.forFeature('game', gameReducer),
+        StoreModule.forFeature('users', usersReducer),
         EffectsModule.forRoot([
             QuizzesEffects,
             QuestionsEffects,
             AnswersEffects,
-            AuthEffects
+            AuthEffects,
+            GameEffects,
+            UsersEffects
         ]),
         StoreRouterConnectingModule.forRoot({
            // serializer: CustomSerializer

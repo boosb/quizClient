@@ -13,7 +13,7 @@ export class ConfirmEmailPageComponent implements OnInit, OnDestroy {
 
   private params: any;
 
-  private paramsSubs: Subscription
+  private paramsSubs: Subscription;
 
   constructor(
     private store: Store<AppState>

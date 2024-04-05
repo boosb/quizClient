@@ -2,14 +2,15 @@
     <div class="content-wrapper">
         <div class="main-content-wrapper">
             <h2 class="question-text">{{ questionText }}</h2>
+
+            <div class="buttons" *appRoleAccess="['ADMIN', 'OWNER']">
+                <button class="btn-item" mat-mini-fab color="basic" (click)="updateQuestion()">
+                    <mat-icon>edit</mat-icon>
+                </button>
     
-            <div class="buttons">
-                <div class="btn" (click)="updateQuestion()">
-                    <img src="../../../assets/img/pencil.png" alt="edit">
-                </div>
-                <div class="btn" (click)="deleteQuestion()">
-                    <img src="../../../assets/img/basket.png" alt="delete">
-                </div>
+                <button class="btn-item" mat-mini-fab color="basic" (click)="deleteQuestion()">
+                    <mat-icon>delete</mat-icon>
+                </button>
             </div>
         </div>
     

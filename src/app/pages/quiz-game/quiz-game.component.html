@@ -1,0 +1,30 @@
+<div *ngIf="isGameOn$ | async">
+    <div class="large-title center">Question: {{counter}}</div>
+
+    <div class="medium-title center">{{currentQuestion?.text}}</div>
+
+    <div class="small-title">Choose an answer:</div>
+
+    <div *ngIf="currentQuestion?.answers">
+        <div 
+            class="answer-item"
+            [class.selected]="answer === selectedAnswer"
+            *ngFor="let answer of currentQuestion?.answers"  
+            (click)="selectAnswer(answer)"
+        >{{answer.text}}</div>
+    </div>
+
+    <div class="control-buttons">
+        <button mat-raised-button [disabled]="previousDisabled" color="basic" (click)="previousQuestion()">Previous</button>
+        <button mat-raised-button [disabled]="answerDisabled" color="basic" (click)="answer()">Answer</button>
+        <button mat-raised-button [disabled]="nextDisabled" color="basic" (click)="nextQuestion()">Next</button>
+    </div>
+    
+    <button mat-raised-button color="basic" (click)="completeQuiz()">Complete</button>
+</div>
+
+<div *ngIf="isCompleteGame$ | async">
+    <app-menu-btn></app-menu-btn>
+    <div class="large-title center">Quiz result</div>
+    <app-game-statistic></app-game-statistic>
+</div>

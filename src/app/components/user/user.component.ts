@@ -4,7 +4,10 @@ import { IUser } from '../../store/models/user';
 @Component({
   selector: 'app-user',
   templateUrl: './user.component.html',
-  styleUrl: './user.component.scss'
+  styleUrls: [
+    './user.component.scss',
+    '../../app.component.scss'
+  ]
 })
 export class UserComponent {
   @Input() user: IUser | undefined;

@@ -58,4 +58,8 @@ export class AuthService {
   confirmEmail(confirmationData: IConfirmationData): Observable<IUser> {
     return this.http.post<IUser>('http://localhost:3000/auth/confirm', confirmationData);
   }
+
+  /*confirmUpdatedEmail(confirmationData: IConfirmationData): Observable<IUser> {
+    return this.http.post<IUser>('http://localhost:3000/auth/confirm-updated', confirmationData);
+  }*/
 }

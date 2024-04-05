@@ -1,8 +1,7 @@
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { ErrorService } from './error.service';
 import { IQuiz } from '../store/models/quiz';
-import { Observable, catchError, throwError, tap } from 'rxjs';
+import { Observable } from 'rxjs';
 import { Update } from '@ngrx/entity';
 
 @Injectable({
@@ -11,10 +10,9 @@ import { Update } from '@ngrx/entity';
 export class QuizService {
   constructor(
     private http: HttpClient,
-    private errorService: ErrorService,
   ) {}
 
-  getOne(quizId: number | undefined): Observable<IQuiz> {
+  getOne(quizId: number | undefined): Observable<IQuiz> { // todo а мне вот этот метод нужен, если я и так при загрузке все квизы получаю?
     return this.http.get<IQuiz>(`http://localhost:3000/quizzes/${quizId}`);
   }
   
@@ -39,10 +37,5 @@ export class QuizService {
 
   delete(quizId: number | undefined): Observable<IQuiz> {
     return this.http.delete<IQuiz>(`http://localhost:3000/quizzes/${quizId}`);
-  }
-
-  private errorHandler(error: HttpErrorResponse) { // todo по сути вся обработка ошибок перешла в effects
-      this.errorService.handle(error.message);
-      return throwError(() => error.message);
   }
 }

@@ -8,4 +8,5 @@ export interface IUser {
     isEmailConfirmed?: boolean
     avatar?: string
     alias?: string
+    oldEmail?: string
 }

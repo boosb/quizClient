@@ -1,11 +1,10 @@
 import { Component, Input, OnDestroy } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
-import { AnswerService } from '../../../services/answer.service';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store';
 import { selectCurrentQuestionId } from '../../../store/selectors/questions.selectors';
-import { selectCurrentAnswer, selectCurrentAnswerId } from '../../../store/selectors/answers.selectors';
+import { selectCurrentAnswer } from '../../../store/selectors/answers.selectors';
 import { addAnswerRequest, updateAnswerRequest } from '../../../store/actions/answers.actions';
 import { Update } from '@ngrx/entity';
 import { IAnswer } from '../../../store/models/answer';
@@ -20,15 +19,15 @@ import { IAnswer } from '../../../store/models/answer';
 })
 export class AnswerModalComponent implements OnDestroy {
 
-  @Input() isUpdate: boolean
+  @Input() isUpdate: boolean;
 
-  private questionIdSubs: Subscription
+  private questionIdSubs: Subscription;
 
-  private answerIdSubs: Subscription
+  private answerIdSubs: Subscription;
 
-  private questionId: number | null | undefined
+  private questionId: number | null | undefined;
 
-  private answerId: number | null | undefined
+  private answerId: number | null | undefined;
 
   form = new FormGroup({
     answerText: new FormControl<string>('', [
@@ -47,26 +46,25 @@ export class AnswerModalComponent implements OnDestroy {
   }
 
   constructor(
-    public answerService: AnswerService,
     private store: Store<AppState>
   ) {
     this.questionIdSubs = this.store.pipe(select(selectCurrentQuestionId))
-      .subscribe(id => this.questionId = id)
+      .subscribe(id => this.questionId = id);
 
     this.answerIdSubs = this.store.pipe(select(selectCurrentAnswer)).subscribe(answer => {
-      this.answerId = answer?.id
-      this.answerText.setValue(answer?.text)
-      this.isRight.setValue(answer?.isRight)
-    })
+      this.answerId = answer?.id;
+      this.answerText.setValue(answer?.text);
+      this.isRight.setValue(answer?.isRight);
+    });
   }
 
   ngOnDestroy(): void {
-    this.questionIdSubs.unsubscribe()
-    this.answerIdSubs.unsubscribe()
+    this.questionIdSubs.unsubscribe();
+    this.answerIdSubs.unsubscribe();
   }
 
   submit() {
-    this.isUpdate ? this._updateAnswer() : this._createAnswer()
+    this.isUpdate ? this._updateAnswer() : this._createAnswer();
   }
 
   _createAnswer() {
@@ -74,10 +72,10 @@ export class AnswerModalComponent implements OnDestroy {
     this.store.dispatch(addAnswerRequest({
       answer: {
         text: answerText as string,
-        isRight: isRight as boolean,
+        isRight: isRight || false as boolean,
         questionId: this.questionId
       }
-    }))
+    }));
   }
 
   _updateAnswer() {
@@ -89,7 +87,7 @@ export class AnswerModalComponent implements OnDestroy {
         isRight: isRight as boolean,
         questionId: this.questionId
       }
-    }
-    this.store.dispatch(updateAnswerRequest({ update: answerUpdate }))
+    };
+    this.store.dispatch(updateAnswerRequest({ update: answerUpdate }));
   }
 }

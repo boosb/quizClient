@@ -6,6 +6,8 @@ import * as fromAnswer from './reducers/answers.reducer';
 import * as fromMenu from './reducers/menu.reducer';
 import * as fromModal from './reducers/modal.reducer';
 import * as fromAuth from './reducers/auth.reducer';
+import * as fromGame from './reducers/quiz-game.reducer';
+import * as fromUsers from './reducers/users.reducer';
 
 export interface AppState {
     quizzesState: fromQuiz.QuizzesState;
@@ -14,6 +16,8 @@ export interface AppState {
     menuState: fromMenu.MenuState;
     modalState: fromModal.ModalState;
     authState: fromAuth.AuthState;
+    gameState: fromGame.GameState;
+    users: fromUsers.UsersState;
     router: RouterReducerState<any>;
 }
   
@@ -24,6 +28,8 @@ export const reducers: ActionReducerMap<AppState, any> = {
     menuState: fromMenu.menuReducer,
     modalState: fromModal.modalReducer,
     authState: fromAuth.authReducer,
+    gameState: fromGame.gameReducer,
+    users: fromUsers.usersReducer,
     router: routerReducer
 }
 
@@ -35,6 +41,8 @@ export const selectAnswerState = createFeatureSelector<fromAnswer.AnswersState>(
 export const selectMenuState = createFeatureSelector<fromMenu.MenuState>('menu');
 export const selectModalState = createFeatureSelector<fromModal.ModalState>('modal');
 export const selectAuthState = createFeatureSelector<fromAuth.AuthState>('auth');
+export const selectGameState = createFeatureSelector<fromGame.GameState>('game');
+export const selectUsersState = createFeatureSelector<fromUsers.UsersState>('users');
 
 export const {
   selectCurrentRoute,
@@ -62,4 +70,10 @@ export const selectModalData = createSelector(
 export const selectModalShow = createSelector(
   selectModalState,
   (state: fromModal.ModalState) => state.isShow
+);
+
+// USERS
+export const selectUsers = createSelector(
+  selectUsersState,
+  (state: fromUsers.UsersState) => state.users
 );

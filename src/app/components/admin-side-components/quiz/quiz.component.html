@@ -1,13 +1,14 @@
-<div class="quiz-item">
+<div class="common-item" (click)="selectQuiz()">
     <div class="main-content-wrapper">
         <h2 class="quiz-text">{{ quiz?.name }}</h2>
         <div class="buttons" *appRoleAccess="['ADMIN', 'OWNER']">
-            <div class="btn" [routerLink]="['/quizzes/edit', quiz?.id]">
-                <img src="../../../assets/img/pencil.png" alt="edit">
-            </div>
-            <div class="btn" (click)="deleteQuiz()">
-                <img src="../../../assets/img/basket.png" alt="delete">
-            </div>
+            <button class="btn-item" mat-mini-fab color="basic" [routerLink]="['/quizzes/edit', quiz?.id]">
+                <mat-icon>edit</mat-icon>
+            </button>
+
+            <button class="btn-item" mat-mini-fab color="basic" (click)="deleteQuiz()">
+                <mat-icon>delete</mat-icon>
+            </button>
         </div>
     </div>
 </div>

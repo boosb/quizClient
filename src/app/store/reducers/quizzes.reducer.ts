@@ -44,4 +44,4 @@ export const {
   selectEntities: selectQuizEntities, 
   selectAll: selectAllQuizzes, 
   selectTotal: selectQuizTotal
- } = adapter.getSelectors();
+} = adapter.getSelectors();

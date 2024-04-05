@@ -1,0 +1,26 @@
+.control-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 3rem;
+}
+
+.answer-item {
+    display: flex;
+    flex-direction: column;
+    max-width: 100%;
+    min-width: 30%;
+    padding: 1rem 1.5rem;
+    border-width: 1px;
+    border-radius: 0.25rem;
+    margin-bottom: 0.5rem;
+    &:hover {
+        cursor: pointer;
+        border-color: green;
+        background-color: rgba(124, 252, 0, 0.2);
+    }
+}
+
+.selected {
+    border-color: green;
+    background-color: rgba(124, 252, 0, 0.2);
+}

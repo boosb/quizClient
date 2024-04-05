@@ -39,10 +39,18 @@
 
         <div *ngIf="questions">
             <app-question
-                *ngFor="let question of questions"  
+                *ngFor="let question of pageQuestions"  
                 [question]="question"
             ></app-question>
         </div>
+
+        <mat-paginator
+            (page)="onPageEvent($event)"
+            [length]="questions?.length"
+            [pageSize]="pageSize"
+            [pageSizeOptions]="[3, 5, 10, 15]"
+            aria-label="Select page">
+        </mat-paginator>
 
         <button 
             class="default-admin-btn"

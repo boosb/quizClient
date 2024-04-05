@@ -19,15 +19,15 @@ import { selectCurrentQuestion } from '../../../store/selectors/questions.select
 })
 export class QuestionModalComponent implements OnDestroy {
 
-  @Input() isUpdate: boolean
+  @Input() isUpdate: boolean;
 
-  private quizIdSubs: Subscription
+  private quizIdSubs: Subscription;
 
-  private currentQuestionSubs: Subscription
+  private currentQuestionSubs: Subscription;
 
-  private quizId: number | null
+  private quizId: number | null;
 
-  private currentQuestion: IQuestion | null | undefined
+  private currentQuestion: IQuestion | null | undefined;
 
   form = new FormGroup({
     questionText: new FormControl<string>('', [
@@ -43,20 +43,20 @@ export class QuestionModalComponent implements OnDestroy {
   constructor(
     private store: Store<AppState>
   ) {
-    this.quizIdSubs = this.store.pipe(select(selectCurrentQuizId)).subscribe(id => this.quizId = id)
+    this.quizIdSubs = this.store.pipe(select(selectCurrentQuizId)).subscribe(id => this.quizId = id);
     this.currentQuestionSubs = this.store.pipe(select(selectCurrentQuestion)).subscribe(question => {
       this.currentQuestion = question
       this.questionText.setValue(question?.text)
-    })
+    });
   }
 
   ngOnDestroy(): void {
-    this.quizIdSubs.unsubscribe()
-    this.currentQuestionSubs.unsubscribe()
+    this.quizIdSubs.unsubscribe();
+    this.currentQuestionSubs.unsubscribe();
   }
 
   submit() {
-    this.isUpdate ? this._updateQuestion() : this._createQuestion()
+    this.isUpdate ? this._updateQuestion() : this._createQuestion();
   }
 
   _createQuestion() {
@@ -78,6 +78,6 @@ export class QuestionModalComponent implements OnDestroy {
         quizId: this.quizId || null
       }
     }
-    this.store.dispatch(updateQuestionRequest({update: questionUpdate}))
+    this.store.dispatch(updateQuestionRequest({update: questionUpdate}));
   }
 }

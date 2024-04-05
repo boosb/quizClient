@@ -1,10 +1,10 @@
-<app-navigation></app-navigation>
+<app-menu-btn></app-menu-btn>
 
-<h1 class="font-bold text-center">{{ titlePage | titlecase }}</h1>
+<h1 class="font-bold text-center">Rating</h1>
 
-<div *ngIf="userService.users">
+<div *ngIf="users">
     <app-user
-        *ngFor="let user of userService.users"  
+        *ngFor="let user of users"  
         [user]="user"
     ></app-user>
 </div>

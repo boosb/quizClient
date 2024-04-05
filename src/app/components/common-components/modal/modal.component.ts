@@ -55,7 +55,7 @@ export class ModalComponent implements OnDestroy {
 
   _getCreatedComponent() {
     switch(this.dlgType) {
-      case 'question':
+      case 'question': // todo вынести мб в константы
         return this.viewRef.createComponent(QuestionModalComponent)
       case 'answer':
         return this.viewRef.createComponent(AnswerModalComponent)

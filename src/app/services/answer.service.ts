@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
-import { ErrorService } from './error.service';
-import { Observable, Subject, catchError, tap, throwError } from 'rxjs';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { Observable, Subject } from 'rxjs';
 import { IAnswer } from '../store/models/answer';
 import { Update } from '@ngrx/entity';
 
@@ -11,10 +10,7 @@ import { Update } from '@ngrx/entity';
 export class AnswerService {
   constructor(
     private http: HttpClient,
-    private errorService: ErrorService
   ) { }
-
-  public newAnswer$ = new Subject<IAnswer>;
 
   getAll(questionId: number | undefined): Observable<IAnswer[]> {
     return this.http.get<IAnswer[]>(`http://localhost:3000/answers`, {
@@ -46,10 +42,5 @@ export class AnswerService {
 
   update(answer: Update<IAnswer>): Observable<IAnswer> {
     return this.http.patch<IAnswer>(`http://localhost:3000/answers/${answer.id}`, answer.changes)
-  }
-
-  private errorHandler(error: HttpErrorResponse) { // todo вынести все это из сервисов
-    this.errorService.handle(error.message);
-    return throwError(() => error.message);
   }
 }

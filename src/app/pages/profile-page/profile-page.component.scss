@@ -1,13 +1,13 @@
 .main-content-wrapper {
     display: flex;
-    margin-bottom: 70px;
+    margin-bottom: 100px;
 }
 
 .avatar-wrapper {
     position: relative;
-    max-width: 130px;
-    max-height: 130px;
-    margin-right: 50px;
+    max-width: 200px;
+    max-height: 200px;
+    margin-right: 150px;
     padding: 15px;
 }
 
@@ -15,39 +15,48 @@
     position: absolute;
     bottom: 0;
     right: 0;
-    
-    &::before{
-        background-image: url('../../../assets/img/basket.png');
+}
+
+.avatar{
+    display: inline-block;
+    overflow: hidden;
+    width: 130px;
+    padding-bottom: 33%;
+    height: 130px;
+    position: relative;
+
+    &__img{
+        width:100%;
+        height:100%;
+        position: absolute;
+        border-radius: 50%;
+        object-fit: cover;
     }
 }
 
-.avatar-img {
-    padding: 10px;
-    border: 1px solid black;
-    border-radius: 50%;
-}
-
-.info-item {
-    margin-bottom: 20px;
-}
-
-.info-item__email-box,
-.info-item__alias-box {
+.info {
     display: flex;
+    flex-direction: column;
+
+    &__item {
+        margin-bottom: 20px;
+    }
+
+    &__confirmed-email {
+        color: green;
+        border: 1px solid green;
+        font-size: 13px;
+        padding: 0px 8px;
+        height: 19px;
+        border-radius: 3px;
+    }
+
+    &__not-confirmed {
+        color: red !important;
+    }
 }
 
-.info-item__alias-title,
-.info-item__email-title {
-    font-weight: 700;
-    margin-bottom: 5px;
-}
-
-.info-item__email,
-.info-item__alias {
-    margin-right: 10px;
-}
-
-.input-field {
-    border: 1px solid black;
-    border-radius: 2px;
+.error-row {
+    color: red;
+    margin-top: -35px;
 }

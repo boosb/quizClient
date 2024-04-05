@@ -1,0 +1,13 @@
+
+<div class="game-statistic-warapper">
+    <div *ngFor="let item of historyData">
+        <div 
+            [ngClass]="{
+                'complete': item.isRight, 
+                'wrong': item.isWrong,
+                'not-answer': item.isNotAnswer,
+                'history-item': true,
+            }"
+        >{{item.num}}</div>
+    </div>
+</div>

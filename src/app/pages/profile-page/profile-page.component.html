@@ -3,65 +3,58 @@
 <form [formGroup]="form" (ngSubmit)="submit()">
     <div class="main-content-wrapper">
         <div class="avatar-wrapper">
-            <img class="avatar-img" [src]="avatarImg" alt="avatar">
-    
+            <span class="avatar">
+                <img class="avatar__img" [src]="imgService.getUserAvatar(user?.avatar)"/>
+            </span>
+            
             <input 
+                #avatarInput 
+                hidden="true"
                 type="file"
                 class="btn-mini btn-avatar-edit"
+                onclick="this.value=null"
                 (change)="changeAvatar($event)"
             >
 
+            <button class="btn-avatar-edit" mat-mini-fab color="basic" (click)="avatarInput.click()">
+                <mat-icon>edit</mat-icon>
+            </button>
+            
         </div>
     
-        <div class="content-wrapper">
-            <div class="info-item">
-                <div class="info-item__alias-title">Alias</div>
-                <div class="info-item__alias-box">
-                    <div *ngIf="profilePageService.toggleAlias$ | async; then inputAliasText else aliasText"></div>
-
-                    <ng-template #aliasText>
-                        <div class="info-item__email">{{ user?.alias }}</div>
-                    </ng-template>
-
-                    <ng-template #inputAliasText>
-                        <input 
-                            type="text"
-                            class="input-field"
-                            formControlName="aliasText"
-                        >
-                    </ng-template>
-
-                    <div class="btn-mini" (click)="profilePageService.switchAlias()">
-                        <img src="../../../assets/img/pencil.png" alt="edit">
-                    </div>
-                </div>
+        <div class="info">
+            <div class="info__item">
+                <mat-form-field>
+                    <mat-label>Alias</mat-label>
+                    <input 
+                        type="text"
+                        formControlName="aliasText"
+                        matInput
+                    >
+                </mat-form-field>
             </div>
-    
-            <div class="info-item">
-                <div class="info-item__email-title">Email</div>
-                <div class="info-item__email-box">
-                    <div *ngIf="profilePageService.toggleEmail$ | async; then inputEmailText else emailText"></div>
 
-                    <ng-template #emailText>
-                        <div class="info-item__email">{{ user?.email }}</div>
-                    </ng-template>
+            <div class="info__item">
+                <mat-form-field class="info__item">
+                    <mat-label>Email 
+                        <span 
+                            [ngClass]="{'info__confirmed-email': true, 'info__not-confirmed': !user?.isEmailConfirmed}"
+                        >{{user?.isEmailConfirmed ? 'confirmed' : 'not confirmed'}}</span>
+                    </mat-label>
+                    <input 
+                        type="text"
+                        formControlName="emailText"
+                        matInput
+                    >
+                </mat-form-field>
 
-                    <ng-template #inputEmailText>
-                        <input 
-                            type="text"
-                            class="input-field"
-                            formControlName="emailText"
-                        >
-                    </ng-template>
-
-                    <div class="btn-mini" (click)="profilePageService.switchEmail()">
-                        <img src="../../../assets/img/pencil.png" alt="edit">
-                    </div>
-                </div>
+                <p
+                    *ngIf="errorText"
+                    class="error-row"
+                >{{ errorText }}</p>
             </div>
         </div>
     </div>
 
-    <button type="submit" class="default-admin-btn">Save changes</button>
-
+    <button type="submit" mat-raised-button color="basic">Save changes</button>
 </form>

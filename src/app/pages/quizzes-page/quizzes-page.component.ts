@@ -13,17 +13,17 @@ import { loadQuizzes } from '../../store/actions/quizzes.actions';
 })
 export class QuizzesPageComponent implements OnInit {
 
-  term: string = ''
+  term: string = '';
   
-  quizzes$: Observable<(IQuiz | undefined)[]> = this.store.select(selectQuizzes)
+  quizzes$: Observable<(IQuiz | undefined)[]> = this.store.select(selectQuizzes);
 
-  isShowModal$: Observable<boolean> = this.store.select(selectModalShow)
+  isShowModal$: Observable<boolean> = this.store.select(selectModalShow);
 
   constructor(
     private store: Store<AppState>
   ) {}
 
   ngOnInit(): void {
-    this.store.dispatch(loadQuizzes())
+    this.store.dispatch(loadQuizzes());
   }
 }

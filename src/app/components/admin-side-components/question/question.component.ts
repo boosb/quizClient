@@ -20,21 +20,21 @@ const MAX_TEXT_LENGTH = 75;
 })
 export class QuestionComponent implements OnInit, OnDestroy {
   
-  @Input() question: IQuestion
+  @Input() question: IQuestion;
 
-  private answersSubs: Subscription;
+  answersSubs: Subscription;
 
-  answers: IAnswer[] = []
+  answers: IAnswer[];
 
-  infoDetails: boolean = false
+  infoDetails: boolean = false;
 
-  answersDetails: boolean = false
+  answersDetails: boolean = false;
 
-  isShowMoreInfoToggle: boolean = false
+  isShowMoreInfoToggle: boolean = false;
 
-  isShowAnswersToggle: boolean = false
+  isShowAnswersToggle: boolean = false;
 
-  questionText: string = ''
+  questionText: string = '';
 
   constructor(
     private store: Store<AppState>
@@ -45,9 +45,9 @@ export class QuestionComponent implements OnInit, OnDestroy {
       .subscribe(answers => {
         this.answers = answers;
         this._setIsShowAnswersToggle();
-      })
+      });
 
-    this._setIsShowMoreInfoToggle()
+    this._setIsShowMoreInfoToggle();
   }
 
   ngOnDestroy(): void {
@@ -67,23 +67,23 @@ export class QuestionComponent implements OnInit, OnDestroy {
     this.store.dispatch(showConfirm({ data: {
       text: 'Are you sure you want to delete the question?',
       okCallback: this._deleteQuestion.bind(this)
-    }}))
+    }}));
   }
 
   setCurrentQuestion() {
-    this.store.dispatch(selectQuestion({questionId: this.question.id}))
+    this.store.dispatch(selectQuestion({questionId: this.question.id}));
   }
 
   updateQuestion() {
-    this.store.dispatch(showModalQuestions({data: { isUpdate: false }}))
+    this.store.dispatch(showModalQuestions({data: { isUpdate: false }}));
   }
 
   addAnswer() {
-    this.store.dispatch(showModalAnswers({data: { isUpdate: false }}))
+    this.store.dispatch(showModalAnswers({data: { isUpdate: false }}));
   }
 
   _deleteQuestion() {
-    this.store.dispatch(deleteQuestionRequest({questionId: Number(this.question.id)}))
+    this.store.dispatch(deleteQuestionRequest({questionId: Number(this.question.id)}));
   }
 
   _setIsShowMoreInfoToggle() {

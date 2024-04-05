@@ -6,7 +6,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { IQuiz } from '../../store/models/quiz';
 import { Observable, Subscription } from 'rxjs';
 import { IQuestion } from '../../store/models/question';
-import { addRequiest, loadQuizzes, selectQuiz, updateRequiest } from '../../store/actions/quizzes.actions';
+import { addRequiest, selectQuiz, updateRequiest } from '../../store/actions/quizzes.actions';
 import { Update } from '@ngrx/entity';
 import { loadQuestions } from '../../store/actions/questions.actions';
 import { selectCurrentQuiz } from '../../store/selectors/quizzes.selectors';
@@ -25,17 +25,21 @@ import { showConfirm, showModalQuestions } from '../../store/actions/modal.actio
 })
 export class QuizPageComponent {
 
-  isUpdate: boolean
+  isUpdate: boolean;
 
-  quizSubs: Subscription
+  quizSubs: Subscription;
 
-  questionsSubs: Subscription
+  questionsSubs: Subscription;
 
-  quiz: IQuiz | undefined
+  quiz: IQuiz | undefined;
 
-  questions: IQuestion[] | undefined
+  questions: IQuestion[] | undefined;
 
-  isShowModal$: Observable<boolean> = this.store.select(selectModalShow)
+  isShowModal$: Observable<boolean> = this.store.select(selectModalShow);
+
+  pageSize: number = 3;
+
+  pageQuestions: IQuestion[] | undefined;
 
   form = new FormGroup({
     quizName: new FormControl<string>(``, [
@@ -46,48 +50,54 @@ export class QuizPageComponent {
   });
 
   get quizName() {
-    return this.form.controls.quizName as FormControl
+    return this.form.controls.quizName as FormControl;
   }
 
   get complexityQuiz() {
-    return this.form.controls.complexityQuiz as FormControl
+    return this.form.controls.complexityQuiz as FormControl;
   }
 
   get quizId() {
-    return String(this.quiz?.id)
+    return String(this.quiz?.id);
   }
 
   constructor(
-
     public questionService: QuestionService,
     private activatedRoute: ActivatedRoute,
     private store: Store<AppState>
   ) {
-    const edit = activatedRoute.snapshot.url.find(part => part.path === 'edit')
-    this.isUpdate = edit ? true : false
+    const edit = activatedRoute.snapshot.url.find(part => part.path === 'edit');
+    this.isUpdate = edit ? true : false;
   }
 
   ngOnInit(): void {
-    this.quizSubs = this.store.pipe(select(selectCurrentQuiz))
-      .subscribe(quiz => this._setQuizData(quiz))
-    this.questionsSubs = this.store.pipe(select(selectAllQuestions))
-      .subscribe(questions => this.questions = questions)
+    this.quizSubs = this.store.pipe(select(selectCurrentQuiz)).subscribe(quiz => this._setQuizData(quiz));
+    this.questionsSubs = this.store.pipe(select(selectAllQuestions)).subscribe(questions => {
+      this.questions = questions;
+      this.pageQuestions = this._cutQuestions(0, this.pageSize);
+    });
   }
 
   ngOnDestroy(): void {
-    this.quizSubs.unsubscribe()
-    this.questionsSubs.unsubscribe()
+    this.quizSubs.unsubscribe();
+    this.questionsSubs.unsubscribe();
   }
 
   addQuestion() {
-    this.store.dispatch(showModalQuestions({data: { isUpdate: false }}))
+    this.store.dispatch(showModalQuestions({data: { isUpdate: false }}));
   }
 
   submit() {
     this.store.dispatch(showConfirm({ data: {
       text: `Do you really want to ${this.isUpdate ? 'update' : 'create'} a quiz?`,
       okCallback: this.isUpdate ? this._updateQuiz.bind(this) : this._createQuiz.bind(this)
-    }}))
+    }}));
+  }
+
+  onPageEvent(event: any) {
+    const {pageIndex, pageSize} = event;
+    const startPoint = pageIndex * pageSize;
+    this.pageQuestions = this._cutQuestions(startPoint, startPoint + pageSize);
   }
 
   _createQuiz() {
@@ -119,19 +129,23 @@ export class QuizPageComponent {
       return
     }
 
-    this.quiz = quiz
-    this._loadData()
-    this._setQuizValues()
+    this.quiz = quiz;
+    this._loadData();
+    this._setQuizValues();
   }
 
   _loadData() {    
-    this.store.dispatch(selectQuiz({ quizId: Number(this.quizId) }))
-    this.store.dispatch(loadQuestions({ quizId: Number(this.quizId) })) // todo надо уходить от этих мудацких преобразования типов
-    this.store.dispatch(loadAnswers({ quizId: Number(this.quizId) }))
+    this.store.dispatch(selectQuiz({ quizId: Number(this.quizId) }));
+    this.store.dispatch(loadQuestions({ quizId: Number(this.quizId) })); // todo надо уходить от этих мудацких преобразования типов
+    this.store.dispatch(loadAnswers({ quizId: Number(this.quizId) }));
   }
 
   _setQuizValues() {
-    this.quizName.setValue(this.quiz?.name)
-    this.complexityQuiz.setValue(this.quiz?.complexity)
+    this.quizName.setValue(this.quiz?.name);
+    this.complexityQuiz.setValue(this.quiz?.complexity);
+  }
+
+  _cutQuestions(startPoint: number, endPoint: number) {
+    return this.questions?.slice(startPoint, endPoint);
   }
 }
