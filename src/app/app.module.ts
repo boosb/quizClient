@@ -62,6 +62,8 @@ import { GameStatisticComponent } from './components/game-statistic/game-statist
 import { usersReducer } from './store/reducers/users.reducer';
 import { UsersEffects } from './store/effects/users.effects';
 import {MatPaginatorModule} from '@angular/material/paginator';
+import { filesReducer } from './store/reducers/files.reducer';
+import { FilesEffects } from './store/effects/files.effects';
 
 @NgModule({
     declarations: [
@@ -144,13 +146,15 @@ import {MatPaginatorModule} from '@angular/material/paginator';
         StoreModule.forFeature('auth', authReducer),
         StoreModule.forFeature('game', gameReducer),
         StoreModule.forFeature('users', usersReducer),
+        StoreModule.forFeature('files', filesReducer),
         EffectsModule.forRoot([
             QuizzesEffects,
             QuestionsEffects,
             AnswersEffects,
             AuthEffects,
             GameEffects,
-            UsersEffects
+            UsersEffects,
+            FilesEffects
         ]),
         StoreRouterConnectingModule.forRoot({
            // serializer: CustomSerializer

@@ -8,6 +8,7 @@ import * as fromModal from './reducers/modal.reducer';
 import * as fromAuth from './reducers/auth.reducer';
 import * as fromGame from './reducers/quiz-game.reducer';
 import * as fromUsers from './reducers/users.reducer';
+import * as fromFiles from './reducers/files.reducer';
 
 export interface AppState {
     quizzesState: fromQuiz.QuizzesState;
@@ -18,6 +19,7 @@ export interface AppState {
     authState: fromAuth.AuthState;
     gameState: fromGame.GameState;
     users: fromUsers.UsersState;
+    files: fromFiles.FilesState;
     router: RouterReducerState<any>;
 }
   
@@ -30,6 +32,7 @@ export const reducers: ActionReducerMap<AppState, any> = {
     authState: fromAuth.authReducer,
     gameState: fromGame.gameReducer,
     users: fromUsers.usersReducer,
+    files: fromFiles.filesReducer,
     router: routerReducer
 }
 
@@ -43,6 +46,7 @@ export const selectModalState = createFeatureSelector<fromModal.ModalState>('mod
 export const selectAuthState = createFeatureSelector<fromAuth.AuthState>('auth');
 export const selectGameState = createFeatureSelector<fromGame.GameState>('game');
 export const selectUsersState = createFeatureSelector<fromUsers.UsersState>('users');
+export const selectFilesState = createFeatureSelector<fromFiles.FilesState>('files');
 
 export const {
   selectCurrentRoute,
@@ -76,4 +80,10 @@ export const selectModalShow = createSelector(
 export const selectUsers = createSelector(
   selectUsersState,
   (state: fromUsers.UsersState) => state.users
+);
+
+// FILES
+export const selectLastImgPath = createSelector(
+  selectFilesState,
+  (state: fromFiles.FilesState) => state.lastImgPath
 );

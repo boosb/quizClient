@@ -75,11 +75,11 @@ export class QuestionComponent implements OnInit, OnDestroy {
   }
 
   updateQuestion() {
-    this.store.dispatch(showModalQuestions({data: { isUpdate: false }}));
+    this.store.dispatch(showModalQuestions({data: {isUpdate: true}}));
   }
 
   addAnswer() {
-    this.store.dispatch(showModalAnswers({data: { isUpdate: false }}));
+    this.store.dispatch(showModalAnswers({data: {isUpdate: false}}));
   }
 
   _deleteQuestion() {

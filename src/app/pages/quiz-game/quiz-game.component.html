@@ -15,12 +15,12 @@
     </div>
 
     <div class="control-buttons">
-        <button mat-raised-button [disabled]="previousDisabled" color="basic" (click)="previousQuestion()">Previous</button>
-        <button mat-raised-button [disabled]="answerDisabled" color="basic" (click)="answer()">Answer</button>
-        <button mat-raised-button [disabled]="nextDisabled" color="basic" (click)="nextQuestion()">Next</button>
+        <button mat-flat-button color="primary" [disabled]="previousDisabled" (click)="previousQuestion()">Previous</button>
+        <button mat-flat-button color="primary" [disabled]="answerDisabled" (click)="answer()">Answer</button>
+        <button mat-flat-button color="primary" [disabled]="nextDisabled" (click)="nextQuestion()">Next</button>
     </div>
     
-    <button mat-raised-button color="basic" (click)="completeQuiz()">Complete</button>
+    <button mat-flat-button color="primary" (click)="completeQuiz()">Complete</button>
 </div>
 
 <div *ngIf="isCompleteGame$ | async">

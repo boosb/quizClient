@@ -2,13 +2,9 @@
     <p>{{ orderNumber }}. {{ answer?.text }}</p>
 
     <div class="buttons" *appRoleAccess="['ADMIN', 'OWNER']">
-        <p class="right-info" *ngIf="answer?.isRight">right</p>
-        <button class="btn-item" mat-mini-fab color="basic" (click)="onEdit()">
-            <mat-icon>edit</mat-icon>
-        </button>
+        <div class="right-info" *ngIf="answer?.isRight">right</div>
 
-        <button class="btn-item" mat-mini-fab color="basic" (click)="onDelete()">
-            <mat-icon>delete</mat-icon>
-        </button>
+        <button class="btn-item btn" mat-button color="primary" (click)="onEdit()" >Edit</button>
+        <button class="btn-item btn" mat-button color="primary" (click)="onDelete()">Delete</button>
     </div>
 </div>

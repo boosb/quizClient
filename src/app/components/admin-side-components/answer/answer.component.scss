@@ -4,11 +4,6 @@
     margin-bottom: 5px;
 }
 
-.buttons {
-    display: flex;
-    align-items: center;
-}
-
 .right-info {
     color: green;
     border: 1px solid green;
@@ -16,4 +11,8 @@
     padding: 0px 8px;
     height: 19px;
     border-radius: 3px;
+}
+
+.btn { 
+    font-size: 13px;
 }

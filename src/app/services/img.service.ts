@@ -11,8 +11,9 @@ export interface Paths {
 })
 export class ImgService {
     paths: Paths = {
-        SOME: 'assets/img/111.svg',
-        DEFAULT_AVATAR: 'assets/img/default-user.svg'
+        SOME: 'assets/img/111.svg', // todo пример подгрузки иконки
+        DEFAULT_AVATAR: 'assets/img/default-user.svg',
+        CAMERA: 'assets/img/camera.svg',
     }
 
     constructor(
@@ -26,13 +27,24 @@ export class ImgService {
 
     getUserAvatar(avatarPath: string | undefined) {
         const avatar = avatarPath ? avatarPath : this.paths.DEFAULT_AVATAR;
-        return this.domSanitizer.bypassSecurityTrustUrl(avatar);
+        return this.getImg(avatar);
+    }
+
+    getImg(imgPath: string | undefined | null) {
+        return imgPath ? this.domSanitizer.bypassSecurityTrustUrl(imgPath) : null;
     }
 
     includeSomeIcon() {
         this.matIconRegistry.addSvgIcon(
             'some',
             this.domSanitizer.bypassSecurityTrustResourceUrl(this.paths.SOME)
-          );
+        );
+    }
+
+    includeCameraIcon() {
+        this.matIconRegistry.addSvgIcon(
+            'camera',
+            this.domSanitizer.bypassSecurityTrustResourceUrl(this.paths.CAMERA)
+        );
     }
 }

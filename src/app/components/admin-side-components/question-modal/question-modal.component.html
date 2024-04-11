@@ -1,18 +1,35 @@
 <form [formGroup]="form" (ngSubmit)="submit()">
     <h1 class="medium-title center">{{ isUpdate ? 'Edit question' : 'Create new question' }}</h1>
-    
-    <input 
-        type="text"
-        class="entry-field"
-        placeholder="Enter question"
-        formControlName="questionText"
-        appFocus
-    >
 
-    <p
-        class="text-red-600 font-medium mb-2"
-        *ngIf="questionText.errors?.minlength && questionText.touched"
-    >Please fill title field width min length. Now {{ questionText.value.length }}</p>
+    <div class="inputs-wrapper">
+        <mat-form-field>
+            <mat-label>Question</mat-label>
+            <input 
+                type="text"
+                placeholder="Enter question"
+                formControlName="questionText"
+                matInput
+            >
+            <!-- Из-за дерективы appFocus возникает ошибка. Разобраться!  -->
+        </mat-form-field>
+        <p
+            class="wrong-text"
+            *ngIf="questionText.errors?.minlength && questionText.touched"
+        >Please fill title field width min length. Now {{ questionText.value.length }}</p>
 
-    <button type="submit" class="default-admin-btn">{{ isUpdate ? 'Update' : 'Create' }}</button>
+        
+        <div class="img-wrapper">
+            <img [src]="imgService.getImg(imgPath)"/>
+        </div>
+        <!--<button mat-fab color="basic">
+            <mat-icon svgIcon="camera"></mat-icon>
+        </button>-->
+
+        <input 
+            type="file"
+            (change)="changeImgQuestion($event)"
+        >
+    </div>
+
+    <button type="submit" mat-flat-button color="primary">{{ isUpdate ? 'Update' : 'Create' }}</button>
 </form>

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { EMPTY, merge, of } from 'rxjs';
 import { map, exhaustMap, catchError, mergeMap, tap, switchMap, concatMap } from 'rxjs/operators';
-import { confirmEmail, confirmEmailSuccess, getAuthUser, getAuthUserSuccess, login, loginError, loginSuccess, registration, registrationSuccess, updateEmailUser, updateEmailUserError, updateEmailUserSuccess, updateUser, updateUserSuccess, uploadAvatar, uploadAvatarSuccess } from '../actions/auth.actions';
+import { confirmEmail, confirmEmailSuccess, getAuthUser, getAuthUserSuccess, login, loginError, loginSuccess, registration, registrationSuccess, updateEmailUser, updateEmailUserError, updateEmailUserSuccess, updateUser, updateUserSuccess } from '../actions/auth.actions';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 import { IUser } from '../models/user';
@@ -78,19 +78,6 @@ export class AuthEffects {
         catchError((err) => of(updateEmailUserError({errorText: err.error.message})))
       ))
     )
-  );
-
-  updateUserAvatar$ = createEffect(() => this.actions$.pipe(
-    ofType(uploadAvatar),
-    switchMap((action) => this.userService.uploadAvatar(action.userId, action.formData)
-      .pipe(
-        map(() => {
-          this.notificationService.show(`Your avatar has been successfully updated!`);
-          return getAuthUser({userId: action.userId})
-        }),
-        catchError(() => EMPTY)
-      ))
-    )  
   );
 
   getAuthUser$ = createEffect(() => this.actions$.pipe(

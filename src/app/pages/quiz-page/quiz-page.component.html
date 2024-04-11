@@ -1,6 +1,6 @@
 <app-modal *ngIf="isShowModal$ | async"></app-modal>
 
-<h1 class="large-title main-title">{{ this.isUpdate ? 'Update quiz' : 'Create quiz' | titlecase }}</h1>
+<h1 class="large-title main-title">{{ 'Quiz' | titlecase }}</h1>
 
 <app-menu-btn></app-menu-btn>
 
@@ -30,8 +30,9 @@
 
             <button 
                 type="submit" 
-                class="default-admin-btn"
-            >{{ this.isUpdate ? 'Update quiz' : 'Create quiz' }}</button>
+                mat-flat-button 
+                color="primary"
+            >Save</button>
         </form>
     </div>
     <div class="questions-block">
@@ -53,7 +54,8 @@
         </mat-paginator>
 
         <button 
-            class="default-admin-btn"
+            mat-flat-button 
+            color="primary"
             (click)="addQuestion()"
         >Add question</button>
     </div>

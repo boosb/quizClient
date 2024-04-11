@@ -1,23 +1,24 @@
 <form [formGroup]="form" (ngSubmit)="submit()">
     <h1 class="medium-title center">{{ isUpdate ? 'Edit answer' : 'Create new answer' }}</h1>
 
-    <input 
-        type="text"
-        class="entry-field"
-        placeholder="Enter answer"
-        formControlName="answerText"
-        appFocus
-    >
-    
-    <input 
-        type="checkbox"
-        formControlName="isRight"
-    >
+    <div class="inputs-wrapper">
+        <mat-form-field>
+            <mat-label>Answer</mat-label>
+            <input 
+                type="text"
+                placeholder="Enter answer"
+                formControlName="answerText"
+                matInput
+                appFocus
+            >
+        </mat-form-field>
+        <p
+            class="wrong-text"
+            *ngIf="answerText.errors?.minlength && answerText.touched"
+        >Please fill title field width min length. Now {{ answerText.value.length }}</p>
 
-    <p
-        class="text-red-600 font-medium mb-2"
-        *ngIf="answerText.errors?.minlength && answerText.touched"
-    >Please fill title field width min length. Now {{ answerText.value.length }}</p>
+        <mat-slide-toggle formControlName="isRight">Right answer</mat-slide-toggle>
+    </div>
 
-    <button type="submit" class="default-admin-btn">{{ isUpdate ? 'Update' : 'Create' }}</button>
+    <button type="submit" mat-flat-button color="primary">{{ isUpdate ? 'Update' : 'Create' }}</button>
 </form>

@@ -6,7 +6,7 @@ import { loadUsers, loadUsersSuccess } from "../actions/users.actions";
 
 @Injectable()
 export class UsersEffects {
-  loadUsets$ = createEffect(() => this.actions$.pipe(
+  loadUsers$ = createEffect(() => this.actions$.pipe(
     ofType(loadUsers),
     switchMap(() => this.usersService.getAllUsers()
       .pipe(

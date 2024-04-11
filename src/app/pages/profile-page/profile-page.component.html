@@ -16,7 +16,7 @@
                 (change)="changeAvatar($event)"
             >
 
-            <button class="btn-avatar-edit" mat-mini-fab color="basic" (click)="avatarInput.click()">
+            <button type="button" class="btn-avatar-edit" mat-mini-fab color="basic" (click)="avatarInput.click()">
                 <mat-icon>edit</mat-icon>
             </button>
             
@@ -56,5 +56,5 @@
         </div>
     </div>
 
-    <button type="submit" mat-raised-button color="basic">Save changes</button>
+    <button type="submit" mat-flat-button color="primary">Save changes</button>
 </form>

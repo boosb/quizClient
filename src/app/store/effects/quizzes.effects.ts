@@ -16,7 +16,10 @@ export class QuizzesEffects {
     exhaustMap(() => this.quizService.getAll()
       .pipe(
         map(quizzes => loadQuizzesSuccess({quizzes})),
-        catchError(() => EMPTY)
+        catchError((err) => {
+          // todo вставить сюда обработку ошибок
+          return EMPTY
+        })
       ))
     )
   );

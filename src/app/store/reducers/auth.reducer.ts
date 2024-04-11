@@ -1,6 +1,6 @@
 import { createReducer, on } from '@ngrx/store';
 import { IUser } from '../models/user';
-import { confirmEmailSuccess, getAuthUserSuccess, loginError, loginSuccess, logout, registrationSuccess, updateEmailUserError, updateUserSuccess, uploadAvatarSuccess } from '../actions/auth.actions';
+import { confirmEmailSuccess, getAuthUserSuccess, loginError, loginSuccess, logout, registrationSuccess, updateEmailUserError, updateUserSuccess } from '../actions/auth.actions';
 
 export interface AuthState {
   user: IUser | null;
@@ -57,15 +57,6 @@ export const authReducer = createReducer(
         user: updatedUser,
         role: updatedUser.role.name,
         errorText: null
-    }
-  }),
-  on(uploadAvatarSuccess, (state, { userId, formData }) => {
-    // todo Хуйня какая-то, потом надо разобраться
-    return {
-        ...state,
-       /* user: updatedUser,
-        role: updatedUser.role.name,
-        errorText: null*/
     }
   }),
   on(getAuthUserSuccess, (state, { user }) => {

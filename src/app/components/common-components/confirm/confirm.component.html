@@ -1,13 +1,15 @@
 <p class="main-text">{{ text }}</p>
 <div class="buttons">
     <button 
-        class="default-admin-btn btn-ok"
+        mat-flat-button 
+        color="primary"
         (click)="onOk()"
         [routerLink]="path"
     >OK</button>
 
     <button 
-        class="default-admin-btn btn-cancel"
+        mat-flat-button 
+        color="warn"
         (click)="close()"
     >Cancel</button>
 </div>

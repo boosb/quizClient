@@ -12,7 +12,6 @@ import { loadQuestions } from '../../store/actions/questions.actions';
 import { selectCurrentQuiz } from '../../store/selectors/quizzes.selectors';
 import { selectAllQuestions } from '../../store/selectors/questions.selectors';
 import { loadAnswers } from '../../store/actions/answers.actions';
-import { ActivatedRoute } from '@angular/router';
 import { showConfirm, showModalQuestions } from '../../store/actions/modal.actions';
 
 @Component({
@@ -24,9 +23,6 @@ import { showConfirm, showModalQuestions } from '../../store/actions/modal.actio
   ]
 })
 export class QuizPageComponent {
-
-  isUpdate: boolean;
-
   quizSubs: Subscription;
 
   questionsSubs: Subscription;
@@ -63,12 +59,8 @@ export class QuizPageComponent {
 
   constructor(
     public questionService: QuestionService,
-    private activatedRoute: ActivatedRoute,
     private store: Store<AppState>
-  ) {
-    const edit = activatedRoute.snapshot.url.find(part => part.path === 'edit');
-    this.isUpdate = edit ? true : false;
-  }
+  ) {}
 
   ngOnInit(): void {
     this.quizSubs = this.store.pipe(select(selectCurrentQuiz)).subscribe(quiz => this._setQuizData(quiz));
@@ -76,6 +68,10 @@ export class QuizPageComponent {
       this.questions = questions;
       this.pageQuestions = this._cutQuestions(0, this.pageSize);
     });
+
+    if(!this.quiz) {
+      this._createQuiz();
+    }
   }
 
   ngOnDestroy(): void {
@@ -89,8 +85,8 @@ export class QuizPageComponent {
 
   submit() {
     this.store.dispatch(showConfirm({ data: {
-      text: `Do you really want to ${this.isUpdate ? 'update' : 'create'} a quiz?`,
-      okCallback: this.isUpdate ? this._updateQuiz.bind(this) : this._createQuiz.bind(this)
+      text: `Do you really want to save changes a quiz?`,
+      okCallback: this._updateQuiz.bind(this)
     }}));
   }
 
@@ -126,7 +122,7 @@ export class QuizPageComponent {
 
   _setQuizData(quiz: IQuiz | undefined) {
     if(!quiz) {
-      return
+      return;
     }
 
     this.quiz = quiz;

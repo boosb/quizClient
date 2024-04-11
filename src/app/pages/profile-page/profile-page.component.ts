@@ -5,9 +5,10 @@ import { AppState } from '../../store';
 import { Subscription } from 'rxjs';
 import { selectError, selectUser } from '../../store/selectors/auth.selectors';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { updateEmailUser, updateUser, uploadAvatar } from '../../store/actions/auth.actions';
+import { updateEmailUser, updateUser } from '../../store/actions/auth.actions';
 import { Update } from '@ngrx/entity';
 import { ImgService } from '../../services/img.service';
+import { uploadAvatar } from '../../store/actions/files.actions';
 
 @Component({
   selector: 'app-profile-page',
@@ -48,9 +49,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
   constructor(
     private readonly store: Store<AppState>,
     public imgService: ImgService,
-  ) {
-    imgService.includeSomeIcon();
-  }
+  ) { }
 
   ngOnInit(): void {
     this.userSubs = this.store.pipe(select(selectUser)).subscribe(currentUser => {
@@ -74,7 +73,6 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
 
   changeAvatar(event: any) {
     this._setFormDataAvatar('avatar', event.target.files[0]);
-
     this.store.dispatch(uploadAvatar({
       userId: this.user?.id, 
       formData: this.formData

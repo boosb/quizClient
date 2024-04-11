@@ -10,7 +10,8 @@ export interface QuestionsState extends EntityState<IQuestion> {
 export const adapterQuestions: EntityAdapter<IQuestion> = createEntityAdapter<IQuestion>();  
 
 const initialQuestionState: QuestionsState = adapterQuestions.getInitialState({
-    selectedQuestionId: null
+    selectedQuestionId: null,
+    lastImgPath: undefined
 })
   
 export const qustionsReducer = createReducer(
@@ -19,7 +20,7 @@ export const qustionsReducer = createReducer(
     on(selectQuestion, (state, { questionId }) => {
         return {
             ...state,
-            selectedQuestionId: questionId
+            selectedQuestionId: questionId,
         }
     }), 
     on(loadQuestionsSuccess, (state, { questions }) => {
@@ -33,7 +34,7 @@ export const qustionsReducer = createReducer(
     }),
     on(updatedQuestionSuccess, (state, { update }) => {
         return adapterQuestions.updateOne(update, state)
-    })
+    }),
 )
 
 
