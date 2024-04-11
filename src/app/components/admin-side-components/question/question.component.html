@@ -1,46 +1,27 @@
-<div class="question-item" (click)="setCurrentQuestion()">
-    <div class="content-wrapper">
-        <div class="main-content-wrapper">
-            <h2 class="question-text">{{ questionText }}</h2>
+<mat-card class="question-item" (click)="setCurrentQuestion()">
+    <mat-card-header class="question-item__header">
+      <mat-card-title>Question {{ number }}</mat-card-title>
+      <mat-card-subtitle>{{ questionText }}</mat-card-subtitle>
+    </mat-card-header>
+    <img class="question-item__img" *ngIf="showDetails" mat-card-image [src]="imgService.getImg(question.img)">
+    <mat-card-content>
+      <div *ngIf="answers && showDetails">
+        <app-answer
+            *ngFor="let answer of answers; index as i"  
+            [answer]="answer"
+            [orderNumber]="i+1"
+        ></app-answer>
+      </div>
 
-            <div class="buttons" *appRoleAccess="['ADMIN', 'OWNER']">
-                <button class="btn-item" mat-mini-fab color="basic" (click)="updateQuestion()">
-                    <mat-icon>edit</mat-icon>
-                </button>
-    
-                <button class="btn-item" mat-mini-fab color="basic" (click)="deleteQuestion()">
-                    <mat-icon>delete</mat-icon>
-                </button>
-            </div>
+    </mat-card-content>
+    <mat-card-actions class="question-item__buttons">
+        <div>
+            <button mat-button (click)="toggleShowMore()">Show details</button>
+            <button mat-button (click)="addAnswer()">Add answer</button>
         </div>
-    
-        <div *ngIf="answers && answersDetails">
-            <app-answer
-                *ngFor="let answer of answers; index as i"  
-                [answer]="answer"
-                [orderNumber]="i+1"
-            ></app-answer>
+        <div *appRoleAccess="['ADMIN', 'OWNER']">
+            <button mat-button (click)="updateQuestion()">Edit</button>
+            <button mat-button (click)="deleteQuestion()">Delete</button>
         </div>
-
-        <div class="toggle-wrapper">
-            <div 
-                *ngIf="isShowMoreInfoToggle"
-                class="toggle"
-                (click)="toggleShowMore()"
-            >{{ infoDetails ? 'Collapse' : 'Show more' }}</div>
-
-            <div 
-                *ngIf="isShowAnswersToggle"
-                class="toggle"
-                (click)="toggleAnswers()"
-            >{{ answersDetails ? 'Hide' : 'Show' }} answers</div>
-        </div>
-    </div>
-
-    <button 
-        mat-flat-button 
-        color="primary"
-        class="btn-mini"
-        (click)="addAnswer()"
-    >Add answer</button>
-</div>
+    </mat-card-actions>
+</mat-card>

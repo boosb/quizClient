@@ -11,10 +11,7 @@ export class FilesEffects {
         ofType(uploadAvatar),
         switchMap((action) => this.filesService.uploadUserAvatar(action.userId, action.formData)
           .pipe(
-            map(() => {
-                console.log('test-11')
-              return getAuthUser({userId: action.userId})
-            }),
+            map(() => getAuthUser({userId: action.userId})),
             catchError(() => EMPTY)
           ))
         )  

@@ -40,8 +40,9 @@
 
         <div *ngIf="questions">
             <app-question
-                *ngFor="let question of pageQuestions"  
+                *ngFor="let question of pageQuestions; index as i"  
                 [question]="question"
+                [number]="i+1"
             ></app-question>
         </div>
 

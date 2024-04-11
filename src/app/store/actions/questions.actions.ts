@@ -15,3 +15,5 @@ export const deletedQuestionSuccess = createAction('[Questions API] Questions De
 
 export const updateQuestionRequest = createAction('[Questions API] Questions Update', props<{ update: Update<IQuestion> }>());
 export const updatedQuestionSuccess = createAction('[Questions API] Questions Updated Success', props<{ update: Update<IQuestion> }>());
+
+export const toggleDetails = createAction('[Questions API] Questions Toggle Details', props<{ questionId: number | null | undefined }>());

@@ -1,12 +1,14 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { IQuestion } from '../../../store/models/question';
 import { IAnswer } from '../../../store/models/answer';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store';
-import { deleteQuestionRequest, selectQuestion } from '../../../store/actions/questions.actions';
+import { deleteQuestionRequest, selectQuestion, toggleDetails } from '../../../store/actions/questions.actions';
 import { selectQustionAnswers } from '../../../store/selectors/answers.selectors';
 import { showConfirm, showModalAnswers, showModalQuestions } from '../../../store/actions/modal.actions';
+import { ImgService } from '../../../services/img.service';
+import { selectShowDetails } from '../../../store/selectors/questions.selectors';
 
 const MAX_TEXT_LENGTH = 75;
 
@@ -22,45 +24,38 @@ export class QuestionComponent implements OnInit, OnDestroy {
   
   @Input() question: IQuestion;
 
+  @Input() number: number;
+
   answersSubs: Subscription;
+
+  showDetailsSubs: Subscription;
 
   answers: IAnswer[];
 
-  infoDetails: boolean = false;
-
-  answersDetails: boolean = false;
-
-  isShowMoreInfoToggle: boolean = false;
-
-  isShowAnswersToggle: boolean = false;
-
   questionText: string = '';
 
+  showDetails: boolean;
+
   constructor(
-    private store: Store<AppState>
+    private store: Store<AppState>,
+    public imgService: ImgService
   ) {}
 
   ngOnInit(): void {
     this.answersSubs = this.store.pipe(select(selectQustionAnswers, {questionId: this.question?.id}))
-      .subscribe(answers => {
-        this.answers = answers;
-        this._setIsShowAnswersToggle();
-      });
+      .subscribe(answers => this.answers = answers);
 
-    this._setIsShowMoreInfoToggle();
+    this.showDetailsSubs = this.store.pipe(select(selectShowDetails, {questionId: this.question?.id}))
+      .subscribe(showDetails => this.showDetails = showDetails);
   }
 
   ngOnDestroy(): void {
     this.answersSubs.unsubscribe();
+    this.showDetailsSubs.unsubscribe();
   }
 
   toggleShowMore() {
-    this.infoDetails = !this.infoDetails;
-    this._cutText(!this.infoDetails);
-  }
-
-  toggleAnswers() {
-    this.answersDetails = !this.answersDetails;
+    this.store.dispatch(toggleDetails({questionId: this.question.id}));
   }
 
   deleteQuestion() {
@@ -84,22 +79,6 @@ export class QuestionComponent implements OnInit, OnDestroy {
 
   _deleteQuestion() {
     this.store.dispatch(deleteQuestionRequest({questionId: Number(this.question.id)}));
-  }
-
-  _setIsShowMoreInfoToggle() {
-    if( this.question ) {
-      const cond = this.question.text.length > MAX_TEXT_LENGTH;
-      if(cond) {
-        this.isShowMoreInfoToggle = true;
-      }
-      this._cutText(cond);
-    }
-  }
-
-  _setIsShowAnswersToggle() {
-    if(this.answers.length > 0) {
-      this.isShowAnswersToggle = true;
-    }
   }
 
   _cutText(condition: boolean) {

@@ -1,42 +1,16 @@
 .question-item {
-    padding: 1rem 1.5rem;
-    border-width: 1px;
-    border-radius: 0.25rem;
-    margin-bottom: 0.5rem;
-}
-
-.content-wrapper {
-    display: flex;
-    flex-direction: column;
-}
-
-.main-content-wrapper {
-    display: flex;
-    justify-content: space-between;
     margin-bottom: 10px;
-}
 
-.question-text {
-    font-size: 1.125rem;
-    line-height: 1.75rem;
-    text-align: left;
-    margin-bottom: 0.5rem;
-}
+    &__header {
+        margin-bottom: 5px;
+    }
 
-.buttons {
-    display: flex;
-}
+    &__img {
+        margin-bottom: 15px;
+    }
 
-.toggle-wrapper {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 10px;
-}
-
-.toggle {
-    color: blue;
-    &:hover {
-        cursor: pointer;
-        text-decoration: underline;
+    &__buttons {
+        display: flex;
+        justify-content: space-between;
     }
 }

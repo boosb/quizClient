@@ -64,6 +64,7 @@ import { UsersEffects } from './store/effects/users.effects';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import { filesReducer } from './store/reducers/files.reducer';
 import { FilesEffects } from './store/effects/files.effects';
+import {MatCardModule} from '@angular/material/card';
 
 @NgModule({
     declarations: [
@@ -136,6 +137,7 @@ import { FilesEffects } from './store/effects/files.effects';
         MatFormFieldModule, 
         MatInputModule,
         MatPaginatorModule,
+        MatCardModule,
         StoreModule.forRoot(reducers),
         StoreModule.forFeature('quizzes', quizzesReducer), // todo почитать, мб можно это организовать покрасивее
         StoreModule.forFeature('router', routerReducer),
