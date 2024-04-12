@@ -31,7 +31,7 @@ export class QuizzesPageComponent implements OnInit, OnDestroy {
     this.store.dispatch(loadQuizzes());
     this.quizzesSubs = this.store.pipe(select(selectQuizzes)).subscribe(quizzes => {
       this.quizzes = quizzes;
-      this.paginatorService.init(quizzes, 8);
+      this.paginatorService.init(quizzes);
     });
   }
 

@@ -7,3 +7,14 @@
 .wrong-text {
     color: red;
 }
+
+.img-wrapper {
+    min-height: 50px;
+    position: relative;
+}
+
+.btn-camera {
+    position: absolute;
+    left: 5px;
+    bottom: 5px;
+}

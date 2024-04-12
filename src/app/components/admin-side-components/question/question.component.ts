@@ -10,8 +10,6 @@ import { showConfirm, showModalAnswers, showModalQuestions } from '../../../stor
 import { ImgService } from '../../../services/img.service';
 import { selectShowDetails } from '../../../store/selectors/questions.selectors';
 
-const MAX_TEXT_LENGTH = 75;
-
 @Component({
   selector: 'app-question',
   templateUrl: './question.component.html',
@@ -24,15 +22,11 @@ export class QuestionComponent implements OnInit, OnDestroy {
   
   @Input() question: IQuestion;
 
-  @Input() number: number;
-
   answersSubs: Subscription;
 
   showDetailsSubs: Subscription;
 
   answers: IAnswer[];
-
-  questionText: string = '';
 
   showDetails: boolean;
 

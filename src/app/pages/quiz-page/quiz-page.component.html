@@ -6,27 +6,27 @@
 
 <div class="wrapper">
     <div class="input-block">
-        <form [formGroup]="form" (ngSubmit)="submit()">
-            <div class="input-block__item">
-                <h2 class="medium-title">Quiz name:</h2>
+        <form [formGroup]="form" (ngSubmit)="submit()" class="form">
+            <h2 class="medium-title">Data:</h2>
+            <mat-form-field>
+                <mat-label>Quiz name</mat-label>
                 <input 
                     type="text"
-                    class="entry-field"
                     placeholder="Quiz name"
                     formControlName="quizName"
-                    appFocus
+                    matInput
                 >
-            </div>
+            </mat-form-field>
 
-            <div class="input-block__item">
-                <h2 class="medium-title">Complexity quiz:</h2>
+            <mat-form-field>
+                <mat-label>Complexity quiz</mat-label>
                 <input 
                     type="text"
-                    class="entry-field"
                     placeholder="Complexity quiz"
                     formControlName="complexityQuiz"
+                    matInput
                 >
-            </div>
+            </mat-form-field>
 
             <button 
                 type="submit" 
@@ -42,11 +42,11 @@
             <app-question
                 *ngFor="let question of paginatorService.showEntities; index as i"  
                 [question]="question"
-                [number]="i+1"
             ></app-question>
         </div>
 
         <mat-paginator
+            *ngIf="questions?.length"
             (page)="paginatorService.onPageEvent(questions, $event)"
             [length]="paginatorService.length"
             [pageSize]="paginatorService.pageSize"

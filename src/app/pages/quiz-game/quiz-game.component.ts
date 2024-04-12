@@ -8,6 +8,7 @@ import { answer, answerSelect, completeGame, nextQuestion, previousQuestion, sta
 import { IQuestion } from '../../store/models/question';
 import { selectBtnState, selectCompleteGame, selectCounter, selectCurrentQuestion, selectGameIsOn, selectSelectedAnswer } from '../../store/selectors/quiz-game.selectors';
 import { IAnswer } from '../../store/models/answer';
+import { ImgService } from '../../services/img.service';
 
 @Component({
   selector: 'app-quiz-game',
@@ -47,7 +48,8 @@ export class QuizGameComponent implements OnInit, OnDestroy {
   isGameOn$: Observable<any> = this.store.pipe(select(selectGameIsOn));
   
   constructor(
-    private store: Store<AppState>
+    private store: Store<AppState>,
+    public imgService: ImgService
   ) {
     this.quizSubs = store.pipe(select(selectCurrentQuiz)).subscribe(quiz => this.quiz = quiz);
     this.currentQuestionSubs = store.pipe(select(selectCurrentQuestion)).subscribe(question => this.currentQuestion = question);

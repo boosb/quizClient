@@ -5,6 +5,7 @@ import { AppState } from '../../../store';
 import { deleteRequiest, selectQuiz } from '../../../store/actions/quizzes.actions';
 import { showConfirm } from '../../../store/actions/modal.actions';
 import { Router } from '@angular/router';
+import { ImgService } from '../../../services/img.service';
 
 @Component({
     selector: 'app-quiz',
@@ -17,8 +18,10 @@ import { Router } from '@angular/router';
 export class QuizComponent {
     constructor(
         private store: Store<AppState>,
-        private router: Router
-    ) {}
+        private imgService: ImgService
+    ) {
+        imgService.includePlayIcon();
+    }
 
     @Input() quiz: IQuiz | undefined;
 
@@ -31,7 +34,6 @@ export class QuizComponent {
 
     selectQuiz() {
         this.store.dispatch(selectQuiz({ quizId: Number(this.quiz?.id) }));
-        this.router.navigateByUrl(`/quizzes/${this.quiz?.id}`); // todo пока что добавлю редирект сюда, есть мысль перенесть потом в effects
     }
 
     _deleteQuiz() {

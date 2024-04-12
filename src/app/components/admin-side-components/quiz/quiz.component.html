@@ -2,12 +2,33 @@
     <mat-card-header class="quiz-item__header">
       <mat-card-title>{{ quiz?.name }}</mat-card-title>
 
-      <div class="buttons" *appRoleAccess="['ADMIN', 'OWNER']">
-        <button class="btn-item" mat-mini-fab color="basic" [routerLink]="['/quizzes/edit', quiz?.id]">
+      <div class="buttons">
+        <button 
+            class="btn-item" 
+            mat-mini-fab 
+            color="basic" 
+            [routerLink]="['/quizzes', quiz?.id]"
+        >
+            <mat-icon svgIcon="play"></mat-icon>
+        </button>
+
+        <button 
+            *appRoleAccess="['ADMIN', 'OWNER']" 
+            class="btn-item" 
+            mat-mini-fab 
+            color="basic" 
+            [routerLink]="['/quizzes/edit', quiz?.id]"
+        >
             <mat-icon>edit</mat-icon>
         </button>
 
-        <button class="btn-item" mat-mini-fab color="basic" (click)="deleteQuiz()">
+        <button 
+            *appRoleAccess="['ADMIN', 'OWNER']" 
+            class="btn-item" 
+            mat-mini-fab 
+            color="basic" 
+            (click)="deleteQuiz()"
+        >
             <mat-icon>delete</mat-icon>
         </button>
     </div>

@@ -12,23 +12,27 @@ export class PaginatorService {
 
     options: number[] = [3, 5, 10, 15];
 
-    init(entities: any[], pageSize: number = 3) {
+    pageIndex: number = 0;
 
-        this.showEntities = this._cutQuestions(entities, 0, this.pageSize); 
+    get startPoint() {
+        return this.pageIndex * this.pageSize;
+    }
+
+    get endPoint() {
+        return this.startPoint + this.pageSize;
+    }
+
+    init(entities: any[]) {
         this.length = entities.length;
-        this.pageSize = pageSize
+        this.showEntities = entities.slice(this.startPoint, this.endPoint);
     }
 
     onPageEvent(entities: any[] | undefined, event: any) {
         if(!entities) {
             return;
         }
-        const {pageIndex, pageSize} = event;
-        const startPoint = pageIndex * pageSize;
-        this.showEntities = this._cutQuestions(entities, startPoint, startPoint + pageSize);
-    }
-
-    _cutQuestions(entities: any[], startPoint: number, endPoint: number) {
-        return entities.slice(startPoint, endPoint);
+        this.pageIndex = event.pageIndex;
+        this.pageSize = event.pageSize;
+        this.showEntities = entities.slice(this.startPoint, this.endPoint);
     }
 }

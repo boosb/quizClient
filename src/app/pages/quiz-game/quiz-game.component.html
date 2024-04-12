@@ -3,6 +3,10 @@
 
     <div class="medium-title center">{{currentQuestion?.text}}</div>
 
+    <div class="img-wrapper">
+        <img class="img" [src]="imgService.getImg(currentQuestion?.img)" alt="">
+    </div>
+
     <div class="small-title">Choose an answer:</div>
 
     <div *ngIf="currentQuestion?.answers">

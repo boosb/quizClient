@@ -75,6 +75,7 @@ export class QuizPageComponent {
   ngOnDestroy(): void {
     this.quizSubs.unsubscribe();
     this.questionsSubs.unsubscribe();
+    //todo мб вставить сюда логику, чтобы пустой квиз удалялся
   }
 
   addQuestion() {
@@ -82,10 +83,7 @@ export class QuizPageComponent {
   }
 
   submit() {
-    this.store.dispatch(showConfirm({ data: {
-      text: `Do you really want to save changes a quiz?`,
-      okCallback: this._updateQuiz.bind(this)
-    }}));
+    this._updateQuiz();
   }
 
   _createQuiz() {

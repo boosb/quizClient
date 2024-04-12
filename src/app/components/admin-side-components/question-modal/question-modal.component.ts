@@ -49,7 +49,7 @@ export class QuestionModalComponent implements OnDestroy {
   }
 
   get img() {
-    return this.currentQuestion?.img ? this.currentQuestion?.img : this.imgPath;
+    return this.currentQuestion?.img ? this.currentQuestion?.img : this.imgPath; // todo шо-то ка кбудто рудимент
   }
 
   constructor(

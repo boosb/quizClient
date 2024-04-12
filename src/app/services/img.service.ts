@@ -14,6 +14,7 @@ export class ImgService {
         SOME: 'assets/img/111.svg', // todo пример подгрузки иконки
         DEFAULT_AVATAR: 'assets/img/default-user.svg',
         CAMERA: 'assets/img/camera.svg',
+        PLAY: 'assets/img/play.svg',
     }
 
     constructor(
@@ -45,6 +46,13 @@ export class ImgService {
         this.matIconRegistry.addSvgIcon(
             'camera',
             this.domSanitizer.bypassSecurityTrustResourceUrl(this.paths.CAMERA)
+        );
+    }
+
+    includePlayIcon() {
+        this.matIconRegistry.addSvgIcon(
+            'play',
+            this.domSanitizer.bypassSecurityTrustResourceUrl(this.paths.PLAY)
         );
     }
 }

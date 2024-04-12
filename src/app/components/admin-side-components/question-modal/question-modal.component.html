@@ -17,18 +17,23 @@
             *ngIf="questionText.errors?.minlength && questionText.touched"
         >Please fill title field width min length. Now {{ questionText.value.length }}</p>
 
-        
         <div class="img-wrapper">
-            <img [src]="imgService.getImg(imgPath)"/>
+            <div>
+                <img [src]="imgService.getImg(imgPath)"/>
+            </div>
+    
+            <input 
+                #questionImgInput 
+                hidden="true"
+                type="file"
+                class="btn-mini btn-avatar-edit"
+                onclick="this.value=null"
+                (change)="changeImgQuestion($event)"
+            >
+            <button class="btn-camera" type="button" mat-mini-fab color="basic" (click)="questionImgInput.click()">
+                <mat-icon svgIcon="camera"></mat-icon>
+            </button>
         </div>
-        <!--<button mat-fab color="basic">
-            <mat-icon svgIcon="camera"></mat-icon>
-        </button>-->
-
-        <input 
-            type="file"
-            (change)="changeImgQuestion($event)"
-        >
     </div>
 
     <button type="submit" mat-flat-button color="primary">{{ isUpdate ? 'Update' : 'Create' }}</button>
