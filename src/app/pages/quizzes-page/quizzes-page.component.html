@@ -11,9 +11,17 @@
     [(ngModel)]="term"
 >
 
-<div *ngIf="quizzes$ | async">
-    <app-quiz
-        *ngFor="let quiz of quizzes$ | async | filterQuizzes: term"
-        [quiz]="quiz"
-    ></app-quiz>
+<app-quiz
+    *ngFor="let quiz of paginatorService.showEntities | filterQuizzes: term"
+    [quiz]="quiz"
+></app-quiz>
+
+<div class="paginator-wrapper">
+    <mat-paginator
+        (page)="paginatorService.onPageEvent(quizzes, $event)"
+        [length]="paginatorService.length"
+        [pageSize]="paginatorService.pageSize"
+        [pageSizeOptions]="paginatorService.options"
+        aria-label="Select page">
+    </mat-paginator>
 </div>

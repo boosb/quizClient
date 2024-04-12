@@ -1,7 +1,7 @@
 <mat-card class="question-item" (click)="setCurrentQuestion()">
     <mat-card-header class="question-item__header">
       <mat-card-title>Question {{ number }}</mat-card-title>
-      <mat-card-subtitle>{{ questionText }}</mat-card-subtitle>
+      <mat-card-subtitle>{{ question.text| cutQuestion: question.id }}</mat-card-subtitle>
     </mat-card-header>
     <img class="question-item__img" *ngIf="showDetails" mat-card-image [src]="imgService.getImg(question.img)">
     <mat-card-content>

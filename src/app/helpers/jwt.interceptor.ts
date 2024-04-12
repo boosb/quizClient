@@ -7,6 +7,7 @@ import { Store, select } from '@ngrx/store';
 import { AppState } from '../store';
 import { selectUser } from '../store/selectors/auth.selectors';
 
+//todo ПОразбираться, чет ваще непонятный файл, но чет с авторизацией связано как будто
 @Injectable()
 export class JwtInterceptor implements HttpInterceptor {
     constructor(

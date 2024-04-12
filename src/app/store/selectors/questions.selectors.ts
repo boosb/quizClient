@@ -20,9 +20,10 @@ export const selectCurrentQuestion = createSelector(
 
 export const selectShowDetails = createSelector(
     selectQuestionState,
-    (state: fromQuestion.QuestionsState, props: any) => {
-        console.log( props.questionId, '>>> ID')
-        //if(id) console.log(state.showDetails[id], ' >> .state.showDetails[id]')
-        return state.showDetails[props.questionId]
-    }
+    (state: fromQuestion.QuestionsState, props: any) => state.showDetails[props.questionId]
+);
+
+export const selectShowDetailsAll = createSelector(
+    selectQuestionState,
+    (state: fromQuestion.QuestionsState) => state.showDetails
 );

@@ -7,7 +7,7 @@ import { IQuiz } from '../store/models/quiz';
 export class FilterQuizzesPipe implements PipeTransform {
 
   transform(quiz: (IQuiz | undefined)[] | null, search: string): (IQuiz | undefined)[] | null {
-    const value = quiz ? quiz.filter(quiz => quiz?.name.toLowerCase().includes(search.toLowerCase())) : null
-    return search.length === 0 ? quiz : value
+    const value = quiz ? quiz.filter(quiz => quiz?.name.toLowerCase().includes(search.toLowerCase())) : null;
+    return search.length === 0 ? quiz : value;
   }
 }

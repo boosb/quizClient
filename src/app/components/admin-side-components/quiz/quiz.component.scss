@@ -1,11 +1,15 @@
-.main-content-wrapper {
-    display: flex;
-    justify-content: space-between;
+.quiz-item {
+    height: 70px;
+    width: 100%;
+    margin-bottom: 10px;
+    &:hover {
+        cursor: pointer;
+        border-color: green;
+        background-color: rgba(124, 252, 0, 0.2);
+    }
 }
 
-.quiz-text {
-    font-size: 1.125rem;
-    line-height: 1.75rem;
-    text-align: left;
-    margin-bottom: 0.5rem;
+.quiz-item__header {
+    display: flex;
+    justify-content: space-between;
 }

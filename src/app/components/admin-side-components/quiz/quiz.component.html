@@ -1,14 +1,15 @@
-<div class="common-item" (click)="selectQuiz()">
-    <div class="main-content-wrapper">
-        <h2 class="quiz-text">{{ quiz?.name }}</h2>
-        <div class="buttons" *appRoleAccess="['ADMIN', 'OWNER']">
-            <button class="btn-item" mat-mini-fab color="basic" [routerLink]="['/quizzes/edit', quiz?.id]">
-                <mat-icon>edit</mat-icon>
-            </button>
+<mat-card class="quiz-item" (click)="selectQuiz()">
+    <mat-card-header class="quiz-item__header">
+      <mat-card-title>{{ quiz?.name }}</mat-card-title>
 
-            <button class="btn-item" mat-mini-fab color="basic" (click)="deleteQuiz()">
-                <mat-icon>delete</mat-icon>
-            </button>
-        </div>
+      <div class="buttons" *appRoleAccess="['ADMIN', 'OWNER']">
+        <button class="btn-item" mat-mini-fab color="basic" [routerLink]="['/quizzes/edit', quiz?.id]">
+            <mat-icon>edit</mat-icon>
+        </button>
+
+        <button class="btn-item" mat-mini-fab color="basic" (click)="deleteQuiz()">
+            <mat-icon>delete</mat-icon>
+        </button>
     </div>
-</div>
+    </mat-card-header>
+</mat-card>

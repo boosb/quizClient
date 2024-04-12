@@ -80,14 +80,4 @@ export class QuestionComponent implements OnInit, OnDestroy {
   _deleteQuestion() {
     this.store.dispatch(deleteQuestionRequest({questionId: Number(this.question.id)}));
   }
-
-  _cutText(condition: boolean) {
-    if(condition && this.question) {
-      this.questionText = this.question.text.slice(0, MAX_TEXT_LENGTH);
-    } 
-    
-    if(!condition && this.question) {
-      this.questionText = this.question.text;
-    }
-  }
 }

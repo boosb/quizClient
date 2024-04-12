@@ -65,6 +65,7 @@ import {MatPaginatorModule} from '@angular/material/paginator';
 import { filesReducer } from './store/reducers/files.reducer';
 import { FilesEffects } from './store/effects/files.effects';
 import {MatCardModule} from '@angular/material/card';
+import { CutQuestionPipe } from './pipes/cut-question.pipe';
 
 @NgModule({
     declarations: [
@@ -73,6 +74,7 @@ import {MatCardModule} from '@angular/material/card';
         ModalComponent,
         FilterQuestionPipe,
         FilterQuizzesPipe,
+        CutQuestionPipe,
         FocusDirective,
         AccessDirective,
         QuizzesPageComponent,
@@ -92,7 +94,7 @@ import {MatCardModule} from '@angular/material/card';
         ConfirmEmailPageComponent,
         ProfilePageComponent,
         QuizGameComponent,
-        GameStatisticComponent
+        GameStatisticComponent,
     ],
     providers: [
         provideStore(),

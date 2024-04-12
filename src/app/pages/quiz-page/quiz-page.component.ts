@@ -13,6 +13,7 @@ import { selectCurrentQuiz } from '../../store/selectors/quizzes.selectors';
 import { selectAllQuestions } from '../../store/selectors/questions.selectors';
 import { loadAnswers } from '../../store/actions/answers.actions';
 import { showConfirm, showModalQuestions } from '../../store/actions/modal.actions';
+import { PaginatorService } from '../../services/paginator.service';
 
 @Component({
   selector: 'app-quiz-page',
@@ -32,10 +33,6 @@ export class QuizPageComponent {
   questions: IQuestion[] | undefined;
 
   isShowModal$: Observable<boolean> = this.store.select(selectModalShow);
-
-  pageSize: number = 3;
-
-  pageQuestions: IQuestion[] | undefined;
 
   form = new FormGroup({
     quizName: new FormControl<string>(``, [
@@ -59,6 +56,7 @@ export class QuizPageComponent {
 
   constructor(
     public questionService: QuestionService,
+    public paginatorService: PaginatorService,
     private store: Store<AppState>
   ) {}
 
@@ -66,7 +64,7 @@ export class QuizPageComponent {
     this.quizSubs = this.store.pipe(select(selectCurrentQuiz)).subscribe(quiz => this._setQuizData(quiz));
     this.questionsSubs = this.store.pipe(select(selectAllQuestions)).subscribe(questions => {
       this.questions = questions;
-      this.pageQuestions = this._cutQuestions(0, this.pageSize);
+      this.paginatorService.init(questions)
     });
 
     if(!this.quiz) {
@@ -88,12 +86,6 @@ export class QuizPageComponent {
       text: `Do you really want to save changes a quiz?`,
       okCallback: this._updateQuiz.bind(this)
     }}));
-  }
-
-  onPageEvent(event: any) {
-    const {pageIndex, pageSize} = event;
-    const startPoint = pageIndex * pageSize;
-    this.pageQuestions = this._cutQuestions(startPoint, startPoint + pageSize);
   }
 
   _createQuiz() {
@@ -139,9 +131,5 @@ export class QuizPageComponent {
   _setQuizValues() {
     this.quizName.setValue(this.quiz?.name);
     this.complexityQuiz.setValue(this.quiz?.complexity);
-  }
-
-  _cutQuestions(startPoint: number, endPoint: number) {
-    return this.questions?.slice(startPoint, endPoint);
   }
 }
