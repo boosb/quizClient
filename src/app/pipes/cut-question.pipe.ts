@@ -28,12 +28,13 @@ export class CutQuestionPipe implements PipeTransform, OnDestroy {
         this.showDetailsSubs.unsubscribe();
     }
 
-    transform(value: any, questionId: number | undefined) {
+    transform(value: string, questionId: number | undefined) {
         if(!questionId) {
             return;
         }
 
+        const tooMachText = value.length > this.MAX_TEXT_LENGTH;
         const questionState = this.showDetails[questionId];
-        return questionState ? value : `${value.slice(0, this.MAX_TEXT_LENGTH)}...`;
+        return questionState || !tooMachText ? value : `${value.slice(0, this.MAX_TEXT_LENGTH)}...`;
     }
 }
