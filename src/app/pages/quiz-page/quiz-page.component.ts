@@ -8,7 +8,7 @@ import { Observable, Subscription } from 'rxjs';
 import { IQuestion } from '../../store/models/question';
 import { addRequiest, selectQuiz, updateRequiest } from '../../store/actions/quizzes.actions';
 import { Update } from '@ngrx/entity';
-import { loadQuestions } from '../../store/actions/questions.actions';
+import { loadQuestions, selectQuestion } from '../../store/actions/questions.actions';
 import { selectCurrentQuiz } from '../../store/selectors/quizzes.selectors';
 import { selectAllQuestions } from '../../store/selectors/questions.selectors';
 import { loadAnswers } from '../../store/actions/answers.actions';
@@ -79,6 +79,7 @@ export class QuizPageComponent {
   }
 
   addQuestion() {
+    this.store.dispatch(selectQuestion({questionId: undefined}));
     this.store.dispatch(showModalQuestions({data: { isUpdate: false }}));
   }
 

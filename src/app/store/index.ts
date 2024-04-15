@@ -81,9 +81,3 @@ export const selectUsers = createSelector(
   selectUsersState,
   (state: fromUsers.UsersState) => state.users
 );
-
-// FILES
-export const selectLastImgPath = createSelector(
-  selectFilesState,
-  (state: fromFiles.FilesState) => state.lastImgPath
-);

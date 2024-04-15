@@ -16,7 +16,7 @@
     </mat-card-content>
     <mat-card-actions class="question-item__buttons">
         <div>
-            <button mat-button (click)="toggleShowMore()">Show details</button>
+            <button mat-button [disabled]="!this.existDetails" (click)="toggleShowMore()">{{ showDetails ? 'Collapse' : 'Show' }} details</button>
             <button mat-button (click)="addAnswer()">Add answer</button>
         </div>
         <div *appRoleAccess="['ADMIN', 'OWNER']">

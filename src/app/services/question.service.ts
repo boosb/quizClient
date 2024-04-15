@@ -37,4 +37,26 @@ export class QuestionService {
   delete(questionId: number | undefined): Observable<IQuestion> {
     return this.http.delete<IQuestion>(`http://localhost:3000/question/${questionId}`)
   }
+
+  sortQuestions(questions: IQuestion[] | undefined) {
+    if(!questions || !questions.length) {
+        return;
+    }
+
+    const sortedQuestions = questions.slice();
+    sortedQuestions.sort((a: IQuestion, b: IQuestion) => {
+        if (!a.id || !b.id) {
+            return 0;
+        }
+        if (a.id > b.id) {
+            return 1;
+        }
+        if (a.id < b.id) {
+            return -1;
+        }
+        return 0;
+    });
+
+    return sortedQuestions;
+  }
 }

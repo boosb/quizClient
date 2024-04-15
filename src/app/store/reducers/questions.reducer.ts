@@ -27,23 +27,23 @@ export const qustionsReducer = createReducer(
         }
     }), 
     on(loadQuestionsSuccess, (state, { questions }) => {
-        return adapterQuestions.setAll(questions, state)
+        return adapterQuestions.setAll(questions, state);
     }),  
     on(addedQuestionSuccess, (state, { question }) => {
-        return adapterQuestions.addOne(question, state)
+        return adapterQuestions.addOne(question, state);
     }),
     on(deletedQuestionSuccess, (state, { questionId }) => {
-        return adapterQuestions.removeOne(questionId, state)
+        return adapterQuestions.removeOne(questionId, state);
     }),
     on(updatedQuestionSuccess, (state, { update }) => {
-        return adapterQuestions.updateOne(update, state)
+        return adapterQuestions.updateOne(update, state);
     }),
     on(toggleDetails, (state, { questionId }) => {
         const showDetails = {
             ...state.showDetails
         }
         if(questionId) {
-            showDetails[questionId] = !state.showDetails[questionId]
+            showDetails[questionId] = !state.showDetails[questionId];
         }
         
         return {

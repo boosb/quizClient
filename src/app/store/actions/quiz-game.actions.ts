@@ -4,7 +4,7 @@ import { IAnswer } from "../models/answer";
 import { IQuestion } from "../models/question";
 
 export const startGame = createAction('[Game API] Quiz Game Start', props<{ quiz: IQuiz }>());
-export const startGameSuccess = createAction('[Game API] Quiz Game Start Success', props<{ quiz: IQuiz, questions: IQuestion[] | null }>());
+export const startGameSuccess = createAction('[Game API] Quiz Game Start Success', props<{ quiz: IQuiz, questions: IQuestion[] | undefined }>());
 
 export const nextQuestion = createAction('[Game API] Quiz Game Next Question', props<{ questionNumber: number }>());
 export const previousQuestion = createAction('[Game API] Quiz Game Previous Question', props<{ questionNumber: number }>());

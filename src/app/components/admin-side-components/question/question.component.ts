@@ -8,7 +8,9 @@ import { deleteQuestionRequest, selectQuestion, toggleDetails } from '../../../s
 import { selectQustionAnswers } from '../../../store/selectors/answers.selectors';
 import { showConfirm, showModalAnswers, showModalQuestions } from '../../../store/actions/modal.actions';
 import { ImgService } from '../../../services/img.service';
-import { selectShowDetails } from '../../../store/selectors/questions.selectors';
+import { selectCurrentQuestion, selectShowDetails } from '../../../store/selectors/questions.selectors';
+import { MAX_TEXT_LENGTH } from '../../../pipes/cut-question.pipe';
+import { selectAnswer } from '../../../store/actions/answers.actions';
 
 @Component({
   selector: 'app-question',
@@ -29,6 +31,10 @@ export class QuestionComponent implements OnInit, OnDestroy {
   answers: IAnswer[];
 
   showDetails: boolean;
+
+  get existDetails() {
+    return (this.answers.length && this.answers.length > 0) || this.question.text.length > MAX_TEXT_LENGTH || this.question.img;
+  }
 
   constructor(
     private store: Store<AppState>,
@@ -68,6 +74,7 @@ export class QuestionComponent implements OnInit, OnDestroy {
   }
 
   addAnswer() {
+    this.store.dispatch(selectAnswer({answerId: undefined}));
     this.store.dispatch(showModalAnswers({data: {isUpdate: false}}));
   }
 

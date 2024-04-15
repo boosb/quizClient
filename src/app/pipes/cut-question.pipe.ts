@@ -4,14 +4,13 @@ import { AppState } from "../store";
 import { Subscription } from "rxjs";
 import { selectShowDetailsAll } from "../store/selectors/questions.selectors";
 
+export const MAX_TEXT_LENGTH: number = 75;
+
 @Pipe({
     name: 'cutQuestion',
     pure: false
 })
 export class CutQuestionPipe implements PipeTransform, OnDestroy {
-
-    private MAX_TEXT_LENGTH: number = 75;
-
     showDetailsSubs: Subscription;
 
     showDetails: {
@@ -33,8 +32,8 @@ export class CutQuestionPipe implements PipeTransform, OnDestroy {
             return;
         }
 
-        const tooMachText = value.length > this.MAX_TEXT_LENGTH;
+        const tooMachText = value.length > MAX_TEXT_LENGTH;
         const questionState = this.showDetails[questionId];
-        return questionState || !tooMachText ? value : `${value.slice(0, this.MAX_TEXT_LENGTH)}...`;
+        return questionState || !tooMachText ? value : `${value.slice(0, MAX_TEXT_LENGTH)}...`;
     }
 }

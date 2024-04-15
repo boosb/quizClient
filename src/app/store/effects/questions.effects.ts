@@ -15,7 +15,10 @@ export class QuestionsEffects {
     ofType(loadQuestions),
     exhaustMap((action) => this.questionService.getAll(action.quizId)
       .pipe(
-        map(questions => loadQuestionsSuccess({questions})),
+        map(questions => {
+          const sortQuestions = this.questionService.sortQuestions(questions)
+          return loadQuestionsSuccess({questions: sortQuestions || []});
+        }),
         catchError(() => EMPTY)
       ))
     )

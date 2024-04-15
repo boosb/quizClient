@@ -1,6 +1,6 @@
 import { Component, Input, OnDestroy, OnInit, ViewContainerRef, inject } from '@angular/core';
 import { Store, select } from '@ngrx/store';
-import { AppState, selectLastImgPath } from '../../../store';
+import { AppState } from '../../../store';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { addQuestionRequest, updateQuestionRequest } from '../../../store/actions/questions.actions';
@@ -9,7 +9,8 @@ import { IQuestion } from '../../../store/models/question';
 import { selectCurrentQuizId } from '../../../store/selectors/quizzes.selectors';
 import { selectCurrentQuestion } from '../../../store/selectors/questions.selectors';
 import { ImgService } from '../../../services/img.service';
-import { uploadImgQuestionRequest } from '../../../store/actions/files.actions';
+import { cleanLastImgPath, uploadImgQuestionRequest } from '../../../store/actions/files.actions';
+import { selectQuestionImgPath } from '../../../store/selectors/files.selectors';
 
 @Component({
   selector: 'app-question-modal',
@@ -21,7 +22,7 @@ import { uploadImgQuestionRequest } from '../../../store/actions/files.actions';
 })
 export class QuestionModalComponent implements OnDestroy {
 
-  @Input() isUpdate: boolean;
+  @Input() isUpdate: boolean; // todo хочу ли я здесь это видеть или вынести в store?!
 
   private quizIdSubs: Subscription;
 
@@ -48,10 +49,6 @@ export class QuestionModalComponent implements OnDestroy {
     return this.form.controls.questionText as FormControl;
   }
 
-  get img() {
-    return this.currentQuestion?.img ? this.currentQuestion?.img : this.imgPath; // todo шо-то ка кбудто рудимент
-  }
-
   constructor(
     private store: Store<AppState>,
     public imgService: ImgService
@@ -61,17 +58,18 @@ export class QuestionModalComponent implements OnDestroy {
     this.quizIdSubs = this.store.pipe(select(selectCurrentQuizId)).subscribe(id => this.quizId = id);
     this.currentQuestionSubs = this.store.pipe(select(selectCurrentQuestion)).subscribe(question => {
       this.currentQuestion = question;
-      this.imgPath = question?.img;
       this.questionText.setValue(question?.text);
     });
-
-    this.imgPathSubs = this.store.pipe(select(selectLastImgPath)).subscribe(imgPath => this.imgPath = imgPath);
+    
+    this.imgPathSubs = this.store.pipe(select(selectQuestionImgPath)).subscribe(imgPath => this.imgPath = imgPath);
   }
 
   ngOnDestroy(): void {
     this.quizIdSubs.unsubscribe();
     this.currentQuestionSubs.unsubscribe();
     this.imgPathSubs.unsubscribe();
+
+    this.store.dispatch(cleanLastImgPath());
   }
 
   submit() {

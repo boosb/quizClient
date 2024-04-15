@@ -2,6 +2,9 @@ import { createSelector } from "@ngrx/store";
 import { selectQuizState, selectRouteParams } from "..";
 import * as fromQuiz from './../reducers/quizzes.reducer';
 
+
+// todo возможно придется как-то обединять Quiz, Questions and Answers, ведь это по сути все продолжение обной сущности, но как будто и нет. Хз, хорошо бы найти того, у кого уточнить
+
 export const selectCurrentQuizId = createSelector(
     selectQuizState,
     fromQuiz.getSelectedQuizId

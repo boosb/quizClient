@@ -45,7 +45,7 @@ export const gameReducer = createReducer(
         return {
             ...state,
             quiz,
-            questions,
+            questions: questions || [],
             currentQuestion: questions ? questions[0] : null,
             counter: 1,
             countQuestions: questions ? questions.length : 0

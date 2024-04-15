@@ -35,25 +35,4 @@ export class GameService implements OnDestroy {
             observer.complete();
         } );
     }
-
-    sortQuestions(quiz: IQuiz) {
-        let sortedQuestions = null;
-        if(quiz.questions) {
-            sortedQuestions = quiz.questions.slice();
-            sortedQuestions.sort((a: IQuestion, b: IQuestion) => {
-                if (!a.id || !b.id) {
-                    return 0;
-                }
-                if (a.id > b.id) {
-                    return 1;
-                }
-                if (a.id < b.id) {
-                    return -1;
-                }
-                return 0;
-            })
-        }
-
-        return {quiz, sortedQuestions};
-    }
 }
