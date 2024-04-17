@@ -13,7 +13,6 @@ import { QuizzesPageComponent } from './pages/quizzes-page/quizzes-page.componen
 import { RatingPageComponent } from './pages/rating-page/rating-page.component';
 import { UserComponent } from './components/user/user.component';
 import { AuthPageComponent } from './pages/auth-page/auth-page.component';
-import { NotificationComponent } from './components/common-components/notification/notification.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AdminMenuComponent } from './components/admin-side-components/admin-menu/admin-menu.component';
 import { AdminMenuItemComponent } from './components/admin-side-components/admin-menu-item/admin-menu-item.component';
@@ -81,7 +80,6 @@ import { CutQuestionPipe } from './pipes/cut-question.pipe';
         RatingPageComponent,
         UserComponent,
         AuthPageComponent,
-        NotificationComponent,
         AdminMenuComponent,
         AdminMenuItemComponent,
         QuestionComponent,

@@ -2,12 +2,12 @@ import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { EMPTY } from 'rxjs';
 import { map, exhaustMap, catchError, mergeMap } from 'rxjs/operators';
-import { NotificationService } from '../../services/notification.service';
 import { QuestionService } from '../../services/question.service';
 import { addQuestionRequest, addedQuestionSuccess, deleteQuestionRequest, deletedQuestionSuccess, loadQuestions, loadQuestionsSuccess, updateQuestionRequest, updatedQuestionSuccess } from '../actions/questions.actions';
 import { Store } from '@ngrx/store';
 import { AppState } from '..';
 import { closeModal } from '../actions/modal.actions';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Injectable()
 export class QuestionsEffects {
@@ -16,7 +16,7 @@ export class QuestionsEffects {
     exhaustMap((action) => this.questionService.getAll(action.quizId)
       .pipe(
         map(questions => {
-          const sortQuestions = this.questionService.sortQuestions(questions)
+          const sortQuestions = this.questionService.sortQuestions(questions);
           return loadQuestionsSuccess({questions: sortQuestions || []});
         }),
         catchError(() => EMPTY)
@@ -29,9 +29,9 @@ export class QuestionsEffects {
     mergeMap((action) => this.questionService.create(action.question)
       .pipe(
         map((createdQuestion) => {
-          this.store.dispatch(closeModal())
-          this.notificationService.show(`Question has been created!`)
-          return addedQuestionSuccess({question: createdQuestion})
+          this.store.dispatch(closeModal());
+          this.snackBar.open('Question has been created!', 'OK', {duration: 3000});
+          return addedQuestionSuccess({question: createdQuestion});
         }),
         catchError(() => EMPTY)
       ))
@@ -43,8 +43,8 @@ export class QuestionsEffects {
     mergeMap((action) => this.questionService.delete(action.questionId)
       .pipe(
         map(() => {
-          this.notificationService.show(`Question has been deleted!`)
-          return deletedQuestionSuccess({questionId: action.questionId})
+          this.snackBar.open('Question has been deleted!', 'OK', {duration: 3000});
+          return deletedQuestionSuccess({questionId: action.questionId});
         }),
         catchError(() => EMPTY)
       ))
@@ -56,9 +56,9 @@ export class QuestionsEffects {
     mergeMap((action) => this.questionService.update(action.update)
       .pipe(
         map(() => {
-          this.store.dispatch(closeModal())
-          this.notificationService.show(`Question has been updated!`)
-          return updatedQuestionSuccess({update: action.update})
+          this.store.dispatch(closeModal());
+          this.snackBar.open('Question has been updated!', 'OK', {duration: 3000});
+          return updatedQuestionSuccess({update: action.update});
         }),
         catchError(() => EMPTY)
       ))
@@ -69,6 +69,6 @@ export class QuestionsEffects {
     private actions$: Actions,
     private questionService: QuestionService,
     private store: Store<AppState>,
-    private notificationService: NotificationService
+    private snackBar: MatSnackBar
   ) {}
 }

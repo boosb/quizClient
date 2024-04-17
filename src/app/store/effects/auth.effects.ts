@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { EMPTY, merge, of } from 'rxjs';
-import { map, exhaustMap, catchError, mergeMap, tap, switchMap, concatMap } from 'rxjs/operators';
-import { confirmEmail, confirmEmailSuccess, getAuthUser, getAuthUserSuccess, login, loginError, loginSuccess, registration, registrationSuccess, updateEmailUser, updateEmailUserError, updateEmailUserSuccess, updateUser, updateUserSuccess } from '../actions/auth.actions';
+import { EMPTY, of } from 'rxjs';
+import { map, exhaustMap, catchError, switchMap } from 'rxjs/operators';
+import { confirmEmail, confirmEmailSuccess, getAuthUser, getAuthUserSuccess, login, loginError, loginSuccess, registration, registrationSuccess, updateEmailUser, updateEmailUserError, updateEmailUserSuccess, updateUser } from '../actions/auth.actions';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 import { IUser } from '../models/user';
 import { UserService } from '../../services/user.service';
-import { NotificationService } from '../../services/notification.service';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Injectable()
 export class AuthEffects {
@@ -59,7 +59,7 @@ export class AuthEffects {
     exhaustMap((action) => this.userService.update(action.update)
       .pipe(
         map(() => {
-          this.notificationService.show(`Your profile has been successfully updated!`);
+          this.snackBar.open('Your profile has been successfully updated!', 'OK', {duration: 3000});
           return getAuthUser({userId: Number(action.update.id)})
         }),
         catchError(() => EMPTY)
@@ -72,7 +72,7 @@ export class AuthEffects {
     exhaustMap((action) => this.userService.updateEmail(action.update)
       .pipe(
         map(() => {
-          this.notificationService.show(`Confirm your new email!`);
+          this.snackBar.open('Confirm your new email!', 'OK', {duration: 3000});
           return updateEmailUserSuccess()
         }),
         catchError((err) => of(updateEmailUserError({errorText: err.error.message})))
@@ -96,7 +96,7 @@ export class AuthEffects {
     private actions$: Actions,
     private authService: AuthService,
     private userService: UserService,
-    private notificationService: NotificationService,
+    private snackBar: MatSnackBar,
     private router: Router
   ) {}
 }

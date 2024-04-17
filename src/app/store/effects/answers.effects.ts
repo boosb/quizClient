@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { AnswerService } from "../../services/answer.service";
-import { NotificationService } from "../../services/notification.service";
+import {MatSnackBar} from '@angular/material/snack-bar';
 import { addAnswerRequest, addedAnswerSuccess, deleteAnswerRequest, deletedAnswerSuccess, loadAnswers, loadAnswersSuccess, updateAnswerRequest, updatedAnswerSuccess } from "../actions/answers.actions";
 import { EMPTY, catchError, exhaustMap, map } from "rxjs";
 import { Store } from "@ngrx/store";
@@ -26,7 +26,7 @@ export class AnswersEffects {
       .pipe(
           map(createdAnswer => {
             this.store.dispatch(closeModal());
-            this.notificationService.show(`Answer has been created!`);
+            this.snackBar.open('Answer has been created!', 'OK', {duration: 3000});
             return addedAnswerSuccess({answer: createdAnswer});
           }),
           catchError(() => EMPTY)
@@ -39,7 +39,7 @@ export class AnswersEffects {
     exhaustMap((action) => this.answerService.delete(action.answerId)
       .pipe(
         map(() => {
-          this.notificationService.show(`Answer has been deleted!`);
+          this.snackBar.open('Answer has been deleted!', 'OK', {duration: 3000});
           return deletedAnswerSuccess({answerId: action.answerId});
         }),
         catchError(() => EMPTY)
@@ -53,7 +53,7 @@ export class AnswersEffects {
       .pipe(
         map(() => {
           this.store.dispatch(closeModal());
-          this.notificationService.show(`Answer has been updated!`);
+          this.snackBar.open('Answer has been updated!', 'OK', {duration: 3000});
           return updatedAnswerSuccess({update: action.update});
         }),
         catchError(() => EMPTY)
@@ -64,7 +64,7 @@ export class AnswersEffects {
   constructor(
     private actions$: Actions,
     private answerService: AnswerService,
-    private notificationService: NotificationService,
+    private snackBar: MatSnackBar,
     private store: Store<AppState>
   ) {}
 }
