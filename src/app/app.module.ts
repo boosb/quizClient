@@ -1,4 +1,4 @@
-import { NgModule, isDevMode } from '@angular/core';
+import { APP_INITIALIZER, NgModule, isDevMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { CommonModule } from '@angular/common';
 import { AppComponent } from './app.component';
@@ -57,7 +57,6 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import { QuizGameComponent } from './pages/quiz-game/quiz-game.component';
 import { gameReducer } from './store/reducers/quiz-game.reducer';
 import { GameEffects } from './store/effects/quiz-game.effects';
-import { GameStatisticComponent } from './components/game-statistic/game-statistic.component';
 import { usersReducer } from './store/reducers/users.reducer';
 import { UsersEffects } from './store/effects/users.effects';
 import {MatPaginatorModule} from '@angular/material/paginator';
@@ -65,6 +64,9 @@ import { filesReducer } from './store/reducers/files.reducer';
 import { FilesEffects } from './store/effects/files.effects';
 import {MatCardModule} from '@angular/material/card';
 import { CutQuestionPipe } from './pipes/cut-question.pipe';
+import { QuizResultComponent } from './components/quiz-result/quiz-result.component';
+import { appInitializer } from './helpers/app.initializer';
+import { AuthService } from './services/auth.service';
 
 @NgModule({
     declarations: [
@@ -92,7 +94,7 @@ import { CutQuestionPipe } from './pipes/cut-question.pipe';
         ConfirmEmailPageComponent,
         ProfilePageComponent,
         QuizGameComponent,
-        GameStatisticComponent,
+        QuizResultComponent
     ],
     providers: [
         provideStore(),
@@ -104,6 +106,7 @@ import { CutQuestionPipe } from './pipes/cut-question.pipe';
           traceLimit: 75, // maximum stack trace frames to be stored (in case trace option was provided as true)
           connectInZone: true // If set to true, the connection is established within the Angular zone
         }),
+        //{ provide: APP_INITIALIZER, useFactory: appInitializer, multi: true, deps: [AuthService] },
         { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
         provideAnimationsAsync(),
     ],

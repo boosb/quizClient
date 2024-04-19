@@ -17,3 +17,5 @@ export const answerWrong = createAction('[Game API] Quiz Game Answer Wrong');
 export const timeOver = createAction('[Game API] Quiz Game Time Over'); // todo а может и не понадобится этот экшен
 
 export const completeGame = createAction('[Game API] Quiz Game Complete');
+
+export const closeGame = createAction('[Game API] Quiz Game Close');

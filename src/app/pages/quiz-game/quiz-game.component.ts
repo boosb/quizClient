@@ -4,7 +4,7 @@ import { Store, select } from '@ngrx/store';
 import { selectCurrentQuiz } from '../../store/selectors/quizzes.selectors';
 import { Observable, Subscription } from 'rxjs';
 import { IQuiz } from '../../store/models/quiz';
-import { answer, answerSelect, completeGame, nextQuestion, previousQuestion, startGame } from '../../store/actions/quiz-game.actions';
+import { answer, answerSelect, closeGame, completeGame, nextQuestion, previousQuestion, startGame } from '../../store/actions/quiz-game.actions';
 import { IQuestion } from '../../store/models/question';
 import { selectBtnState, selectCompleteGame, selectCounter, selectCurrentQuestion, selectGameIsOn, selectSelectedAnswer } from '../../store/selectors/quiz-game.selectors';
 import { IAnswer } from '../../store/models/answer';
@@ -43,7 +43,7 @@ export class QuizGameComponent implements OnInit, OnDestroy {
 
   selectedAnswer: IAnswer | null;
 
-  isCompleteGame$: Observable<any> = this.store.pipe(select(selectCompleteGame));
+ // isCompleteGame$: Observable<any> = this.store.pipe(select(selectCompleteGame));
 
   isGameOn$: Observable<any> = this.store.pipe(select(selectGameIsOn));
   
@@ -78,6 +78,8 @@ export class QuizGameComponent implements OnInit, OnDestroy {
     this.counterSubs.unsubscribe();
     this.btnStateSubs.unsubscribe();
     this.selectedAnswerSubs.unsubscribe();
+
+    this.store.dispatch(closeGame());
   }
 
   previousQuestion() {

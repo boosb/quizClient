@@ -1,0 +1,25 @@
+<div *ngIf="isCompleteGame$ | async">
+    <app-menu-btn></app-menu-btn>
+    <div class="large-title center">Quiz result</div>
+    <mat-card class="quiz-result-item">
+        <mat-card-header>
+            <!-- В title можно вставить название квиза -->
+          <mat-card-title>Test title</mat-card-title>
+    
+          <!-- В subtitle можно вставить дату и время прохождения квиза, но сначала надо добавить ее в БД -->
+          <mat-card-subtitle>Test subtitle</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content class="quiz-result-item__result">
+            <div *ngFor="let item of historyData">
+                <div 
+                    [ngClass]="{
+                        'quiz-result-item__complete': item.isRight, 
+                        'quiz-result-item__wrong': item.isWrong,
+                        'quiz-result-item__not-answer': item.isNotAnswer,
+                        'quiz-result-item__history-item': true,
+                    }"
+                >{{item.num}}</div>
+            </div>
+        </mat-card-content>
+    </mat-card>
+</div>

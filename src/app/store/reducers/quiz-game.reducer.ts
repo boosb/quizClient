@@ -1,5 +1,5 @@
 import { createReducer, on } from "@ngrx/store"
-import { answerRight, answerSelect, answerWrong, completeGame, nextQuestion, previousQuestion, startGame, startGameSuccess } from "../actions/quiz-game.actions"
+import { answerRight, answerSelect, answerWrong, closeGame, completeGame, nextQuestion, previousQuestion, startGame, startGameSuccess } from "../actions/quiz-game.actions"
 import { IQuestion } from "../models/question"
 import { IQuiz } from "../models/quiz"
 import { IAnswer } from "../models/answer"
@@ -145,5 +145,20 @@ export const gameReducer = createReducer(
             },
             isComplete: true
         }
-    })
+    }),
+    on(closeGame, (state, {}) => {
+        return {
+            ...state,
+            currentQuestion: null,
+            counter: 0,
+            selectedAnswer: null,
+            btnState: {
+                ...state.btnState,
+                answerDisabled: false,
+                nextDisabled: false,
+                previousDisabled: true
+            },
+            isComplete: false
+        }
+    }),
 )

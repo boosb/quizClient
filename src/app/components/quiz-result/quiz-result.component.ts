@@ -1,15 +1,17 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Store, select } from '@ngrx/store';
+import { Observable, Subscription } from 'rxjs';
 import { AppState } from '../../store';
-import { Subscription } from 'rxjs';
-import { selectCountQuestions, selectHistoryGame } from '../../store/selectors/quiz-game.selectors';
+import { selectCompleteGame, selectCountQuestions, selectHistoryGame } from '../../store/selectors/quiz-game.selectors';
 
 @Component({
-  selector: 'app-game-statistic',
-  templateUrl: './game-statistic.component.html',
-  styleUrl: './game-statistic.component.scss'
+  selector: 'app-quiz-result',
+  templateUrl: './quiz-result.component.html',
+  styleUrl: './quiz-result.component.scss'
 })
-export class GameStatisticComponent implements OnInit, OnDestroy {
+export class QuizResultComponent implements OnInit, OnDestroy { // todo Хочу открывать компонент по маршруту .../result
+  isCompleteGame$: Observable<any> = this.store.pipe(select(selectCompleteGame));
+  
   historySubs: Subscription;
 
   countQuestionsSubs: Subscription;
