@@ -1,9 +1,10 @@
 import { Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
-import { EMPTY, catchError, map, of, switchMap } from "rxjs";
-import { answer, answerRight, answerWrong, startGame, startGameSuccess } from "../actions/quiz-game.actions";
+import { EMPTY, catchError, map, of, switchMap, tap } from "rxjs";
+import { answer, answerRight, answerWrong, completeGame, startGame, startGameSuccess } from "../actions/quiz-game.actions";
 import { GameService } from "../../services/quiz-game.service";
 import { QuestionService } from "../../services/question.service";
+import { Router } from "@angular/router";
 
 @Injectable()
 export class GameEffects {
@@ -31,9 +32,16 @@ export class GameEffects {
     )
   );
 
+  completeGame$ = createEffect(() => this.actions$.pipe(
+      ofType(completeGame),
+      tap((action) => this.router.navigateByUrl(`quizzes/${action.quizId}/result`))
+    ), { dispatch: false }
+  );
+
   constructor(
     private actions$: Actions,
     private gameService: GameService,
-    private questionService: QuestionService
+    private questionService: QuestionService,
+    private router: Router
   ) {}
 }

@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnDestroy, ViewChild, ViewContainerRef } from '@angular/core';
+import { ChangeDetectorRef, Component, HostListener, OnDestroy, ViewChild, ViewContainerRef } from '@angular/core';
 import { QuestionModalComponent } from '../../admin-side-components/question-modal/question-modal.component';
 import { Store, select } from '@ngrx/store';
 import { AppState, selectModalData, selectModalDialog } from '../../../store';
@@ -51,6 +51,11 @@ export class ModalComponent implements OnDestroy {
 
   close() {
     this.store.dispatch(closeModal())
+  }
+
+  @HostListener('window:keydown.esc', ['$event'])
+  onEscKeyDown(event: KeyboardEvent) {
+    this.close();
   }
 
   _getCreatedComponent() {

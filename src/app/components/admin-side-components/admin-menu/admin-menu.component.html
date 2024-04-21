@@ -1,9 +1,9 @@
 <div class="admin-menu" *ngIf="isShow$ | async">
     <app-admin-menu-item text="Profile" routerLink="/profile"></app-admin-menu-item>
     <app-admin-menu-item text="All quizzes" routerLink=""></app-admin-menu-item>
-    <app-admin-menu-item text="Statistics"></app-admin-menu-item>
+    <app-admin-menu-item text="History"></app-admin-menu-item>
     <app-admin-menu-item text="Rating" routerLink="/rating"></app-admin-menu-item>
-    <app-admin-menu-item text="Create quiz" routerLink="/quizzes/create"></app-admin-menu-item>
+    <app-admin-menu-item *appRoleAccess="['ADMIN', 'OWNER']" text="Create quiz" routerLink="/quizzes/create"></app-admin-menu-item>
     <app-admin-menu-item text="Settings"></app-admin-menu-item>
     <app-admin-menu-item text="Exit" (click)="logout()"></app-admin-menu-item>
 </div>

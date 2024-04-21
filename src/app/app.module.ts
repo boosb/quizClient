@@ -65,7 +65,7 @@ import { FilesEffects } from './store/effects/files.effects';
 import {MatCardModule} from '@angular/material/card';
 import { CutQuestionPipe } from './pipes/cut-question.pipe';
 import { QuizResultComponent } from './components/quiz-result/quiz-result.component';
-import { appInitializer } from './helpers/app.initializer';
+//import { appInitializer } from './helpers/app.initializer';
 import { AuthService } from './services/auth.service';
 
 @NgModule({
@@ -124,6 +124,7 @@ import { AuthService } from './services/auth.service';
             {path: 'confirm', component: ConfirmEmailPageComponent},
             {path: 'profile', component: ProfilePageComponent, canActivate: [AuthGuard]},
             {path: 'quizzes/:id', component: QuizGameComponent, canActivate: [AuthGuard]},
+            {path: 'quizzes/:id/result', component: QuizResultComponent, canActivate: [AuthGuard]},
             // todo настроить компонент и маршрут PageNotFoundComponent с **
         ]),
         HttpClientModule, // todo а этот модуль я не нашел как подключить иначе, кроме как в ngModule

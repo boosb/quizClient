@@ -4,6 +4,7 @@ import { Injectable } from "@angular/core";
     providedIn: 'root'
 })
 export class PaginatorService {
+    // todo Возникла проблема. Причина, что разные пагинаторы опираются на одинаковые данные. Это приводит к массе проблем
     pageSize: number = 3;
 
     showEntities: any[];

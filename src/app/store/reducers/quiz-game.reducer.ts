@@ -107,7 +107,8 @@ export const gameReducer = createReducer(
                 nextDisabled: nextQuestionNumber === state.countQuestions,
                 previousDisabled: nextQuestionNumber <= 1
             },
-            history
+            history,
+            isComplete: nextQuestionNumber > state.countQuestions
         }
     }),
     on(answerWrong, (state, {}) => {
@@ -128,7 +129,8 @@ export const gameReducer = createReducer(
                 nextDisabled: nextQuestionNumber === state.countQuestions,
                 previousDisabled: nextQuestionNumber <= 1
             },
-            history
+            history,
+            isComplete: nextQuestionNumber > state.countQuestions
         }
     }),
     on(completeGame, (state, {}) => {
