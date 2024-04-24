@@ -1,4 +1,4 @@
-<div class="menu-btn" [class.show-menu]="isShow$ | async" (click)="click()">
+<div class="menu-btn" [class.show-menu]="isShow$ | async" (click)="click()" *ngIf="authUser$ | async">
     <div class="top-row" [class.show-menu]="isShow$ | async"></div>
     <div class="middle-row" [class.show-menu]="isShow$ | async"></div>
     <div class="bottom-row" [class.show-menu]="isShow$ | async"></div>

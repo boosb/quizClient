@@ -1,6 +1,7 @@
+import { IHistoryQuizzes } from "./history-quizzes"
+
 export interface IUser {
-    role?: any
-    id?: number
+    id?: number // todo у меня везед id стоит как необязательный параметр, но мне так не хочется 
     roleId?: number
     email?: string
     password: string
@@ -8,5 +9,7 @@ export interface IUser {
     isEmailConfirmed?: boolean
     avatar?: string
     alias?: string
-    oldEmail?: string
+    oldEmail?: string // todo поле пока не используется, но мб пригодится при реализации функционала смены email
+    role?: any
+    historyQuizzes?: IHistoryQuizzes[]
 }

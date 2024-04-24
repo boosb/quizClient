@@ -9,6 +9,7 @@ import * as fromAuth from './reducers/auth.reducer';
 import * as fromGame from './reducers/quiz-game.reducer';
 import * as fromUsers from './reducers/users.reducer';
 import * as fromFiles from './reducers/files.reducer';
+import * as fromHistoryQuizzes from './reducers/history-quizzes.reducer';
 
 export interface AppState {
     quizzesState: fromQuiz.QuizzesState;
@@ -20,6 +21,7 @@ export interface AppState {
     gameState: fromGame.GameState;
     users: fromUsers.UsersState;
     files: fromFiles.FilesState;
+    historyQuizzes: fromHistoryQuizzes.HistoryQuizzesState;
     router: RouterReducerState<any>;
 }
   
@@ -33,6 +35,7 @@ export const reducers: ActionReducerMap<AppState, any> = {
     gameState: fromGame.gameReducer,
     users: fromUsers.usersReducer,
     files: fromFiles.filesReducer,
+    historyQuizzes: fromHistoryQuizzes.historyQuizzesReducer,
     router: routerReducer
 }
 
@@ -47,6 +50,7 @@ export const selectAuthState = createFeatureSelector<fromAuth.AuthState>('auth')
 export const selectGameState = createFeatureSelector<fromGame.GameState>('game');
 export const selectUsersState = createFeatureSelector<fromUsers.UsersState>('users');
 export const selectFilesState = createFeatureSelector<fromFiles.FilesState>('files');
+export const selectHistoryQuizzesState = createFeatureSelector<fromHistoryQuizzes.HistoryQuizzesState>('historyQuizzes');
 
 export const {
   selectCurrentRoute,

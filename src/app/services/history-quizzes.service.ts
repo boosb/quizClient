@@ -13,8 +13,11 @@ export class HistoryQuizzesService {
     ) {
     }
 
-    create(hystory: IHistoryQuizzes): Observable<IHistoryQuizzes> {
-        console.log('hello-1')
-        return this.http.post<IHistoryQuizzes>(`http://localhost:3000/history-quizzes`, hystory);
+    getAll(): Observable<IHistoryQuizzes> {
+        return this.http.get<IHistoryQuizzes>(`http://localhost:3000/history-quizzes`);
+    }
+
+    create(historyQuizzes: IHistoryQuizzes): Observable<IHistoryQuizzes> {
+        return this.http.post<IHistoryQuizzes>(`http://localhost:3000/history-quizzes`, historyQuizzes);
     }
 }

@@ -4,11 +4,15 @@ import { IQuestion } from "../models/question"
 import { IQuiz } from "../models/quiz"
 import { IAnswer } from "../models/answer"
 
+export interface IHistory {
+    [key:number]: number // 1 - right, 0 - wrong
+}
+
 export interface GameState {
     quiz: IQuiz | null
     questions: IQuestion[] | null
     currentQuestion: IQuestion | null
-    counter: number
+    counter: number // number current question
     countQuestions: number
     selectedAnswer: IAnswer | null
     btnState: {
@@ -16,9 +20,7 @@ export interface GameState {
         previousDisabled: boolean,
         answerDisabled: boolean
     }
-    history: {
-        [key:number]: number // 1 - right, 0 - wrong
-    }
+    history: IHistory
     isComplete: boolean
 }
 
@@ -95,6 +97,11 @@ export const gameReducer = createReducer(
             ...state.history,
         };
         history[state.counter] = 1;
+        console.log(state.counter, ' >> state.counter')
+        console.log(state.countQuestions, ' >>> state.countQuestions')
+        console.log(nextQuestionNumber, ' >> nextQuestionNumber')
+
+        console.log(history, ' >> history-state')
         // todo по сути я заполняю только историю, а все остальное как в экшене nextQuestion. МБ можно сделать интереснее
         return {
             ...state,
@@ -108,7 +115,7 @@ export const gameReducer = createReducer(
                 previousDisabled: nextQuestionNumber <= 1
             },
             history,
-            isComplete: nextQuestionNumber > state.countQuestions
+            isComplete: state.counter === state.countQuestions
         }
     }),
     on(answerWrong, (state, {}) => {
@@ -117,6 +124,11 @@ export const gameReducer = createReducer(
             ...state.history,
         };
         history[state.counter] = 0;
+        console.log(state.counter, ' >> state.counter')
+        console.log(state.countQuestions, ' >>> state.countQuestions')
+        console.log(nextQuestionNumber, ' >> nextQuestionNumber')
+
+        console.log(history, ' >> history-state')
         // todo по сути я заполняю только историю, а все остальное как в экшене nextQuestion. МБ можно сделать интереснее
         return {
             ...state,
@@ -130,7 +142,7 @@ export const gameReducer = createReducer(
                 previousDisabled: nextQuestionNumber <= 1
             },
             history,
-            isComplete: nextQuestionNumber > state.countQuestions
+            isComplete: state.counter === state.countQuestions
         }
     }),
     on(completeGame, (state, {}) => {

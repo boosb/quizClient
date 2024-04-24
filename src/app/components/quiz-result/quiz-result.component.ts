@@ -1,8 +1,12 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Store, select } from '@ngrx/store';
-import { Observable, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { AppState } from '../../store';
-import { selectCompleteGame, selectCountQuestions, selectHistoryGame } from '../../store/selectors/quiz-game.selectors';
+import { IHistoryQuizzes } from '../../store/models/history-quizzes';
+import { selectQuizById } from '../../store/selectors/quizzes.selectors';
+import { IQuiz } from '../../store/models/quiz';
+import { IQuestion } from '../../store/models/question';
+import { HistoryDataItem } from '../../store/models/history-quizzes-item';
 
 @Component({
   selector: 'app-quiz-result',
@@ -10,43 +14,61 @@ import { selectCompleteGame, selectCountQuestions, selectHistoryGame } from '../
   styleUrl: './quiz-result.component.scss'
 })
 export class QuizResultComponent implements OnInit, OnDestroy { // todo Хочу открывать компонент по маршруту .../result
-  isCompleteGame$: Observable<any> = this.store.pipe(select(selectCompleteGame));
-  
-  historySubs: Subscription;
+  @Input() historyQuiz: IHistoryQuizzes;
 
-  countQuestionsSubs: Subscription;
+  quizSubs: Subscription;
 
-  countQuestions: number;
+  countQuestions: number | undefined;
 
-  historyData: any;
+  quiz: IQuiz | undefined;
+
+  rightCount: number = 0;
+
+  historyData: HistoryDataItem[] | undefined;
 
   constructor(
     private store: Store<AppState>
   ) {}
 
   ngOnInit(): void {
-    this.countQuestionsSubs = this.store.pipe(select(selectCountQuestions)).subscribe(count => this.countQuestions = count);
-    this.historySubs = this.store.pipe(select(selectHistoryGame)).subscribe(history => this.historyData = this._getHistoryData(history));
+    const { quizId } = this.historyQuiz;
+    this.quizSubs = this.store.pipe(select(selectQuizById, {quizId})).subscribe(quiz => {
+      this.quiz = quiz;
+      this.countQuestions = quiz?.questions?.length;
+      this.historyData = this._getHistoryData(quiz?.questions);
+    });
+
+    this._rightCounter();
   }
 
   ngOnDestroy(): void {
-    this.historySubs.unsubscribe();
-    this.countQuestionsSubs.unsubscribe();
+    this.quizSubs.unsubscribe();
   }
 
-  _getHistoryData(history: any) {
-    const historyData = [];
-    for(let i = 1; i <= this.countQuestions; i++) {
-      const item = history[i]
-
-      historyData.push({
-        num: i, 
-        isNotAnswer: this._isUndefined(item),
-        isRight: item === 1, 
-        isWrong: item === 0
-      });
+  _getHistoryData(questions: IQuestion[] | undefined) {
+    if(!questions) {
+      return;
     }
-    return historyData;
+
+    return questions.map((question, ind) => {
+      const questionNum = ind + 1;
+      const historyItem = this.historyQuiz.history[questionNum];
+
+      return {
+        num: questionNum, 
+        isNotAnswer: this._isUndefined(historyItem),
+        isRight: historyItem === 1,
+        isWrong: historyItem === 0
+      }
+    });
+  }
+
+  _rightCounter() {
+    this.historyData?.forEach(historyItem => {
+      if(historyItem.isRight) {
+        this.rightCount += 1;
+      }
+    });
   }
 
   _isUndefined(value: any) {

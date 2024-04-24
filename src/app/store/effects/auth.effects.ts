@@ -84,9 +84,7 @@ export class AuthEffects {
     ofType(getAuthUser),
     switchMap((action) => this.userService.getOne(action.userId)
       .pipe(
-        map((user) => {
-          return getAuthUserSuccess({ user: user });
-        }),
+        map((user) => getAuthUserSuccess({ user })),
         catchError(() => EMPTY)
       ))
     )  

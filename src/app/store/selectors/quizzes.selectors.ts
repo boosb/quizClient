@@ -26,6 +26,16 @@ export const selectCurrentQuiz = createSelector(
     selectRouteParams,
     (state: fromQuiz.QuizzesState, { id }) => state.entities[id]
 );
+/*
+export const selectQuestionsCountAtQuiz = createSelector(
+    selectQuizState,
+    (state: fromQuiz.QuizzesState, props: any) => state.entities[props.quizId]?.questions?.length
+);*/
+
+export const selectQuizById = createSelector(
+    selectQuizState,
+    (state: fromQuiz.QuizzesState, props: any) => state.entities[props.quizId]
+);
 
 export const selectCurrentQuizQuestions = createSelector(
     selectQuizState,

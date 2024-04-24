@@ -18,15 +18,23 @@
         margin: 5px;
     }
     
-    &__complete{
+    &__complete {
         background-color: greenyellow;
     }
     
-    &__wrong{
+    &__wrong {
         background-color: red;
     }
     
-    &__not-answer{
+    &__not-answer {
         background-color: #DCDCDC;
+    }
+
+    &__counters {
+        margin-top: 10px;
+    }
+
+    &__right-count {
+        font-weight: 700;
     }
 }

@@ -1,8 +1,10 @@
-import { Component } from '@angular/core';
-import { Store } from '@ngrx/store';
+import { Component, OnInit } from '@angular/core';
+import { Store, select } from '@ngrx/store';
 import { AppState, selectMenuIsShow } from '../../../store';
 import { Observable, Subscription } from 'rxjs';
 import { toggleMenu } from '../../../store/actions/menu.action';
+import { selectUser } from '../../../store/selectors/auth.selectors';
+import { IUser } from '../../../store/models/user';
 
 @Component({
   selector: 'app-menu-btn',
@@ -11,7 +13,9 @@ import { toggleMenu } from '../../../store/actions/menu.action';
 })
 export class MenuBtnComponent {
 
-  public isShow$: Observable<boolean> = this.store.select(selectMenuIsShow)
+  public isShow$: Observable<boolean> = this.store.select(selectMenuIsShow);
+
+  public authUser$: Observable<IUser|null> = this.store.select(selectUser);
 
   constructor(
     private store: Store<AppState>

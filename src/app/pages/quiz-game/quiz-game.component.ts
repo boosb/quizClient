@@ -10,6 +10,8 @@ import { selectBtnState, selectCompleteGame, selectCounter, selectCurrentQuestio
 import { IAnswer } from '../../store/models/answer';
 import { ImgService } from '../../services/img.service';
 import { HistoryQuizzesService } from '../../services/history-quizzes.service';
+import { addHistoryQuizzesRequiest } from '../../store/actions/history-quizzes.action';
+import { IHistory } from '../../store/reducers/quiz-game.reducer';
 
 @Component({
   selector: 'app-quiz-game',
@@ -50,7 +52,7 @@ export class QuizGameComponent implements OnInit, OnDestroy {
 
   isGameOn$: Observable<any> = this.store.pipe(select(selectGameIsOn));
 
-  historyData: any;
+  historyData: IHistory;
   
   constructor(
     private store: Store<AppState>,
@@ -69,13 +71,21 @@ export class QuizGameComponent implements OnInit, OnDestroy {
 
     this.selectedAnswerSubs = store.pipe(select(selectSelectedAnswer)).subscribe(answer => this.selectedAnswer = answer);
 
+    this.store.pipe(select(selectHistoryGame)).subscribe(history => this.historyData = history);
+
     this.completeGameSubs = store.pipe(select(selectCompleteGame)).subscribe(isComplete => {
       if(isComplete) {
         this.store.dispatch(completeGame({quizId: this.quiz?.id}));
+        if(this.quiz?.id) {
+          //todo 1) ну да, тут ошибки возникают из-за того, что я не передаю требуемые данные в компонент результата
+          //todo 2) данные в историяя не обновляются после прохождения квиза (надо перезагружать)
+          this.store.dispatch(addHistoryQuizzesRequiest({
+            historyData: this.historyData,
+            quizId: this.quiz?.id
+          }))
+        }
       }
     });
-
-    this.store.pipe(select(selectHistoryGame)).subscribe(history => this.historyData = history);
   }
 
   ngOnInit(): void {
@@ -117,12 +127,10 @@ export class QuizGameComponent implements OnInit, OnDestroy {
   completeQuiz() {
     this.store.dispatch(completeGame({quizId: this.quiz?.id}));
     if(this.quiz?.id) {
-      console.log('hello')
-      this.historyQuizzesService.create({
-        history: this.historyData,
-        userId: 13, // todo заглушка с моим пользователем
+      this.store.dispatch(addHistoryQuizzesRequiest({
+        historyData: this.historyData,
         quizId: this.quiz?.id
-      });
+      }))
     }
   }
 }

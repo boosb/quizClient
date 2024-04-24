@@ -23,7 +23,10 @@ export class PaginatorService {
         return this.startPoint + this.pageSize;
     }
 
-    init(entities: any[]) {
+    init(entities: any[] | undefined | null) {
+        if(!entities) {
+            return;
+        }
         this.length = entities.length;
         this.showEntities = entities.slice(this.startPoint, this.endPoint);
     }

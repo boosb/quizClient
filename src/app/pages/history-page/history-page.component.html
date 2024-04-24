@@ -1,0 +1,14 @@
+<app-quiz-result
+    *ngFor="let resultQuiz of paginatorService.showEntities"
+    [historyQuiz]="resultQuiz"
+></app-quiz-result>
+
+<div class="paginator-wrapper">
+    <mat-paginator
+        (page)="paginatorService.onPageEvent(historyQuizzes, $event)"
+        [length]="paginatorService.length"
+        [pageSize]="paginatorService.pageSize"
+        [pageSizeOptions]="paginatorService.options"
+        aria-label="Select page">
+    </mat-paginator>
+</div>

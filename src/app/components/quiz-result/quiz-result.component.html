@@ -1,15 +1,10 @@
-<div >
-    <app-menu-btn></app-menu-btn>
-    <div class="large-title center">Quiz result</div>
-    <mat-card class="quiz-result-item">
-        <mat-card-header>
-            <!-- В title можно вставить название квиза -->
-          <mat-card-title>Test title</mat-card-title>
-    
-          <!-- В subtitle можно вставить дату и время прохождения квиза, но сначала надо добавить ее в БД -->
-          <mat-card-subtitle>Test subtitle</mat-card-subtitle>
-        </mat-card-header>
-        <mat-card-content class="quiz-result-item__result">
+<mat-card class="quiz-result-item">
+    <mat-card-header>
+      <mat-card-title>{{quiz?.name}}</mat-card-title>
+      <mat-card-subtitle>{{historyQuiz.dateTime | date: 'medium'}}</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+        <div class="quiz-result-item__result">
             <div *ngFor="let item of historyData">
                 <div 
                     [ngClass]="{
@@ -20,6 +15,10 @@
                     }"
                 >{{item.num}}</div>
             </div>
-        </mat-card-content>
-    </mat-card>
-</div>
+        </div>
+        
+        <div class="quiz-result-item__counters">Number of correct answers: 
+            <span class="quiz-result-item__right-count">{{rightCount}}</span>
+        </div>
+    </mat-card-content>
+</mat-card>
