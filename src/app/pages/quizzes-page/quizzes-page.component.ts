@@ -22,6 +22,8 @@ export class QuizzesPageComponent implements OnInit, OnDestroy {
 
   isShowModal$: Observable<boolean> = this.store.select(selectModalShow);
 
+  paginatorData: any;
+
   constructor(
     private store: Store<AppState>,
     public paginatorService: PaginatorService
@@ -31,7 +33,10 @@ export class QuizzesPageComponent implements OnInit, OnDestroy {
     this.store.dispatch(loadQuizzes());
     this.quizzesSubs = this.store.pipe(select(selectQuizzes)).subscribe(quizzes => {
       this.quizzes = quizzes;
-      this.paginatorService.init(quizzes);
+      this.paginatorService.init('quizzesPage', quizzes);
+      console.log(this.paginatorService.data, ' >>> TEST')
+      this.paginatorData = this.paginatorService.getPaginatorData('quizzesPage');
+     // console.log(this.paginatorData, ' >>paginatorData')
     });
   }
 

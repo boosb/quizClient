@@ -10,16 +10,16 @@
 >
 
 <app-quiz
-    *ngFor="let quiz of paginatorService.showEntities | filterQuizzes: term"
+    *ngFor="let quiz of paginatorData.showEntities | filterQuizzes: term"
     [quiz]="quiz"
 ></app-quiz>
 
 <div class="paginator-wrapper">
     <mat-paginator
-        (page)="paginatorService.onPageEvent(quizzes, $event)"
-        [length]="paginatorService.length"
-        [pageSize]="paginatorService.pageSize"
-        [pageSizeOptions]="paginatorService.options"
+        (page)="paginatorService.onPageEvent('quizzesPage', quizzes, $event)"
+        [length]="paginatorData.length"
+        [pageSize]="paginatorData.pageSize"
+        [pageSizeOptions]="paginatorData.options"
         aria-label="Select page">
     </mat-paginator>
 </div>

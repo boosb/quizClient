@@ -42,6 +42,8 @@ export class QuizPageComponent {
     complexityQuiz: new FormControl<number>(0, [])
   });
 
+  paginatorData: any;
+
   get quizName() {
     return this.form.controls.quizName as FormControl;
   }
@@ -64,12 +66,14 @@ export class QuizPageComponent {
     this.quizSubs = this.store.pipe(select(selectCurrentQuiz)).subscribe(quiz => this._setQuizData(quiz));
     this.questionsSubs = this.store.pipe(select(selectAllQuestions)).subscribe(questions => {
       this.questions = questions;
-      this.paginatorService.init(questions)
+      this.paginatorService.init('quizPage', questions)
     });
 
     if(!this.quiz) {
       this._createQuiz();
     }
+
+    this.paginatorData = this.paginatorService.getPaginatorData('quizzesPage');
   }
 
   ngOnDestroy(): void {

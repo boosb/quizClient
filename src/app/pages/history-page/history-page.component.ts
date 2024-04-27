@@ -18,6 +18,8 @@ export class HistoryPageComponent implements OnInit {
 
   historyQuizzes: IHistoryQuizzes[] | undefined;
 
+  paginatorData: any;
+
   constructor(
     private store: Store<AppState>,
     public paginatorService: PaginatorService
@@ -27,7 +29,10 @@ export class HistoryPageComponent implements OnInit {
     this.historyQuizzesSubs = this.store.pipe(select(selectUserHistoryQuizzes)).subscribe(historyQuizzes => {
       const sortedHistoryQuizzes = this._dateSort(historyQuizzes);
       this.historyQuizzes = sortedHistoryQuizzes;
-      this.paginatorService.init(sortedHistoryQuizzes);
+      this.paginatorService.init('historyPage', sortedHistoryQuizzes);
+
+      console.log(this.paginatorService.data, ' >>> TEST')
+      this.paginatorData = this.paginatorService.getPaginatorData('historyPage');
     });
   }
 

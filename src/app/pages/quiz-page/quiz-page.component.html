@@ -38,17 +38,17 @@
 
         <div *ngIf="questions">
             <app-question
-                *ngFor="let question of paginatorService.showEntities; index as i"  
+                *ngFor="let question of paginatorData.showEntities; index as i"  
                 [question]="question"
             ></app-question>
         </div>
 
         <mat-paginator
             *ngIf="questions?.length"
-            (page)="paginatorService.onPageEvent(questions, $event)"
-            [length]="paginatorService.length"
-            [pageSize]="paginatorService.pageSize"
-            [pageSizeOptions]="paginatorService.options"
+            (page)="paginatorData.onPageEvent('quizzesPage', questions, $event)"
+            [length]="paginatorData.length"
+            [pageSize]="paginatorData.pageSize"
+            [pageSizeOptions]="paginatorData.options"
             aria-label="Select page">
         </mat-paginator>
 
