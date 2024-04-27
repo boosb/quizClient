@@ -1,0 +1,8 @@
+<div *ngIf="!isCompleteGame && quiz">
+    <app-quiz-game [quiz]="quiz"></app-quiz-game>
+</div>
+
+<div *ngIf="isCompleteGame">
+    <div class="large-title center">Your quiz result:</div>
+    <app-quiz-result [historyQuiz]="lastHistoryQuiz"></app-quiz-result>
+</div>

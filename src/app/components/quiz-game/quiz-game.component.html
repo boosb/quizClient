@@ -1,4 +1,4 @@
-<div *ngIf="isGameOn$ | async">
+<div>
     <div class="exit-btn-wrapper">
         <button 
             mat-flat-button 
@@ -11,15 +11,12 @@
     </div>
 
     <div class="large-title center">Question: {{counter}}</div>
-
     <div class="medium-title center">{{currentQuestion?.text}}</div>
-
     <div class="img-wrapper">
         <img class="img" [src]="imgService.getImg(currentQuestion?.img)" alt="">
     </div>
 
     <div class="small-title">Choose an answer:</div>
-
     <div *ngIf="currentQuestion?.answers">
         <div 
             class="answer-item"
@@ -34,9 +31,4 @@
         <button mat-flat-button color="primary" [disabled]="buttons.answerDisabled" (click)="answer()">Answer</button>
         <button mat-flat-button color="primary" [disabled]="buttons.nextDisabled" (click)="nextQuestion()">Next</button>
     </div>
-</div>
-
-<div *ngIf="isCompleteGame$ | async">
-    <div class="large-title center">Your quiz result:</div>
-    <app-quiz-result [historyQuiz]="lastHistoryQuiz"></app-quiz-result>
 </div>

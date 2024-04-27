@@ -54,7 +54,6 @@ import {MatIconModule} from '@angular/material/icon';
 import {MatDividerModule} from '@angular/material/divider';
 import {MatInputModule} from '@angular/material/input';
 import {MatFormFieldModule} from '@angular/material/form-field';
-import { QuizGameComponent } from './pages/quiz-game/quiz-game.component';
 import { gameReducer } from './store/reducers/quiz-game.reducer';
 import { GameEffects } from './store/effects/quiz-game.effects';
 import { usersReducer } from './store/reducers/users.reducer';
@@ -66,6 +65,8 @@ import { CutQuestionPipe } from './pipes/cut-question.pipe';
 import { QuizResultComponent } from './components/quiz-result/quiz-result.component';
 //import { appInitializer } from './helpers/app.initializer';
 import { HistoryPageComponent } from './pages/history-page/history-page.component';
+import { GamePageComponent } from './pages/game-page/game-page.component';
+import { QuizGameComponent } from './components/quiz-game/quiz-game.component';
 
 @NgModule({
     declarations: [
@@ -92,9 +93,10 @@ import { HistoryPageComponent } from './pages/history-page/history-page.componen
         AnswerModalComponent,
         ConfirmEmailPageComponent,
         ProfilePageComponent,
-        QuizGameComponent,
+        GamePageComponent,
         QuizResultComponent,
-        HistoryPageComponent
+        HistoryPageComponent,
+        QuizGameComponent
     ],
     providers: [
         provideStore(),
@@ -123,7 +125,7 @@ import { HistoryPageComponent } from './pages/history-page/history-page.componen
             {path: 'quizzes/edit/:id', component: QuizPageComponent, canActivate: [AuthGuard, RoleGuard]},
             {path: 'confirm', component: ConfirmEmailPageComponent},
             {path: 'profile', component: ProfilePageComponent, canActivate: [AuthGuard]},
-            {path: 'quizzes/:id', component: QuizGameComponent, canActivate: [AuthGuard]},
+            {path: 'quizzes/:id', component: GamePageComponent, canActivate: [AuthGuard]},
             {path: 'history', component: HistoryPageComponent, canActivate: [AuthGuard]}
             // todo настроить компонент и маршрут PageNotFoundComponent с **
         ]),

@@ -1,15 +1,13 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy } from '@angular/core';
 import { AppState } from '../../store';
 import { Store, select } from '@ngrx/store';
-import { selectCurrentQuiz } from '../../store/selectors/quizzes.selectors';
-import { Observable, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { IQuiz } from '../../store/models/quiz';
-import { addHistoryQuizzesRequiest, answer, answerSelect, closeGame, nextQuestion, previousQuestion, startGame } from '../../store/actions/quiz-game.actions';
+import { addHistoryQuizzesRequiest, answer, answerSelect, nextQuestion, previousQuestion } from '../../store/actions/quiz-game.actions';
 import { IQuestion } from '../../store/models/question';
-import { selectBtnState, selectCompleteGame, selectCounter, selectCurrentQuestion, selectGameIsOn, selectCurrentHistoryGame, selectIsLastAnswer, selectSelectedAnswer, selectHistoryGame } from '../../store/selectors/quiz-game.selectors';
+import { selectBtnState, selectCounter, selectCurrentQuestion, selectIsLastAnswer, selectSelectedAnswer, selectHistoryGame } from '../../store/selectors/quiz-game.selectors';
 import { IAnswer } from '../../store/models/answer';
 import { ImgService } from '../../services/img.service';
-import { IHistoryQuizzes } from '../../store/models/history-quizzes';
 import { GameButtons } from '../../store/models/game-buttons';
 import { ICurrentHistory } from '../../store/models/current-history';
 
@@ -17,13 +15,12 @@ import { ICurrentHistory } from '../../store/models/current-history';
   selector: 'app-quiz-game',
   templateUrl: './quiz-game.component.html',
   styleUrls: [
-    '../../app.component.scss',
-    './quiz-game.component.scss'
+    './quiz-game.component.scss',
+    '../../app.component.scss'
   ]
 })
-export class QuizGameComponent implements OnInit, OnDestroy {
-  //todo разбить на два компонента (основная игра и результаты)
-  quizSubs: Subscription;
+export class QuizGameComponent implements OnDestroy {
+  @Input() quiz: IQuiz;
 
   currentQuestionSubs: Subscription;
 
@@ -37,8 +34,6 @@ export class QuizGameComponent implements OnInit, OnDestroy {
 
   isLastAnswerSubs: Subscription;
 
-  quiz: IQuiz | undefined;
-
   currentQuestion: IQuestion | null;
 
   counter: number;
@@ -49,28 +44,17 @@ export class QuizGameComponent implements OnInit, OnDestroy {
 
   completeGameSubs: Subscription;
 
-  isCompleteGame$: Observable<any> = this.store.pipe(select(selectCompleteGame));
-
-  isGameOn$: Observable<any> = this.store.pipe(select(selectGameIsOn));
-
   currentHistory: ICurrentHistory;
 
-  lastHistoryQuiz: IHistoryQuizzes | null;
-  
   constructor(
     private store: Store<AppState>,
     public imgService: ImgService
   ) {
-    this.quizSubs = store.pipe(select(selectCurrentQuiz)).subscribe(quiz => this.quiz = quiz);
     this.currentQuestionSubs = store.pipe(select(selectCurrentQuestion)).subscribe(question => this.currentQuestion = question);
     this.counterSubs = store.pipe(select(selectCounter)).subscribe(counter => this.counter = counter);
     this.btnStateSubs = store.pipe(select(selectBtnState)).subscribe(btnState => this.buttons = btnState);
     this.selectedAnswerSubs = store.pipe(select(selectSelectedAnswer)).subscribe(answer => this.selectedAnswer = answer);
-    this.historySubs = store.pipe(select(selectHistoryGame)).subscribe(history => {
-      this.currentHistory = history.currentHistory;
-      this.lastHistoryQuiz = history.lastHistoryQuizzes
-    });
-
+    this.historySubs = store.pipe(select(selectHistoryGame)).subscribe(history => this.currentHistory = history.currentHistory);
     this.isLastAnswerSubs = store.pipe(select(selectIsLastAnswer)).subscribe(isLastAnswer => {
       if(isLastAnswer) {
         this.completeQuiz();
@@ -80,24 +64,13 @@ export class QuizGameComponent implements OnInit, OnDestroy {
     imgService.includeExitIcon();
   }
 
-  ngOnInit(): void {
-    if(!this.quiz) {
-      return;
-    }
-
-    this.store.dispatch(startGame({quiz: this.quiz}));
-  }
-
   ngOnDestroy(): void {
-    this.quizSubs.unsubscribe();
     this.currentQuestionSubs.unsubscribe();
     this.counterSubs.unsubscribe();
     this.btnStateSubs.unsubscribe();
     this.selectedAnswerSubs.unsubscribe();
     this.historySubs.unsubscribe();
     this.isLastAnswerSubs.unsubscribe();
-
-    this.store.dispatch(closeGame());
   }
 
   previousQuestion() {

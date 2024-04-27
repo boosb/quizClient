@@ -37,11 +37,6 @@ export const selectCompleteGame = createSelector(
     (state: fromGame.GameState) => state.isComplete
 );
 
-export const selectGameIsOn = createSelector(
-    selectGameState,
-    (state: fromGame.GameState) => !state.isComplete
-);
-
 export const selectHistoryGame = createSelector(
     selectGameState,
     (state: fromGame.GameState) => state.history
