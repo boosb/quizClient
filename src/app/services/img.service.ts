@@ -15,6 +15,7 @@ export class ImgService {
         DEFAULT_AVATAR: 'assets/img/default-user.svg',
         CAMERA: 'assets/img/camera.svg',
         PLAY: 'assets/img/play.svg',
+        EXIT: 'assets/img/exit.svg',
     }
 
     constructor(
@@ -53,6 +54,13 @@ export class ImgService {
         this.matIconRegistry.addSvgIcon(
             'play',
             this.domSanitizer.bypassSecurityTrustResourceUrl(this.paths.PLAY)
+        );
+    }
+
+    includeExitIcon() {
+        this.matIconRegistry.addSvgIcon(
+            'exit',
+            this.domSanitizer.bypassSecurityTrustResourceUrl(this.paths.EXIT)
         );
     }
 }

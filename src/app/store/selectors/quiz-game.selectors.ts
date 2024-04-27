@@ -2,6 +2,11 @@ import { createSelector } from "@ngrx/store";
 import { selectGameState } from "..";
 import * as fromGame from '../reducers/quiz-game.reducer';
 
+export const selectQuizGame = createSelector(
+    selectGameState,
+    (state: fromGame.GameState) => state.quiz
+);
+
 export const selectCurrentQuestion = createSelector(
     selectGameState,
     (state: fromGame.GameState) => state.currentQuestion
@@ -40,4 +45,14 @@ export const selectGameIsOn = createSelector(
 export const selectHistoryGame = createSelector(
     selectGameState,
     (state: fromGame.GameState) => state.history
+);
+
+export const selectCurrentHistoryGame = createSelector(
+    selectGameState,
+    (state: fromGame.GameState) => state.history.currentHistory
+);
+
+export const selectIsLastAnswer = createSelector(
+    selectGameState,
+    (state: fromGame.GameState) => state.isLastAnswer
 );

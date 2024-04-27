@@ -60,14 +60,11 @@ import { GameEffects } from './store/effects/quiz-game.effects';
 import { usersReducer } from './store/reducers/users.reducer';
 import { UsersEffects } from './store/effects/users.effects';
 import {MatPaginatorModule} from '@angular/material/paginator';
-import { filesReducer } from './store/reducers/files.reducer';
 import { FilesEffects } from './store/effects/files.effects';
 import {MatCardModule} from '@angular/material/card';
 import { CutQuestionPipe } from './pipes/cut-question.pipe';
 import { QuizResultComponent } from './components/quiz-result/quiz-result.component';
 //import { appInitializer } from './helpers/app.initializer';
-import { AuthService } from './services/auth.service';
-import { HistoryQuizzesEffects } from './store/effects/history-quizzes.effects';
 import { HistoryPageComponent } from './pages/history-page/history-page.component';
 
 @NgModule({
@@ -127,7 +124,6 @@ import { HistoryPageComponent } from './pages/history-page/history-page.componen
             {path: 'confirm', component: ConfirmEmailPageComponent},
             {path: 'profile', component: ProfilePageComponent, canActivate: [AuthGuard]},
             {path: 'quizzes/:id', component: QuizGameComponent, canActivate: [AuthGuard]},
-            {path: 'quizzes/:id/result', component: QuizResultComponent, canActivate: [AuthGuard]},
             {path: 'history', component: HistoryPageComponent, canActivate: [AuthGuard]}
             // todo настроить компонент и маршрут PageNotFoundComponent с **
         ]),
@@ -156,7 +152,7 @@ import { HistoryPageComponent } from './pages/history-page/history-page.componen
         StoreModule.forFeature('auth', authReducer),
         StoreModule.forFeature('game', gameReducer),
         StoreModule.forFeature('users', usersReducer),
-        StoreModule.forFeature('files', filesReducer),
+       
         EffectsModule.forRoot([
             QuizzesEffects,
             QuestionsEffects,
@@ -164,8 +160,7 @@ import { HistoryPageComponent } from './pages/history-page/history-page.componen
             AuthEffects,
             GameEffects,
             UsersEffects,
-            FilesEffects,
-            HistoryQuizzesEffects
+            FilesEffects
         ]),
         StoreRouterConnectingModule.forRoot({
            // serializer: CustomSerializer

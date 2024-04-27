@@ -2,19 +2,19 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { AppState } from '../../store';
-import { IHistoryQuizzes } from '../../store/models/history-quizzes';
 import { selectQuizById } from '../../store/selectors/quizzes.selectors';
 import { IQuiz } from '../../store/models/quiz';
 import { IQuestion } from '../../store/models/question';
 import { HistoryDataItem } from '../../store/models/history-quizzes-item';
+import { IHistoryQuizzes } from '../../store/models/history-quizzes';
 
 @Component({
   selector: 'app-quiz-result',
   templateUrl: './quiz-result.component.html',
   styleUrl: './quiz-result.component.scss'
 })
-export class QuizResultComponent implements OnInit, OnDestroy { // todo Хочу открывать компонент по маршруту .../result
-  @Input() historyQuiz: IHistoryQuizzes;
+export class QuizResultComponent implements OnInit, OnDestroy {
+  @Input() historyQuiz: IHistoryQuizzes | null;
 
   quizSubs: Subscription;
 
@@ -31,6 +31,9 @@ export class QuizResultComponent implements OnInit, OnDestroy { // todo Хочу
   ) {}
 
   ngOnInit(): void {
+    if(!this.historyQuiz) {
+      return;
+    }
     const { quizId } = this.historyQuiz;
     this.quizSubs = this.store.pipe(select(selectQuizById, {quizId})).subscribe(quiz => {
       this.quiz = quiz;
@@ -52,7 +55,7 @@ export class QuizResultComponent implements OnInit, OnDestroy { // todo Хочу
 
     return questions.map((question, ind) => {
       const questionNum = ind + 1;
-      const historyItem = this.historyQuiz.history[questionNum];
+      const historyItem = this.historyQuiz?.history[questionNum];
 
       return {
         num: questionNum, 

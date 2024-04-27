@@ -1,31 +1,28 @@
 import { createReducer, on } from "@ngrx/store"
-import { answerRight, answerSelect, answerWrong, closeGame, completeGame, nextQuestion, previousQuestion, startGame, startGameSuccess } from "../actions/quiz-game.actions"
+import { addedHistoryQuizzesSuccess, answerRight, answerSelect, answerWrong, closeGame, nextQuestion, previousQuestion, startGameSuccess } from "../actions/quiz-game.actions"
 import { IQuestion } from "../models/question"
 import { IQuiz } from "../models/quiz"
 import { IAnswer } from "../models/answer"
+import { GameButtons } from "../models/game-buttons"
+import { IHistory } from "../models/history"
 
-export interface IHistory {
-    [key:number]: number // 1 - right, 0 - wrong
-}
-
+// todo Тут появляется важный вопрос. С обной стороны данный редьюсер и стайт кажется мне слишком раздутым, хочется разбить на части
+// Но с другой стороны, не совсем понятно как это грамотно сделать. Мои попытки наткнылись на подводные камни
 export interface GameState {
-    quiz: IQuiz | null
-    questions: IQuestion[] | null
-    currentQuestion: IQuestion | null
-    counter: number // number current question
-    countQuestions: number
-    selectedAnswer: IAnswer | null
-    btnState: {
-        nextDisabled: boolean
-        previousDisabled: boolean,
-        answerDisabled: boolean
-    }
+    quiz: IQuiz | null                 // квиз в который играем
+    questions: IQuestion[] | null      // вопросы квиза в который играем
+    currentQuestion: IQuestion | null  // текущий вопрос 
+    counter: number                    // номер текущего вопроса
+    countQuestions: number             // общее количество вопросов
+    selectedAnswer: IAnswer | null     // выбранный ответ
+    btnState: GameButtons              // состояния кнопок
+    isComplete: boolean                // признак завершенной игры
     history: IHistory
-    isComplete: boolean
+    isLastAnswer: boolean
 }
 
-const initialGameState: GameState = {
-    quiz: null,
+export const initialGameState: GameState = {
+    quiz: null,                    
     questions: null,
     currentQuestion: null,
     counter: 0,
@@ -36,8 +33,12 @@ const initialGameState: GameState = {
         previousDisabled: true,
         answerDisabled: true
     },
-    history: {},
-    isComplete: false
+    isComplete: false,
+    history: {
+        currentHistory: {},
+        lastHistoryQuizzes: null
+    },
+    isLastAnswer: false
 }
   
 export const gameReducer = createReducer(
@@ -93,15 +94,11 @@ export const gameReducer = createReducer(
     }),
     on(answerRight, (state, {}) => {
         const nextQuestionNumber = state.counter + 1;
-        const history = {
-            ...state.history,
+        const currentHistory = {
+            ...state.history.currentHistory
         };
-        history[state.counter] = 1;
-        console.log(state.counter, ' >> state.counter')
-        console.log(state.countQuestions, ' >>> state.countQuestions')
-        console.log(nextQuestionNumber, ' >> nextQuestionNumber')
+        currentHistory[state.counter] = 1;
 
-        console.log(history, ' >> history-state')
         // todo по сути я заполняю только историю, а все остальное как в экшене nextQuestion. МБ можно сделать интереснее
         return {
             ...state,
@@ -114,21 +111,20 @@ export const gameReducer = createReducer(
                 nextDisabled: nextQuestionNumber === state.countQuestions,
                 previousDisabled: nextQuestionNumber <= 1
             },
-            history,
-            isComplete: state.counter === state.countQuestions
+            history: {
+                ...state.history,
+                currentHistory
+            },
+            isLastAnswer: state.counter === state.countQuestions
         }
     }),
     on(answerWrong, (state, {}) => {
         const nextQuestionNumber = state.counter + 1;
-        const history = {
-            ...state.history,
+        const currentHistory = {
+            ...state.history.currentHistory
         };
-        history[state.counter] = 0;
-        console.log(state.counter, ' >> state.counter')
-        console.log(state.countQuestions, ' >>> state.countQuestions')
-        console.log(nextQuestionNumber, ' >> nextQuestionNumber')
+        currentHistory[state.counter] = 0;
 
-        console.log(history, ' >> history-state')
         // todo по сути я заполняю только историю, а все остальное как в экшене nextQuestion. МБ можно сделать интереснее
         return {
             ...state,
@@ -141,38 +137,24 @@ export const gameReducer = createReducer(
                 nextDisabled: nextQuestionNumber === state.countQuestions,
                 previousDisabled: nextQuestionNumber <= 1
             },
-            history,
-            isComplete: state.counter === state.countQuestions
-        }
-    }),
-    on(completeGame, (state, {}) => {
-        return {
-            ...state,
-            currentQuestion: null,
-            counter: 0,
-            selectedAnswer: null,
-            btnState: {
-                ...state.btnState,
-                answerDisabled: true,
-                nextDisabled: true,
-                previousDisabled: true
+            history: {
+                ...state.history,
+                currentHistory
             },
-            isComplete: true
+            isLastAnswer: state.counter === state.countQuestions
         }
     }),
     on(closeGame, (state, {}) => {
+        return initialGameState
+    }),
+    on(addedHistoryQuizzesSuccess, (state, { historyQuizzes }) => {
         return {
             ...state,
-            currentQuestion: null,
-            counter: 0,
-            selectedAnswer: null,
-            btnState: {
-                ...state.btnState,
-                answerDisabled: false,
-                nextDisabled: false,
-                previousDisabled: true
-            },
-            isComplete: false
+            isComplete: true,
+            history: {
+                ...state.history,
+                lastHistoryQuizzes: historyQuizzes
+            }
         }
     }),
 )

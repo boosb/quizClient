@@ -4,14 +4,14 @@ import { Store, select } from '@ngrx/store';
 import { selectCurrentQuiz } from '../../store/selectors/quizzes.selectors';
 import { Observable, Subscription } from 'rxjs';
 import { IQuiz } from '../../store/models/quiz';
-import { answer, answerSelect, closeGame, completeGame, nextQuestion, previousQuestion, startGame } from '../../store/actions/quiz-game.actions';
+import { addHistoryQuizzesRequiest, answer, answerSelect, closeGame, nextQuestion, previousQuestion, startGame } from '../../store/actions/quiz-game.actions';
 import { IQuestion } from '../../store/models/question';
-import { selectBtnState, selectCompleteGame, selectCounter, selectCurrentQuestion, selectGameIsOn, selectHistoryGame, selectSelectedAnswer } from '../../store/selectors/quiz-game.selectors';
+import { selectBtnState, selectCompleteGame, selectCounter, selectCurrentQuestion, selectGameIsOn, selectCurrentHistoryGame, selectIsLastAnswer, selectSelectedAnswer, selectHistoryGame } from '../../store/selectors/quiz-game.selectors';
 import { IAnswer } from '../../store/models/answer';
 import { ImgService } from '../../services/img.service';
-import { HistoryQuizzesService } from '../../services/history-quizzes.service';
-import { addHistoryQuizzesRequiest } from '../../store/actions/history-quizzes.action';
-import { IHistory } from '../../store/reducers/quiz-game.reducer';
+import { IHistoryQuizzes } from '../../store/models/history-quizzes';
+import { GameButtons } from '../../store/models/game-buttons';
+import { ICurrentHistory } from '../../store/models/current-history';
 
 @Component({
   selector: 'app-quiz-game',
@@ -22,6 +22,7 @@ import { IHistory } from '../../store/reducers/quiz-game.reducer';
   ]
 })
 export class QuizGameComponent implements OnInit, OnDestroy {
+  //todo разбить на два компонента (основная игра и результаты)
   quizSubs: Subscription;
 
   currentQuestionSubs: Subscription;
@@ -32,60 +33,51 @@ export class QuizGameComponent implements OnInit, OnDestroy {
 
   selectedAnswerSubs: Subscription;
 
+  historySubs: Subscription;
+
+  isLastAnswerSubs: Subscription;
+
   quiz: IQuiz | undefined;
 
   currentQuestion: IQuestion | null;
 
   counter: number;
 
-  nextDisabled: boolean = false;
-
-  previousDisabled: boolean = false;
-
-  answerDisabled: boolean = false;
+  buttons: GameButtons;
 
   selectedAnswer: IAnswer | null;
 
   completeGameSubs: Subscription;
 
-  //isCompleteGame$: Observable<any> = this.store.pipe(select(selectCompleteGame));
+  isCompleteGame$: Observable<any> = this.store.pipe(select(selectCompleteGame));
 
   isGameOn$: Observable<any> = this.store.pipe(select(selectGameIsOn));
 
-  historyData: IHistory;
+  currentHistory: ICurrentHistory;
+
+  lastHistoryQuiz: IHistoryQuizzes | null;
   
   constructor(
     private store: Store<AppState>,
-    public imgService: ImgService,
-    private historyQuizzesService: HistoryQuizzesService
+    public imgService: ImgService
   ) {
     this.quizSubs = store.pipe(select(selectCurrentQuiz)).subscribe(quiz => this.quiz = quiz);
     this.currentQuestionSubs = store.pipe(select(selectCurrentQuestion)).subscribe(question => this.currentQuestion = question);
     this.counterSubs = store.pipe(select(selectCounter)).subscribe(counter => this.counter = counter);
-
-    this.btnStateSubs = store.pipe(select(selectBtnState)).subscribe(btnState => {
-      this.nextDisabled = btnState.nextDisabled;
-      this.previousDisabled = btnState.previousDisabled;
-      this.answerDisabled = btnState.answerDisabled;
+    this.btnStateSubs = store.pipe(select(selectBtnState)).subscribe(btnState => this.buttons = btnState);
+    this.selectedAnswerSubs = store.pipe(select(selectSelectedAnswer)).subscribe(answer => this.selectedAnswer = answer);
+    this.historySubs = store.pipe(select(selectHistoryGame)).subscribe(history => {
+      this.currentHistory = history.currentHistory;
+      this.lastHistoryQuiz = history.lastHistoryQuizzes
     });
 
-    this.selectedAnswerSubs = store.pipe(select(selectSelectedAnswer)).subscribe(answer => this.selectedAnswer = answer);
-
-    this.store.pipe(select(selectHistoryGame)).subscribe(history => this.historyData = history);
-
-    this.completeGameSubs = store.pipe(select(selectCompleteGame)).subscribe(isComplete => {
-      if(isComplete) {
-        this.store.dispatch(completeGame({quizId: this.quiz?.id}));
-        if(this.quiz?.id) {
-          //todo 1) ну да, тут ошибки возникают из-за того, что я не передаю требуемые данные в компонент результата
-          //todo 2) данные в историяя не обновляются после прохождения квиза (надо перезагружать)
-          this.store.dispatch(addHistoryQuizzesRequiest({
-            historyData: this.historyData,
-            quizId: this.quiz?.id
-          }))
-        }
+    this.isLastAnswerSubs = store.pipe(select(selectIsLastAnswer)).subscribe(isLastAnswer => {
+      if(isLastAnswer) {
+        this.completeQuiz();
       }
     });
+
+    imgService.includeExitIcon();
   }
 
   ngOnInit(): void {
@@ -102,8 +94,8 @@ export class QuizGameComponent implements OnInit, OnDestroy {
     this.counterSubs.unsubscribe();
     this.btnStateSubs.unsubscribe();
     this.selectedAnswerSubs.unsubscribe();
-
-    this.completeGameSubs.unsubscribe();
+    this.historySubs.unsubscribe();
+    this.isLastAnswerSubs.unsubscribe();
 
     this.store.dispatch(closeGame());
   }
@@ -125,12 +117,12 @@ export class QuizGameComponent implements OnInit, OnDestroy {
   }
 
   completeQuiz() {
-    this.store.dispatch(completeGame({quizId: this.quiz?.id}));
-    if(this.quiz?.id) {
-      this.store.dispatch(addHistoryQuizzesRequiest({
-        historyData: this.historyData,
-        quizId: this.quiz?.id
-      }))
+    if(!this.quiz?.id) {
+      return;
     }
+    this.store.dispatch(addHistoryQuizzesRequiest({
+      historyData: this.currentHistory,
+      quizId: this.quiz?.id
+    }));
   }
 }

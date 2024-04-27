@@ -60,7 +60,7 @@ export class AuthEffects {
       .pipe(
         map(() => {
           this.snackBar.open('Your profile has been successfully updated!', 'OK', {duration: 3000});
-          return getAuthUser({userId: Number(action.update.id)})
+          return getAuthUser({userId: Number(action.update.id)});
         }),
         catchError(() => EMPTY)
       ))

@@ -13,6 +13,7 @@ import { IHistoryQuizzes } from '../../store/models/history-quizzes';
   styleUrl: './history-page.component.scss'
 })
 export class HistoryPageComponent implements OnInit {
+  //todo так же по мимо фильтров надо добавить сортировку (как минимум по дате)
   historyQuizzesSubs: Subscription;
 
   historyQuizzes: IHistoryQuizzes[] | undefined;
@@ -24,8 +25,18 @@ export class HistoryPageComponent implements OnInit {
   
   ngOnInit(): void {
     this.historyQuizzesSubs = this.store.pipe(select(selectUserHistoryQuizzes)).subscribe(historyQuizzes => {
-      this.historyQuizzes = historyQuizzes;
-      this.paginatorService.init(historyQuizzes);
+      const sortedHistoryQuizzes = this._dateSort(historyQuizzes);
+      this.historyQuizzes = sortedHistoryQuizzes;
+      this.paginatorService.init(sortedHistoryQuizzes);
     });
+  }
+
+  _dateSort(historyQuizzes: IHistoryQuizzes[] | undefined) {
+    if(!historyQuizzes) {
+      return;
+    }
+
+    const copyHistoryQuizzes = [...historyQuizzes]
+    return copyHistoryQuizzes?.sort((a, b) => (a.dateTime && b.dateTime) && a.dateTime > b.dateTime ? 1 : -1);
   }
 }

@@ -1,4 +1,15 @@
 <div *ngIf="isGameOn$ | async">
+    <div class="exit-btn-wrapper">
+        <button 
+            mat-flat-button 
+            color="primary" 
+            (click)="completeQuiz()"
+        >
+            Complete
+            <mat-icon svgIcon="exit"></mat-icon>
+        </button>
+    </div>
+
     <div class="large-title center">Question: {{counter}}</div>
 
     <div class="medium-title center">{{currentQuestion?.text}}</div>
@@ -18,11 +29,14 @@
         >{{answer.text}}</div>
     </div>
 
-    <div class="control-buttons">
-        <button mat-flat-button color="primary" [disabled]="previousDisabled" (click)="previousQuestion()">Previous</button>
-        <button mat-flat-button color="primary" [disabled]="answerDisabled" (click)="answer()">Answer</button>
-        <button mat-flat-button color="primary" [disabled]="nextDisabled" (click)="nextQuestion()">Next</button>
+    <div class="main-control-buttons">
+        <button mat-flat-button color="primary" [disabled]="buttons.previousDisabled" (click)="previousQuestion()">Previous</button>
+        <button mat-flat-button color="primary" [disabled]="buttons.answerDisabled" (click)="answer()">Answer</button>
+        <button mat-flat-button color="primary" [disabled]="buttons.nextDisabled" (click)="nextQuestion()">Next</button>
     </div>
-    
-    <button mat-flat-button color="primary" (click)="completeQuiz()">Complete</button>
+</div>
+
+<div *ngIf="isCompleteGame$ | async">
+    <div class="large-title center">Your quiz result:</div>
+    <app-quiz-result [historyQuiz]="lastHistoryQuiz"></app-quiz-result>
 </div>

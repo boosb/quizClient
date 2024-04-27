@@ -12,7 +12,7 @@ import { loadQuestions, selectQuestion } from '../../store/actions/questions.act
 import { selectCurrentQuiz } from '../../store/selectors/quizzes.selectors';
 import { selectAllQuestions } from '../../store/selectors/questions.selectors';
 import { loadAnswers } from '../../store/actions/answers.actions';
-import { showConfirm, showModalQuestions } from '../../store/actions/modal.actions';
+import { showModalQuestions } from '../../store/actions/modal.actions';
 import { PaginatorService } from '../../services/paginator.service';
 
 @Component({

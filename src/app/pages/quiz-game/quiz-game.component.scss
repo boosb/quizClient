@@ -1,4 +1,4 @@
-.control-buttons {
+.main-control-buttons {
     display: flex;
     justify-content: space-between;
     margin-top: 3rem;
@@ -33,4 +33,9 @@
 
 .img {
     max-width: 650px;
+}
+
+.exit-btn-wrapper {
+    display: flex;
+    justify-content: flex-end;
 }
