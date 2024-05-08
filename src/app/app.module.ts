@@ -68,17 +68,24 @@ import { HistoryPageComponent } from './pages/history-page/history-page.componen
 import { GamePageComponent } from './pages/game-page/game-page.component';
 import { QuizGameComponent } from './components/quiz-game/quiz-game.component';
 import { PaginatorComponent } from './components/common-components/paginator/paginator.component';
+import { DateSortPipe } from './pipes/date-sort.pipe';
 
 @NgModule({
     declarations: [
-        AppComponent, 
-        QuizComponent, 
-        ModalComponent,
+        // pipes
         FilterQuestionPipe,
         FilterQuizzesPipe,
         CutQuestionPipe,
+        DateSortPipe,
+
+        // directives
         FocusDirective,
         AccessDirective,
+        
+        // components
+        AppComponent, 
+        QuizComponent, 
+        ModalComponent,
         QuizzesPageComponent,
         RatingPageComponent,
         UserComponent,

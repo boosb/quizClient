@@ -16,7 +16,6 @@ import { BASE_PAGE_SIZE } from '../../components/common-components/paginator/pag
   ]
 })
 export class HistoryPageComponent implements OnInit, OnDestroy {
-  //todo так же по мимо фильтров надо добавить сортировку (как минимум по дате)
   historyQuizzesSubs: Subscription;
 
   historyQuizzes: IHistoryQuizzes[] | undefined;
@@ -29,9 +28,8 @@ export class HistoryPageComponent implements OnInit, OnDestroy {
   
   ngOnInit(): void {
     this.historyQuizzesSubs = this.store.pipe(select(selectUserHistoryQuizzes)).subscribe(historyQuizzes => {
-      const sortedHistoryQuizzes = this._dateSort(historyQuizzes);
-      this.historyQuizzes = sortedHistoryQuizzes;
-      this.showHistoryQuizzes = sortedHistoryQuizzes?.slice(0, BASE_PAGE_SIZE);
+      this.historyQuizzes = historyQuizzes;
+      this.showHistoryQuizzes = historyQuizzes?.slice(0, BASE_PAGE_SIZE);
     });
   }
 
@@ -41,14 +39,5 @@ export class HistoryPageComponent implements OnInit, OnDestroy {
 
   onChangeShowHistoryQuizzes(entities: IHistoryQuizzes[] | undefined) {
     this.showHistoryQuizzes = entities;
-  }
-
-  _dateSort(historyQuizzes: IHistoryQuizzes[] | undefined) { // todo мб эту штуку вынести в пайп
-    if(!historyQuizzes) {
-      return;
-    }
-
-    const copyHistoryQuizzes = [...historyQuizzes]
-    return copyHistoryQuizzes?.sort((a, b) => (a.dateTime && b.dateTime) && a.dateTime > b.dateTime ? 1 : -1);
   }
 }

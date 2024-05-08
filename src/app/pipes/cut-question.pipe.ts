@@ -1,4 +1,4 @@
-import { OnDestroy, OnInit, Pipe, PipeTransform } from "@angular/core";
+import { OnDestroy, Pipe, PipeTransform } from "@angular/core";
 import { Store, select } from "@ngrx/store";
 import { AppState } from "../store";
 import { Subscription } from "rxjs";

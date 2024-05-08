@@ -1,12 +1,12 @@
 <div class="large-title center">Your gaming history</div>
 
 <app-quiz-result
-    *ngFor="let historyQuiz of showHistoryQuizzes"
+    *ngFor="let historyQuiz of showHistoryQuizzes | dateSort"
     [historyQuiz]="historyQuiz"
 ></app-quiz-result>
 
 <app-paginator 
-    [entities]="historyQuizzes" 
+    [entities]="historyQuizzes | dateSort" 
     [length]="historyQuizzes?.length" 
     (onChange)="onChangeShowHistoryQuizzes($event)"
 ></app-paginator>
