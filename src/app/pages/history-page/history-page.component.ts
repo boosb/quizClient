@@ -1,10 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription, delay } from 'rxjs';
 import { AppState } from '../../store';
 import { Store, select } from '@ngrx/store';
 import { selectUserHistoryQuizzes } from '../../store/selectors/auth.selectors';
 import { IHistoryQuizzes } from '../../store/models/history-quizzes';
-import { BASE_PAGE_SIZE } from '../../components/common-components/paginator/paginator.component';
+import { FormControl, FormGroup } from '@angular/forms';
 
 // todo в этот компонент можно добавить фильтры, например по дате
 @Component({
@@ -22,22 +22,33 @@ export class HistoryPageComponent implements OnInit, OnDestroy {
 
   showHistoryQuizzes: IHistoryQuizzes[] | undefined;
 
+  formFilter = new FormGroup({
+    filterSorted: new FormControl<string>(`Date`, []),
+  });
+
+  get filterSorted() {
+    return this.formFilter.controls.filterSorted as FormControl;
+  }
+
   constructor(
     private store: Store<AppState>
   ) {}
   
   ngOnInit(): void {
-    this.historyQuizzesSubs = this.store.pipe(select(selectUserHistoryQuizzes)).subscribe(historyQuizzes => {
-      this.historyQuizzes = historyQuizzes;
-      this.showHistoryQuizzes = historyQuizzes?.slice(0, BASE_PAGE_SIZE);
-    });
+    this.historyQuizzesSubs = this.store.pipe(select(selectUserHistoryQuizzes)).subscribe(historyQuizzes => this.historyQuizzes = historyQuizzes);
   }
 
   ngOnDestroy(): void {
     this.historyQuizzesSubs.unsubscribe();
   }
 
-  onChangeShowHistoryQuizzes(entities: IHistoryQuizzes[] | undefined) {
-    this.showHistoryQuizzes = entities;
+  onChangeShowHistoryQuizzes(entitiesObservable: Observable<IHistoryQuizzes[]>) {
+    entitiesObservable.pipe(
+      delay(0)
+    ).subscribe(entities => this.showHistoryQuizzes = entities);
+  }
+
+  toggleFilterSorted() {
+    console.log(this.filterSorted, ' >>> hi')
   }
 }

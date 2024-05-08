@@ -69,6 +69,8 @@ import { GamePageComponent } from './pages/game-page/game-page.component';
 import { QuizGameComponent } from './components/quiz-game/quiz-game.component';
 import { PaginatorComponent } from './components/common-components/paginator/paginator.component';
 import { DateSortPipe } from './pipes/date-sort.pipe';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { NameSortPipe } from './pipes/name-sort.pipe';
 
 @NgModule({
     declarations: [
@@ -77,6 +79,7 @@ import { DateSortPipe } from './pipes/date-sort.pipe';
         FilterQuizzesPipe,
         CutQuestionPipe,
         DateSortPipe,
+        NameSortPipe,
 
         // directives
         FocusDirective,
@@ -143,6 +146,8 @@ import { DateSortPipe } from './pipes/date-sort.pipe';
         FormsModule,
         ReactiveFormsModule,
         BrowserAnimationsModule,
+
+        // angular material
         MatSlideToggleModule,
         MatButton,
         MatTooltip,
@@ -153,6 +158,8 @@ import { DateSortPipe } from './pipes/date-sort.pipe';
         MatInputModule,
         MatPaginatorModule,
         MatCardModule,
+        MatButtonToggleModule,
+
         StoreModule.forRoot(reducers),
         StoreModule.forFeature('quizzes', quizzesReducer), // todo почитать, мб можно это организовать покрасивее
         StoreModule.forFeature('router', routerReducer),

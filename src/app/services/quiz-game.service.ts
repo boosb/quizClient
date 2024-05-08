@@ -1,11 +1,9 @@
 import { Injectable, OnDestroy } from "@angular/core";
 import { IAnswer } from "../store/models/answer";
-import { BehaviorSubject, Observable, Subject, Subscription, of, throwError } from "rxjs";
+import { BehaviorSubject, Observable, Subscription } from "rxjs";
 import { Store, select } from "@ngrx/store";
 import { AppState } from "../store";
 import { selectSelectedAnswer } from "../store/selectors/quiz-game.selectors";
-import { IQuiz } from "../store/models/quiz";
-import { IQuestion } from "../store/models/question";
 
 @Injectable({
     providedIn: 'root'

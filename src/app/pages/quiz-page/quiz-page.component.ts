@@ -4,7 +4,7 @@ import { AppState, selectModalShow } from '../../store';
 import { QuestionService } from '../../services/question.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { IQuiz } from '../../store/models/quiz';
-import { Observable, Subscription } from 'rxjs';
+import { Observable, Subscription, delay } from 'rxjs';
 import { IQuestion } from '../../store/models/question';
 import { addRequiest, selectQuiz, updateRequiest } from '../../store/actions/quizzes.actions';
 import { Update } from '@ngrx/entity';
@@ -63,10 +63,10 @@ export class QuizPageComponent {
 
   ngOnInit(): void {
     this.quizSubs = this.store.pipe(select(selectCurrentQuiz)).subscribe(quiz => this._setQuizData(quiz));
-    this.questionsSubs = this.store.pipe(select(selectAllQuestions)).subscribe(questions => {
-      this.questions = questions;
-      this.showQuestions = questions.slice(0, BASE_PAGE_SIZE);
-    });
+   /* this.questionsSubs = this.store.pipe(select(selectAllQuestions)).subscribe(questions => {
+      console.log(questions, ' >>> questions')
+      this.questions = questions
+    });*/
 
     if(!this.quiz) {
       this._createQuiz();
@@ -75,7 +75,7 @@ export class QuizPageComponent {
 
   ngOnDestroy(): void {
     this.quizSubs.unsubscribe();
-    this.questionsSubs.unsubscribe();
+   // this.questionsSubs.unsubscribe();
     //todo мб вставить сюда логику, чтобы пустой квиз удалялся
   }
 
@@ -88,8 +88,10 @@ export class QuizPageComponent {
     this._updateQuiz();
   }
 
-  onChangeShowQuestions(entities: IQuestion[] | undefined) {
-    this.showQuestions = entities;
+  onChangeShowQuestions(entitiesObservable: Observable<IQuestion[]>) {
+    entitiesObservable.pipe(
+      delay(0)
+    ).subscribe(entities => this.showQuestions = entities);
   }
 
   _createQuiz() {
@@ -122,14 +124,15 @@ export class QuizPageComponent {
     }
 
     this.quiz = quiz;
+    this.questions = quiz?.questions;
     this._loadData();
     this._setQuizValues();
   }
 
   _loadData() {    
     this.store.dispatch(selectQuiz({ quizId: Number(this.quizId) }));
-    this.store.dispatch(loadQuestions({ quizId: Number(this.quizId) })); // todo надо уходить от этих мудацких преобразования типов
-    this.store.dispatch(loadAnswers({ quizId: Number(this.quizId) }));
+    //this.store.dispatch(loadQuestions({ quizId: Number(this.quizId) })); // todo надо уходить от этих мудацких преобразования типов
+    //this.store.dispatch(loadAnswers({ quizId: Number(this.quizId) }));
   }
 
   _setQuizValues() {

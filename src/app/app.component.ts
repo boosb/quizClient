@@ -15,6 +15,6 @@ export class AppComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    //this.store.dispatch(loadQuizzes())
+    this.store.dispatch(loadQuizzes())
   }
 }

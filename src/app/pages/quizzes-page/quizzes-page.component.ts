@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { IQuiz } from '../../store/models/quiz';
-import { Observable, Subscription } from 'rxjs';
+import { Observable, Subscription, delay } from 'rxjs';
 import { AppState, selectModalShow } from '../../store';
 import { selectQuizzes } from '../../store/selectors/quizzes.selectors';
 import { loadQuizzes } from '../../store/actions/quizzes.actions';
@@ -29,18 +29,16 @@ export class QuizzesPageComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.store.dispatch(loadQuizzes());
-    this.quizzesSubs = this.store.pipe(select(selectQuizzes)).subscribe(quizzes => {
-      this.quizzes = quizzes;
-      this.showQuizzes = quizzes.slice(0, BASE_PAGE_SIZE);
-    });
+    this.quizzesSubs = this.store.pipe(select(selectQuizzes)).subscribe(quizzes => this.quizzes = quizzes);
   }
 
   ngOnDestroy(): void {
     this.quizzesSubs.unsubscribe();
   }
 
-  onChangeShowQuizzes(entities: IQuiz[]) {
-    this.showQuizzes = entities;
+  onChangeShowQuizzes(entitiesObservable: Observable<IQuiz[]>) {
+    entitiesObservable.pipe(
+      delay(0)
+    ).subscribe(entities => this.showQuizzes = entities);
   }
 }

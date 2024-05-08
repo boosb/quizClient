@@ -1,12 +1,20 @@
 <div class="large-title center">Your gaming history</div>
 
+<form class="filters-wrapper" [formGroup]="formFilter">
+    <div class="small-title">Sorted:</div>
+    <mat-button-toggle-group formControlName="filterSorted" (click)="toggleFilterSorted()">
+        <mat-button-toggle value="Date" selected>Date</mat-button-toggle>
+        <mat-button-toggle value="Quiz name">Quiz name</mat-button-toggle>
+    </mat-button-toggle-group>
+</form>
+
 <app-quiz-result
-    *ngFor="let historyQuiz of showHistoryQuizzes | dateSort"
+    *ngFor="let historyQuiz of showHistoryQuizzes"
     [historyQuiz]="historyQuiz"
 ></app-quiz-result>
 
 <app-paginator 
-    [entities]="historyQuizzes | dateSort" 
+    [entities]="historyQuizzes | nameSort: filterSorted.value" 
     [length]="historyQuizzes?.length" 
     (onChange)="onChangeShowHistoryQuizzes($event)"
 ></app-paginator>
