@@ -13,7 +13,7 @@ import { selectCurrentQuiz } from '../../store/selectors/quizzes.selectors';
 import { selectAllQuestions } from '../../store/selectors/questions.selectors';
 import { loadAnswers } from '../../store/actions/answers.actions';
 import { showModalQuestions } from '../../store/actions/modal.actions';
-import { PaginatorService } from '../../services/paginator.service';
+import { BASE_PAGE_SIZE } from '../../components/common-components/paginator/paginator.component';
 
 @Component({
   selector: 'app-quiz-page',
@@ -32,6 +32,8 @@ export class QuizPageComponent {
 
   questions: IQuestion[] | undefined;
 
+  showQuestions: IQuestion[] | undefined;
+
   isShowModal$: Observable<boolean> = this.store.select(selectModalShow);
 
   form = new FormGroup({
@@ -41,8 +43,6 @@ export class QuizPageComponent {
     ]),
     complexityQuiz: new FormControl<number>(0, [])
   });
-
-  paginatorData: any;
 
   get quizName() {
     return this.form.controls.quizName as FormControl;
@@ -58,7 +58,6 @@ export class QuizPageComponent {
 
   constructor(
     public questionService: QuestionService,
-    public paginatorService: PaginatorService,
     private store: Store<AppState>
   ) {}
 
@@ -66,14 +65,12 @@ export class QuizPageComponent {
     this.quizSubs = this.store.pipe(select(selectCurrentQuiz)).subscribe(quiz => this._setQuizData(quiz));
     this.questionsSubs = this.store.pipe(select(selectAllQuestions)).subscribe(questions => {
       this.questions = questions;
-      this.paginatorService.init('quizPage', questions)
+      this.showQuestions = questions.slice(0, BASE_PAGE_SIZE);
     });
 
     if(!this.quiz) {
       this._createQuiz();
     }
-
-    this.paginatorData = this.paginatorService.getPaginatorData('quizzesPage');
   }
 
   ngOnDestroy(): void {
@@ -89,6 +86,10 @@ export class QuizPageComponent {
 
   submit() {
     this._updateQuiz();
+  }
+
+  onChangeShowQuestions(entities: IQuestion[] | undefined) {
+    this.showQuestions = entities;
   }
 
   _createQuiz() {

@@ -67,6 +67,7 @@ import { QuizResultComponent } from './components/quiz-result/quiz-result.compon
 import { HistoryPageComponent } from './pages/history-page/history-page.component';
 import { GamePageComponent } from './pages/game-page/game-page.component';
 import { QuizGameComponent } from './components/quiz-game/quiz-game.component';
+import { PaginatorComponent } from './components/common-components/paginator/paginator.component';
 
 @NgModule({
     declarations: [
@@ -96,7 +97,8 @@ import { QuizGameComponent } from './components/quiz-game/quiz-game.component';
         GamePageComponent,
         QuizResultComponent,
         HistoryPageComponent,
-        QuizGameComponent
+        QuizGameComponent,
+        PaginatorComponent
     ],
     providers: [
         provideStore(),

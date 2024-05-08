@@ -5,7 +5,7 @@ import { Observable, Subscription } from 'rxjs';
 import { AppState, selectModalShow } from '../../store';
 import { selectQuizzes } from '../../store/selectors/quizzes.selectors';
 import { loadQuizzes } from '../../store/actions/quizzes.actions';
-import { PaginatorService } from '../../services/paginator.service';
+import { BASE_PAGE_SIZE } from '../../components/common-components/paginator/paginator.component';
 
 @Component({
   selector: 'app-quizzzes-page',
@@ -20,27 +20,27 @@ export class QuizzesPageComponent implements OnInit, OnDestroy {
   
   quizzes: IQuiz[];
 
+  showQuizzes: IQuiz[];
+
   isShowModal$: Observable<boolean> = this.store.select(selectModalShow);
 
-  paginatorData: any;
-
   constructor(
-    private store: Store<AppState>,
-    public paginatorService: PaginatorService
+    private store: Store<AppState>
   ) {}
 
   ngOnInit(): void {
     this.store.dispatch(loadQuizzes());
     this.quizzesSubs = this.store.pipe(select(selectQuizzes)).subscribe(quizzes => {
       this.quizzes = quizzes;
-      this.paginatorService.init('quizzesPage', quizzes);
-      console.log(this.paginatorService.data, ' >>> TEST')
-      this.paginatorData = this.paginatorService.getPaginatorData('quizzesPage');
-     // console.log(this.paginatorData, ' >>paginatorData')
+      this.showQuizzes = quizzes.slice(0, BASE_PAGE_SIZE);
     });
   }
 
   ngOnDestroy(): void {
     this.quizzesSubs.unsubscribe();
+  }
+
+  onChangeShowQuizzes(entities: IQuiz[]) {
+    this.showQuizzes = entities;
   }
 }
