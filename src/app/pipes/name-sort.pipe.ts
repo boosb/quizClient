@@ -1,42 +1,33 @@
 import { Pipe, PipeTransform } from "@angular/core";
+import { ICurrentHistory } from "../store/models/current-history";
 
 const DATE = 'Date';
 const QUIZ_NAME= 'Quiz name';
+const RIGHT_ANSWERS = 'Number of right answers';
 
 @Pipe({
-    name: 'nameSort',
-    pure: false
+    name: 'historySort'
 })
-export class NameSortPipe implements PipeTransform {
-    /*transform(value: any, ...args: any[]) {
-        throw new Error("Method not implemented.");
-    }*/
+export class HistorySortPipe implements PipeTransform {
     transform(entities: any[] | undefined, byField: string) {
-        console.log(byField, ' >>> args')
-
         if(!entities) {
             return;
         }
 
-
-        if(byField === DATE) {
-            console.log('5')
-            return this._dateSorted(entities);
+        switch(byField) {
+            case DATE:
+                return this._dateSorted(entities);
+            case QUIZ_NAME:
+                return this._nameSorted(entities);
+            case RIGHT_ANSWERS:
+                return this._numberOfRightAnswersSorted(entities);
+            default:
+                return entities;
         }
-
-        if(byField === QUIZ_NAME) {
-            console.log('6')
-            return this._nameSorted(entities);
-        }
-
-        return entities
-      
-       /* const copyEntities = [...entities];
-        return copyEntities?.sort((a, b) => a.name > b.name ? -1 : 1);*/
     }
 
     _dateSorted(entities: any[]) {
-        const copyEntities = [...entities]
+        const copyEntities = [...entities];
         return copyEntities?.sort((a, b) => (a.dateTime && b.dateTime) && a.dateTime > b.dateTime ? -1 : 1);
     }
 
@@ -44,5 +35,31 @@ export class NameSortPipe implements PipeTransform {
         const copyEntities = [...entities];
         return copyEntities?.sort((a, b) => a.name > b.name ? -1 : 1);
     }
-    
+
+    _numberOfRightAnswersSorted(entities: any[]) {
+        const countedEntities = this._getCountedEntities(entities);
+
+        const copyCountedEntities = [...countedEntities];
+        const sortedData = copyCountedEntities?.sort((a, b) => a.countRightAnswer > b.countRightAnswer ? -1 : 1);
+        return sortedData.map(obj => obj.entity);
+    }
+
+    _getCountedEntities(entities: any[]) { // todo хотя если я переписал пайп только для страницы ИСТОРИИ, то тип нифига не эни
+        return entities?.map(entity => {
+            const countRightAnswer = this._getCountRightAnswer(entity.history);
+            return {
+                entity,
+                countRightAnswer
+            };
+        });
+    }
+
+    _getCountRightAnswer(history: ICurrentHistory) {
+        let countRightAnswer = 0;
+        const historyValues = Object.values(history);
+        historyValues.forEach(value => {
+            countRightAnswer += value === 1 ? 1 : 0;
+        });
+        return countRightAnswer;
+    }
 }

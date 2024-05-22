@@ -5,6 +5,7 @@
     <mat-button-toggle-group formControlName="filterSorted" (click)="toggleFilterSorted()">
         <mat-button-toggle value="Date" selected>Date</mat-button-toggle>
         <mat-button-toggle value="Quiz name">Quiz name</mat-button-toggle>
+        <mat-button-toggle value="Number of right answers">Number of right answers</mat-button-toggle>
     </mat-button-toggle-group>
 </form>
 
@@ -14,7 +15,7 @@
 ></app-quiz-result>
 
 <app-paginator 
-    [entities]="historyQuizzes | nameSort: filterSorted.value" 
+    [entities]="historyQuizzes | historySort: filterSorted.value" 
     [length]="historyQuizzes?.length" 
     (onChange)="onChangeShowHistoryQuizzes($event)"
 ></app-paginator>

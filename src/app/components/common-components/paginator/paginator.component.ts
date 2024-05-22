@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { AfterViewChecked, Component, EventEmitter, Input, Output } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { of } from 'rxjs';
 
@@ -9,7 +9,7 @@ export const BASE_PAGE_SIZE = 3;
   templateUrl: './paginator.component.html',
   styleUrl: './paginator.component.scss'
 })
-export class PaginatorComponent {
+export class PaginatorComponent implements AfterViewChecked {
   @Input() entities: any[] | undefined;
 
   @Input() length: number | undefined;
@@ -21,7 +21,7 @@ export class PaginatorComponent {
   pageSizeOptions = [3, 5, 10];
   pageEvent: PageEvent;
 
-  ngOnInit() {
+  ngAfterViewChecked() {
     // todo узнал про пайп slice, мб вместо showEntities лучше применять его.
     const showEntities = this._getShowEntities();
 
