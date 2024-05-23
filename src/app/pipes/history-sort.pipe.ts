@@ -1,5 +1,6 @@
 import { Pipe, PipeTransform } from "@angular/core";
 import { ICurrentHistory } from "../store/models/current-history";
+import { IHistoryQuizzes } from "../store/models/history-quizzes";
 
 const DATE = 'Date';
 const QUIZ_NAME= 'Quiz name';
@@ -9,7 +10,7 @@ const RIGHT_ANSWERS = 'Number of right answers';
     name: 'historySort'
 })
 export class HistorySortPipe implements PipeTransform {
-    transform(entities: any[] | undefined, byField: string) {
+    transform(entities: IHistoryQuizzes[] | undefined, byField: string) {
         if(!entities) {
             return;
         }
@@ -26,17 +27,17 @@ export class HistorySortPipe implements PipeTransform {
         }
     }
 
-    _dateSorted(entities: any[]) {
+    _dateSorted(entities: IHistoryQuizzes[]) {
         const copyEntities = [...entities];
         return copyEntities?.sort((a, b) => (a.dateTime && b.dateTime) && a.dateTime > b.dateTime ? -1 : 1);
     }
 
-    _nameSorted(entities: any[]) {      
+    _nameSorted(entities: any[]) {
         const copyEntities = [...entities];
         return copyEntities?.sort((a, b) => a.name > b.name ? -1 : 1);
     }
 
-    _numberOfRightAnswersSorted(entities: any[]) {
+    _numberOfRightAnswersSorted(entities: IHistoryQuizzes[]) {
         const countedEntities = this._getCountedEntities(entities);
 
         const copyCountedEntities = [...countedEntities];
@@ -44,7 +45,7 @@ export class HistorySortPipe implements PipeTransform {
         return sortedData.map(obj => obj.entity);
     }
 
-    _getCountedEntities(entities: any[]) { // todo хотя если я переписал пайп только для страницы ИСТОРИИ, то тип нифига не эни
+    _getCountedEntities(entities: IHistoryQuizzes[]) {
         return entities?.map(entity => {
             const countRightAnswer = this._getCountRightAnswer(entity.history);
             return {

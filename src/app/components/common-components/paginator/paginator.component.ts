@@ -22,7 +22,6 @@ export class PaginatorComponent implements AfterViewChecked {
   pageEvent: PageEvent;
 
   ngAfterViewChecked() {
-    // todo узнал про пайп slice, мб вместо showEntities лучше применять его.
     const showEntities = this._getShowEntities();
 
     if(!showEntities) {

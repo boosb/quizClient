@@ -69,7 +69,7 @@ import { GamePageComponent } from './pages/game-page/game-page.component';
 import { QuizGameComponent } from './components/quiz-game/quiz-game.component';
 import { PaginatorComponent } from './components/common-components/paginator/paginator.component';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
-import { HistorySortPipe } from './pipes/name-sort.pipe';
+import { HistorySortPipe } from './pipes/history-sort.pipe';
 
 @NgModule({
     declarations: [
